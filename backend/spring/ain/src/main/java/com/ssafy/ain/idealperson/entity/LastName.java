@@ -11,4 +11,7 @@ public class LastName extends BaseEntity {
     @Column(name = "id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name = "name", nullable = false, length = 20)
+    private String name;
 }
