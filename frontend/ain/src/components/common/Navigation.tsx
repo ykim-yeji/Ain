@@ -9,11 +9,8 @@ export default function Navigation() {
   const pathName = usePathname();
 
   return (
-    <div
-      className='grid grid-cols-3 bottom-0 left-0 right-0 items-end px-1 py-3 w-full'
-      style={{ backgroundColor: '#5F0F7A' }}
-    >
-      <div className='flex justify-center ml-8'>
+    <div className='flex justify-around bottom-0 left-0 right-0 py-3 w-full bg-[#5F0F7A]'>
+      <div className='flex justify-center'>
         <Link href='/chat'>
           <div
             className='flex 
@@ -40,7 +37,7 @@ export default function Navigation() {
           </div>
         </Link>
       </div>
-      <div className='flex justify-center mr-8     '>
+      <div className='flex justify-center'>
         <Link href='/photo'>
           <div className='flex flex-col cursor-pointer'>
             <FontAwesomeIcon
