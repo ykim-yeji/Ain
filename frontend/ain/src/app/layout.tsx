@@ -27,7 +27,7 @@ export default function RootLayout({
             <Header />
           </div>
           <div
-            className='flex flex-col items-center w-full h-full mt-14 mb-[68px]'
+            className='flex flex-col items-center w-full h-full mt-[65px] mb-[68px]'
           >
             {children}
           </div>
