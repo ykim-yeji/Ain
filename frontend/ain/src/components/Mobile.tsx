@@ -70,12 +70,19 @@ export const MobilePage = () => {
       <h1>모바일 기기로 접근했습니다.</h1>
       {image ? (
         <>
-          <img src={image} style={{ width: '100%' }} alt="Captured" />
+          <img src={image} className="w-full" alt="Captured" />
           <button onClick={savePicture}>사진 저장</button>
         </>
       ) : (
         <>
-          <video ref={videoRef} style={{ width: '100%' }}></video>
+          <video ref={videoRef} className="w-full"></video>
+          {isCameraOn && (
+            <img
+              src="/test.png"
+              className="absolute bottom-0 left-0 w-auto h-auto pointer-events-none"
+              alt="Overlay"
+            />
+          )}
           {isCameraOn ? (
             <button onClick={takePicture}>사진 촬영</button>
           ) : (
@@ -86,4 +93,3 @@ export const MobilePage = () => {
     </div>
   );
 };
-
