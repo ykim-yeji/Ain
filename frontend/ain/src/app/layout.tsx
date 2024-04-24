@@ -20,19 +20,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang='en' style={{ height: '100%' }}>
-      <body className='flex justify-center' style={{ minHeight: '100%', margin: 0 }}>
-        <div className='bg-gradient-to-r from-violet-500 to-fuchsia-500'>
-          <div>
+    <html lang='en'>
+      <body className='flex justify-center items-center h-screen'>
+        <div className='flex flex-col justify-center h-full w-full max-w-md bg-gradient-to-b from-[#C776E3] via-[#9772CA] to-[#6B6EB2]'>
+          <div className='fixed top-0 w-full max-w-md'>
             <Header />
           </div>
           <div
-            className='flex flex-col items-center justify-between p-24 h-full w-full max-w-lg '
-            style={{ width: '372px' }}
+            className='flex flex-col items-center w-full h-full mt-14 mb-[68px]'
           >
             {children}
           </div>
-          <div className='fixed bottom-0 left-0 flex w-full items-end justify-center'>
+          <div className='fixed bottom-0 flex w-full max-w-md items-end justify-center'>
             <Navigation />
           </div>
         </div>

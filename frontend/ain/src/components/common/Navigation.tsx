@@ -10,8 +10,8 @@ export default function Navigation() {
 
   return (
     <div
-      className='grid grid-cols-3 bottom-0 left-0 right-0 items-end px-1 py-3'
-      style={{ backgroundColor: '#5F0F7A', width: '372px' }}
+      className='grid grid-cols-3 bottom-0 left-0 right-0 items-end px-1 py-3 w-full'
+      style={{ backgroundColor: '#5F0F7A' }}
     >
       <div className='flex justify-center ml-8'>
         <Link href='/chat'>

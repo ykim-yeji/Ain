@@ -6,11 +6,8 @@ import Link from 'next/link';
 export default function Header() {
   return (
     <div>
-      <div className='z-10 w-full max-w-5xl items-center  font-mono text-sm  '>
-        <div
-          className='left-0 top-0 w-full border-gray-300
-   pt-1 backdrop-blur-3xl '
-        >
+      <div className='z-10 w-full items-center  font-mono text-sm  '>
+
           <div className='flex justify-between '>
             <div>
               <Link href='/'>
@@ -23,7 +20,6 @@ export default function Header() {
               </Link>
             </div>
           </div>
-        </div>
       </div>
     </div>
   );
