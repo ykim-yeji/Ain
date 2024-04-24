@@ -1,4 +1,4 @@
-package com.ssafy.ain.idealperson.entity;
+package com.ssafy.ain.idealperson.constant;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

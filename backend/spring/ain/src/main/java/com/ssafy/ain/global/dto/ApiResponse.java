@@ -2,8 +2,8 @@ package com.ssafy.ain.global.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.ssafy.ain.global.constants.ErrorCode;
-import com.ssafy.ain.global.constants.SuccessCode;
+import com.ssafy.ain.global.constant.ErrorCode;
+import com.ssafy.ain.global.constant.SuccessCode;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

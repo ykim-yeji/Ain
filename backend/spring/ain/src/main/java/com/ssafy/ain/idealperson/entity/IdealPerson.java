@@ -1,7 +1,8 @@
 package com.ssafy.ain.idealperson.entity;
 
 import com.ssafy.ain.global.entity.BaseEntity;
-import com.ssafy.ain.global.entity.Gender;
+import com.ssafy.ain.global.constant.Gender;
+import com.ssafy.ain.idealperson.constant.Mbti;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;

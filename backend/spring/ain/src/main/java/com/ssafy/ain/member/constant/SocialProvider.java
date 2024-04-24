@@ -1,4 +1,4 @@
-package com.ssafy.ain.member.entity;
+package com.ssafy.ain.member.constant;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

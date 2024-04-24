@@ -1,11 +1,12 @@
 package com.ssafy.ain.member.entity;
 
 import com.ssafy.ain.global.entity.BaseEntity;
+import com.ssafy.ain.member.constant.MemberStatus;
+import com.ssafy.ain.member.constant.SocialProvider;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
