@@ -5,13 +5,25 @@ import { useState, useEffect } from 'react';
 
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+
+import useModalStore from '@/store/modalStore';
 
 import UserNicknameModifyModal from '@/components/modal/UserNicknameModify';
 
 export default function Header() {
-  const [isLogin, setIsLogin] = useState(true);
-  const [dropDown, setDropDown] = useState(false);
-  const [nicknameModalState, setNicknameModalState] = useState(false);
+  const [isLogin, setIsLogin] = useState<boolean>(true);
+  const [dropDown, setDropDown] = useState<boolean>(false);
+
+  const router = useRouter();
+
+  const { nicknameModalState, setNicknameModalState } = useModalStore();
+
+  useEffect(() => {
+    const handleRouteChange = () => {
+      setDropDown(false);
+    };
+  });
 
   const handleLoginState = () => {
     if (isLogin === true) {
@@ -29,14 +41,14 @@ export default function Header() {
     }
   };
 
-  const handleNicknameModal = () => {
-    if (nicknameModalState === true) {
-      setNicknameModalState(false);
-    } else {
-      setNicknameModalState(true);
-    }
-    setDropDown(false);
-  };
+  // const handleNicknameModal = () => {
+  //   if (nicknameModalState === true) {
+  //     setNicknameModalState(false);
+  //   } else {
+  //     setNicknameModalState(true);
+  //   }
+  //   setDropDown(false);
+  // };
 
   const logout = () => {
     setIsLogin(false);
@@ -102,7 +114,8 @@ export default function Header() {
                     <div>
                       <button
                         type='button'
-                        onClick={handleNicknameModal}
+                        // onClick={handleNicknameModal}
+                        onClick={setNicknameModalState}
                         className='mt-4 bg-white rounded-full text-xs w-28 px-2 py-2 font-semibold font-sans'
                         style={{ fontSize: '13px' }}
                       >
@@ -135,7 +148,7 @@ export default function Header() {
 
       {nicknameModalState && (
         <div>
-          <UserNicknameModifyModal closeModal={handleNicknameModal} />
+          <UserNicknameModifyModal closeModal={setNicknameModalState} />
         </div>
       )}
     </div>
