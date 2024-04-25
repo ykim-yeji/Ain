@@ -1,4 +1,5 @@
 'use client';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHouse, faComments, faCamera } from '@fortawesome/free-solid-svg-icons';
 

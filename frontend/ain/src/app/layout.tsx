@@ -26,7 +26,11 @@ export default function RootLayout({
           <div className='fixed top-0 w-full max-w-md'>
             <Header />
           </div>
-          <div className='flex flex-col items-center w-full h-full mt-[65px] mb-[68px]'>{children}</div>
+          <div
+            className='flex flex-col items-center w-full h-full mt-[65px] mb-[68px]'
+          >
+            {children}
+          </div>
           <div className='fixed bottom-0 flex w-full max-w-md items-end justify-center'>
             <Navigation />
           </div>
