@@ -1,8 +1,14 @@
 'use client';
 
+import React from 'react';
+import { useRouter } from 'next/navigation';
+
 export default function Page() {
+  const router = useRouter();
+
   const kakaoLogin = () => {
     alert('환영합니다 치킨님!');
+    router.push('/nickname');
   };
 
   return (
