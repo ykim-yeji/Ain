@@ -27,7 +27,6 @@ export const MobilePage = () => {
       if (context) {
         context.drawImage(videoRef.current, 0, 0, canvas.width, canvas.height);
         
-        // 이미지 로드
         const myImage = new Image();
         myImage.src = '/test.png'; // 여기에 추가하고 싶은 이미지의 URL을 넣으세요.
         await new Promise((resolve) => {
