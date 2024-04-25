@@ -66,8 +66,13 @@ export const MobilePage = () => {
   };
 
   return (
-    <div>
+    <div className="relative">
       <h1>모바일 기기로 접근했습니다.</h1>
+      {isCameraOn ? (
+            <button onClick={takePicture}>사진 촬영</button>
+          ) : (
+            <button onClick={startCamera}>카메라 시작</button>
+          )}
       {image ? (
         <>
           <img src={image} className="w-full" alt="Captured" />
@@ -82,11 +87,6 @@ export const MobilePage = () => {
               className="absolute bottom-0 left-0 w-auto h-auto pointer-events-none"
               alt="Overlay"
             />
-          )}
-          {isCameraOn ? (
-            <button onClick={takePicture}>사진 촬영</button>
-          ) : (
-            <button onClick={startCamera}>카메라 시작</button>
           )}
         </>
       )}
