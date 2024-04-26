@@ -3,7 +3,9 @@ package com.ssafy.ain.member.service.impl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ssafy.ain.member.constant.OauthProvider;
 import com.ssafy.ain.member.dto.AuthDTO.*;
+import com.ssafy.ain.member.entity.Member;
 import com.ssafy.ain.member.repository.MemberRepository;
 import com.ssafy.ain.member.service.OauthService;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +22,8 @@ import org.springframework.web.client.RestTemplate;
 @Service
 @RequiredArgsConstructor
 public class OauthKakaoServiceImpl implements OauthService {
+
+    private final MemberRepository memberRepository;
 
     @Value("${oauth.kakao.grant-type}")
     private String authorizationGrantType;
@@ -39,8 +43,23 @@ public class OauthKakaoServiceImpl implements OauthService {
         String accessToken = getAccessToken(authorizationCode);
         //액세스 토큰으로 사용자 정보 가져오기
         Long oauthId = getKakaoUser(accessToken);
+        //새로운 사용자일 경우 회원가입
+        Member member = memberRepository.findByOauthIdAndOauthProvider(oauthId, OauthProvider.KAKAO);
+        if (member == null) {
+            memberRepository.save(
+                    Member.builder()
+                            .oauthId(oauthId)
+                            .oauthProvider(OauthProvider.KAKAO)
+                            .build()
+            );
+            member = memberRepository.findByOauthIdAndOauthProvider(oauthId, OauthProvider.KAKAO);
+        }
 
-        return null;
+        return LoginResponse.builder()
+                .memberId(member.getId())
+                .memberAccessToken(null)
+                .memberRefreshToken(null)
+                .build();
     }
 
     /**

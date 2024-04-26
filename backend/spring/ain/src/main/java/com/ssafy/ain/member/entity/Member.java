@@ -5,6 +5,7 @@ import com.ssafy.ain.member.constant.MemberStatus;
 import com.ssafy.ain.member.constant.OauthProvider;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicInsert;
@@ -36,4 +37,10 @@ public class Member extends BaseEntity {
     @Column(name = "status", nullable = false)
     @Enumerated(EnumType.STRING)
     private MemberStatus status = MemberStatus.LOGIN;
+
+    @Builder
+    public Member(Long oauthId, OauthProvider oauthProvider) {
+        this.oauthId = oauthId;
+        this.oauthProvider = oauthProvider;
+    }
 }
