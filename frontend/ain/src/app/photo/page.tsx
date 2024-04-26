@@ -1,7 +1,7 @@
 'use client';
 
-import { MobilePage } from "@/components/Mobile";
-import { DesktopPage } from "@/components/Desktop";
+import { MobilePage } from "@/components/platform/Mobile";
+import { DesktopPage } from "@/components/platform/Desktop";
 import { useUserAgent } from "@/hooks/useUserAgent";
 
 export default function Page() {

@@ -47,7 +47,7 @@ export default function CreatePage() {
         </div>
 
         {/* 질문 */}
-        <div className="w-[80%] h-[15%] flex flex-col justify-start text-center text-lg text-bold text-black">
+        <div className="w-[80%] h-[15%] flex flex-col justify-start text-center text-[17px] text-bold text-black">
         {currentNum === 1 && (
           <p>아인의 성별은 <br />무엇인가요?</p>
         )}
