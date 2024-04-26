@@ -7,8 +7,7 @@ export default function Page() {
   const router = useRouter();
 
   const kakaoLogin = () => {
-    alert('환영합니다 치킨님!');
-    router.push('/nickname');
+    location.href = process.env.NEXT_PUBLIC_KAKAO_OAUTH_URL as string;
   };
 
   return (
@@ -21,10 +20,6 @@ export default function Page() {
       <button type='button' onClick={kakaoLogin} className='mt-8 flex justify-center'>
         <img src='/logo/kakao.png' width='50%' height='100%' />
       </button>
-      {/* <div className='flex mb-10'>
-        <img className='mr-12' src='/left-cloud.png' width={200} />
-        <img className='' src='/right-cloud.png' width={200} />
-      </div> */}
     </div>
   );
 }
