@@ -37,6 +37,8 @@ public class OauthKakaoServiceImpl implements OauthService {
     public LoginResponse login(String authorizationCode) {
         //인가 코드로 액세스 토큰 받기
         String accessToken = getAccessToken(authorizationCode);
+        //액세스 토큰으로 사용자 정보 가져오기
+        Long oauthId = getKakaoUser(accessToken);
 
         return null;
     }
@@ -68,6 +70,33 @@ public class OauthKakaoServiceImpl implements OauthService {
             JsonNode jsonNode = objectMapper.readTree(accessTokenResponseBody);
 
             return jsonNode.get("access_token").asText();
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * 액세스 토큰으로 사용자 정보 가져오기
+     * @param accessToken 액세스 토큰
+     * @return
+     */
+    private Long getKakaoUser(String accessToken) {
+        //HTTP Header 생성
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization", "Bearer " + accessToken);
+        headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+        //HTTP 요청 보내기
+        HttpEntity<MultiValueMap<String, String>> kakaoUserRequest = new HttpEntity<>(headers);
+        RestTemplate restTemplate = new RestTemplate();
+        ResponseEntity<String> kakaoUserResponse = restTemplate.exchange("https://kapi.kakao.com/v2/user/me",
+                HttpMethod.POST, kakaoUserRequest, String.class);
+        //JSON 형태의 HTTP 응답 파싱
+        String kakaoUserResponseBody = kakaoUserResponse.getBody();
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            JsonNode jsonNode = objectMapper.readTree(kakaoUserResponseBody);
+
+            return jsonNode.get("id").asLong();
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
