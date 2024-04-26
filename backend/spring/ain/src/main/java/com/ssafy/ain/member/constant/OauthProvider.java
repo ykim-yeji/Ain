@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public enum SocialProvider {
+public enum OauthProvider {
 
     KAKAO("카카오");
 

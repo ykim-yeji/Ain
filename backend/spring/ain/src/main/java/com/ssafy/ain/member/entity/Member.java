@@ -2,7 +2,7 @@ package com.ssafy.ain.member.entity;
 
 import com.ssafy.ain.global.entity.BaseEntity;
 import com.ssafy.ain.member.constant.MemberStatus;
-import com.ssafy.ain.member.constant.SocialProvider;
+import com.ssafy.ain.member.constant.OauthProvider;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -23,12 +23,12 @@ public class Member extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "social_id", nullable = false)
-    private Long socialId;
+    @Column(name = "oauth_id", nullable = false)
+    private Long oauthId;
 
-    @Column(name = "social_provider", nullable = false)
+    @Column(name = "oauth_type", nullable = false)
     @Enumerated(EnumType.STRING)
-    private SocialProvider socialProvider;
+    private OauthProvider oauthProvider;
 
     @Column(name = "nickname", length = 20)
     private String nickname;
