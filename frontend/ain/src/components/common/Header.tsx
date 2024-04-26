@@ -65,7 +65,7 @@ export default function Header() {
                 <Image src='/ainlogo.svg' alt='Ain Logo' className='ml-3' width={100} height={24} priority />
               </Link> */}
             <div onClick={handleLoginState}>
-              <Image src='/ainlogo.svg' alt='Ain Logo' className='ml-3' width={120} height={30} priority />
+              <Image src='/logo/ainlogo.svg' alt='Ain Logo' className='ml-3' width={120} height={30} priority />
             </div>
           </div>
           <div className='flex items-center relative'>
@@ -74,7 +74,7 @@ export default function Header() {
                 <div className='flex' onClick={handleDropDown}>
                   <div>
                     <Image
-                      src='/islogin.svg'
+                      src='/icon/islogin.svg'
                       alt='로그인한 상태'
                       className='mr-2 cursor-pointer'
                       width={28}
@@ -87,7 +87,7 @@ export default function Header() {
                     <div className='flex items-center'>
                       <Image
                         // src='/역삼각형.svg'
-                        src='/삼각형.svg'
+                        src='/icon/dropdown-triangle.svg'
                         alt='드롭다운 활성화'
                         className='mr-6 cursor-pointer'
                         width={10}
@@ -99,7 +99,7 @@ export default function Header() {
                     <div className='flex items-center'>
                       <Image
                         // src='/삼각형.svg'
-                        src='/역삼각형.svg'
+                        src='/icon/dropdown-triangle-revert.svg'
                         alt='드롭다운 활성화'
                         className='mr-6 cursor-pointer'
                         width={10}
@@ -139,7 +139,14 @@ export default function Header() {
               </div>
             ) : (
               <Link href='/login'>
-                <Image src='/login.svg' alt='로그인' className='mr-6 cursor-pointer' width={20} height={20} priority />
+                <Image
+                  src='/icon/login.svg'
+                  alt='로그인'
+                  className='mr-6 cursor-pointer'
+                  width={20}
+                  height={20}
+                  priority
+                />
               </Link>
             )}
           </div>

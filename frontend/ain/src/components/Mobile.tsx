@@ -9,7 +9,7 @@ export const MobilePage = () => {
   const { image, takePicture } = usePhotoCapture(videoRef);
 
   return (
-    <div className="relative">
+    <div className='relative'>
       <h1>모바일 기기로 접근했습니다.</h1>
       {isCameraOn ? (
         <button onClick={takePicture}>사진 촬영</button>
@@ -18,17 +18,17 @@ export const MobilePage = () => {
       )}
       {image ? (
         <>
-          <img src={image} className="w-full" alt="Captured" />
+          <img src={image} className='w-full' alt='Captured' />
           <button onClick={() => savePicture(image)}>사진 저장</button>
         </>
       ) : (
         <>
-          <video ref={videoRef} className="w-full"></video>
+          <video ref={videoRef} className='w-full'></video>
           {isCameraOn && (
             <img
-              src="/test.png"
-              className="absolute bottom-0 left-0 w-auto h-auto pointer-events-none"
-              alt="Overlay"
+              src='/image/test.png'
+              className='absolute bottom-0 left-0 w-auto h-auto pointer-events-none'
+              alt='Overlay'
             />
           )}
         </>
