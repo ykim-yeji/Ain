@@ -4,10 +4,16 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHouse, faComments, faCamera } from '@fortawesome/free-solid-svg-icons';
 
 import Link from 'next/link';
+import { useState } from 'react';
 import { usePathname } from 'next/navigation';
+
+import modalStore from '@/store/modalStore';
 
 export default function Navigation() {
   const pathName = usePathname();
+  const [showOverlay, setShowOverlay] = useState<boolean>(false);
+
+  const { navOverlay, toggleNavOverlay, setNicknameModalState } = modalStore();
 
   return (
     <div className='flex justify-around bottom-0 left-0 right-0 py-3 w-full bg-[#5F0F7A]'>
@@ -31,8 +37,19 @@ export default function Navigation() {
       <div className='flex justify-center'>
         <Link href='/'>
           <div className='flex flex-col cursor-pointer'>
-            <FontAwesomeIcon style={{ color: pathName === '/' ? '#C776E3' : 'white' }} icon={faHouse} size='xl' />
-            <div style={{ color: pathName === '/' ? '#C776E3' : 'white' }} className='text-sm'>
+            <FontAwesomeIcon
+              style={{
+                color: pathName === '/' || pathName === '/create' || pathName === 'loading' ? '#C776E3' : 'white',
+              }}
+              icon={faHouse}
+              size='xl'
+            />
+            <div
+              style={{
+                color: pathName === '/' || pathName === '/create' || pathName === 'loading' ? '#C776E3' : 'white',
+              }}
+              className='text-sm'
+            >
               Home
             </div>
           </div>
@@ -52,6 +69,9 @@ export default function Navigation() {
           </div>
         </Link>
       </div>
+      {navOverlay && (
+        <div onClick={setNicknameModalState} className='absolute top-0 left-0 w-full h-full bg-black opacity-70 z-0' />
+      )}
     </div>
   );
 }
