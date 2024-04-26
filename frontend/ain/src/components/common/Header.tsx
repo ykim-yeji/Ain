@@ -13,17 +13,18 @@ import UserNicknameModifyModal from '@/components/modal/UserNicknameModify';
 
 export default function Header() {
   const [isLogin, setIsLogin] = useState<boolean>(true);
-  const [dropDown, setDropDown] = useState<boolean>(false);
+  // const [dropDown, setDropDown] = useState<boolean>(false);
 
   const router = useRouter();
 
-  const { nicknameModalState, setNicknameModalState } = useModalStore();
+  const { headerDropDown, setHeaderDropDown, nicknameModalState, setNicknameModalState, testNum, increaseTestNum } =
+    useModalStore();
 
-  useEffect(() => {
-    const handleRouteChange = () => {
-      setDropDown(false);
-    };
-  });
+  // useEffect(() => {
+  //   const handleRouteChange = () => {
+  //     setDropDown(false);
+  //   };
+  // });
 
   const handleLoginState = () => {
     if (isLogin === true) {
@@ -33,12 +34,26 @@ export default function Header() {
     }
   };
 
-  const handleDropDown = () => {
-    if (dropDown === true) {
-      setDropDown(false);
-    } else {
-      setDropDown(true);
-    }
+  // const handleDropDown = () => {
+  //   if (dropDown === true) {
+  //     setDropDown(false);
+  //   } else {
+  //     setDropDown(true);
+  //   }
+  // };
+
+  // const handleDropDown = () => {
+  //   setHeaderDropDown();
+  // };
+
+  const confirm = () => {
+    console.log('zustand상태확인');
+    console.log(nicknameModalState);
+    console.log(testNum);
+  };
+
+  const increase = () => {
+    increaseTestNum();
   };
 
   // const handleNicknameModal = () => {
@@ -52,7 +67,8 @@ export default function Header() {
 
   const logout = () => {
     setIsLogin(false);
-    setDropDown(false);
+    // setDropDown(false);
+    setHeaderDropDown();
   };
 
   return (
@@ -68,10 +84,28 @@ export default function Header() {
               <Image src='/logo/ainlogo.svg' alt='Ain Logo' className='ml-3' width={120} height={30} priority />
             </div>
           </div>
+          {/* <button
+            type='button'
+            onClick={confirm}
+            className='mb-10 text-md font-semibold px-7 py-1 rounded-full text-white'
+            style={{ backgroundColor: '#BE44E9' }}
+          >
+            주스탠드 테스트
+          </button>
+          <button
+            type='button'
+            onClick={increase}
+            className='mb-10 text-md font-semibold px-7 py-1 rounded-full text-white'
+            style={{ backgroundColor: '#BE44E9' }}
+          >
+            testNum 1 증가
+          </button> */}
           <div className='flex items-center relative'>
             {isLogin ? (
               <div className='flex flex-col'>
-                <div className='flex' onClick={handleDropDown}>
+                {/* <div className='flex' onClick={handleDropDown}>
+                 */}
+                <div className='flex' onClick={setHeaderDropDown}>
                   <div>
                     <Image
                       src='/icon/islogin.svg'
@@ -83,7 +117,8 @@ export default function Header() {
                     />
                   </div>
 
-                  {dropDown ? (
+                  {/* {dropDown ? ( */}
+                  {headerDropDown ? (
                     <div className='flex items-center'>
                       <Image
                         // src='/역삼각형.svg'
@@ -109,7 +144,8 @@ export default function Header() {
                     </div>
                   )}
                 </div>
-                {dropDown ? (
+                {/* {dropDown ? ( */}
+                {headerDropDown ? (
                   <div className='absolute top-10 right-4'>
                     <div>
                       <button
@@ -152,9 +188,9 @@ export default function Header() {
           </div>
         </div>
       </div>
-
       {nicknameModalState && (
-        <div>
+        // <div className='z-10'>
+        <div className='z-50'>
           <UserNicknameModifyModal closeModal={setNicknameModalState} />
         </div>
       )}

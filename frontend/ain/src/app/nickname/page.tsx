@@ -36,7 +36,7 @@ export default function Page() {
       </div>
       <input
         type='text'
-        className='mt-4 mx-10 w-40 x-2 py-2 rounded-full text-center text-lg text-white outline-0'
+        className='mt-4 mx-10 w-40 x-2 py-2 rounded-md text-center text-lg text-white outline-0'
         value={inputValue}
         style={{ backgroundColor: '#F4DBFD' }}
         placeholder='치킨'

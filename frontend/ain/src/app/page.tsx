@@ -1,7 +1,30 @@
+'use client';
+
 import Image from 'next/image';
 import Link from 'next/link';
 
+import { useRouter } from 'next/navigation';
+
+import useModalStore from '@/store/modalStore';
+
 export default function Home() {
+  const router = useRouter();
+  const { nicknameModalState, setNicknameModalState, testNum, increaseTestNum } = useModalStore();
+
+  const confirm = () => {
+    console.log('zustand상태확인');
+    console.log(nicknameModalState);
+    console.log(testNum);
+  };
+
+  const increase = () => {
+    increaseTestNum();
+  };
+
+  const routerRedirect = () => {
+    router.push('/photo');
+  };
+
   return (
     <main className='text-center'>
       <Image
@@ -24,6 +47,30 @@ export default function Home() {
           생성하기
         </button>
       </Link>
+      {/* <button
+        type='button'
+        onClick={confirm}
+        className='mb-10 text-md font-semibold px-7 py-1 rounded-full text-white'
+        style={{ backgroundColor: '#BE44E9' }}
+      >
+        주스탠드 테스트
+      </button>
+      <button
+        type='button'
+        onClick={increase}
+        className='mb-10 text-md font-semibold px-7 py-1 rounded-full text-white'
+        style={{ backgroundColor: '#BE44E9' }}
+      >
+        testNum 1 증가
+      </button> */}
+      {/* <button
+        type='button'
+        onClick={routerRedirect}
+        className='mb-10 text-md font-semibold px-7 py-1 rounded-full text-white'
+        style={{ backgroundColor: '#BE44E9' }}
+      >
+        router.push 이동
+      </button> */}
     </main>
   );
 }
