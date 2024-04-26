@@ -97,7 +97,7 @@ export default function CreatePage() {
 
         </div>
         {/* 질문 */}
-        <div className="w-[80%] h-[15%] flex flex-col justify-start text-center text-lg text-bold text-black">
+        <div className="w-[80%] h-[15%] flex flex-col justify-start text-center text-[17px] text-bold text-black">
         {currentNum === 1 && (
           <p>아인의 성별은 <br />무엇인가요?</p>
         )}
@@ -161,8 +161,8 @@ export default function CreatePage() {
         <div className="w-[70%] h-full flex flex-col justify-start items-center">
             <img src="./gif/question.gif" className="w-[70%]"/>
             <div className="w-[90%] h-[200px] bg-[#F0D5FA] rounded-2xl flex flex-col items-center justify-evenly shadow-xl">
-              <p className="text-lg text-center text-black">아인이 당신을 <br />기다리고 있어요!</p>
-              <button className="w-[70%] h-14 bg-[#AB42CF] rounded-xl text-center text-white shadow-lg"
+              <p className="text-[17px] text-center text-black">아인이 당신을 <br />기다리고 있어요!</p>
+              <button className="w-[70%] h-14 bg-[#AB42CF] rounded-xl text-center text-white shadow-lg text-lg"
               onClick={submitInput}>만나러 가기</button>                  
             </div>
         </div>
