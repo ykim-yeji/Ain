@@ -1,8 +1,12 @@
 'use client'
 
-import { useEffect, useState } from "react"
+import router from "next/router"
+import useCreateStore from "@/store/createStore"
+import { useState } from "react"
+import Link from "next/link"
 
 export default function CreatePage() {
+
   const [currentNum, setCurrentNum] = useState<number>(1)
 
   const [genderInput, setGenderInput] = useState<number>(0)
@@ -10,12 +14,10 @@ export default function CreatePage() {
   const [shapeInput, setShapeInput] = useState<string>('')
   const [ectInput, setEctInput] = useState<string>('')
 
-  const [mergeInput, setMergeInput] = useState<string>('')
-
   const submitInput = () => {
     if (genderInput !== 0) {
-      setMergeInput(faceInput + shapeInput + ectInput)
-      // api 로직 구현
+      useCreateStore.setState(state => ({ mergeInput: faceInput + shapeInput + ectInput}))
+      // router.push('/loading');
     }
     else {
       alert('성별을 선택해 주세요')
@@ -116,9 +118,11 @@ export default function CreatePage() {
                 <img src="./icon/angle_left_purple.png" className="w-[10px]" />            
               </button>
             </div>
-            <p className="text-lg text-center text-black">아인이 당신을 <br />기다리고 있어요!</p>
+            <p className=" w-full text-lg text-center text-black">아인이 당신을 <br />기다리고 있어요!</p>
+            <Link href='/loading' className="w-full flex justify-center">
             <button className="w-[70%] h-14 mb-2 bg-[#AB42CF] rounded-xl text-center text-white shadow-md"
-            onClick={submitInput}>만나러 가기</button>                  
+            onClick={submitInput}>만나러 가기</button>
+            </Link>                  
           </div>
         </div>
       )}
@@ -126,4 +130,5 @@ export default function CreatePage() {
     </div>
   </div>
 }
+
 

@@ -1,4 +1,14 @@
+'use client'
+import useCreateStore from "@/store/createStore";
+
 export default function LoadingPage() {
-    return <div>로딩 페이지</div>;
+
+  const { mergeInput } = useCreateStore();
+
+  console.log(mergeInput)
+
+    return <div>
+      <img src="" alt="" />
+    </div>;
   }
   
