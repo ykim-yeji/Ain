@@ -94,7 +94,6 @@ export default function CreatePage() {
           <button onClick={(event) => setCurrentNum(currentNum -1)}>
             <img src="./icon/angle_left_purple.png" className="w-[10px]" />            
           </button>
-
         </div>
         {/* 질문 */}
         <div className="w-[80%] h-[15%] flex flex-col justify-start text-center text-lg text-bold text-black">
@@ -159,12 +158,17 @@ export default function CreatePage() {
       // currentNum이 5일때
       : (
         <div className="w-[70%] h-full flex flex-col justify-start items-center">
-            <img src="./gif/question.gif" className="w-[70%]"/>
-            <div className="w-[90%] h-[200px] bg-[#F0D5FA] rounded-2xl flex flex-col items-center justify-evenly shadow-xl">
-              <p className="text-lg text-center text-black">아인이 당신을 <br />기다리고 있어요!</p>
-              <button className="w-[70%] h-14 bg-[#AB42CF] rounded-xl text-center text-white shadow-lg"
-              onClick={submitInput}>만나러 가기</button>                  
+          <img src="./gif/question.gif" className="w-[70%]"/>
+          <div className="w-[90%] h-[220px] bg-[#F0D5FA] rounded-2xl flex flex-col items-center justify-evenly shadow-xl">
+            <div className="w-[80%] h-6 flex flex-col justify-end">
+              <button onClick={(event) => setCurrentNum(currentNum -1)}>
+                <img src="./icon/angle_left_purple.png" className="w-[10px]" />            
+              </button>
             </div>
+            <p className="text-lg text-center text-black">아인이 당신을 <br />기다리고 있어요!</p>
+            <button className="w-[70%] h-14 mb-2 bg-[#AB42CF] rounded-xl text-center text-white shadow-md"
+            onClick={submitInput}>만나러 가기</button>                  
+          </div>
         </div>
       )}
 
