@@ -10,25 +10,7 @@ export default function CreatePage() {
   const [shapeInput, setShapeInput] = useState<string>('')
   const [ectInput, setEctInput] = useState<string>('')
 
-  const [showPrev, setShowPrev] = useState<boolean>(false)
-  const [showNext, setShowNext] = useState<boolean>(false)
-
   const [mergeInput, setMergeInput] = useState<string>('')
-
-  const unsure = () => {
-    if (currentNum == 2) {
-      setCurrentNum(3)
-      setFaceInput('')
-    }
-    else if (currentNum == 3) {
-      setCurrentNum(4)
-      setShapeInput('')
-    }
-    else if (currentNum == 4) {
-      setCurrentNum(5)
-      setEctInput('')
-    }
-  }
 
   const submitInput = () => {
     if (genderInput !== 0) {
@@ -39,33 +21,6 @@ export default function CreatePage() {
       alert('성별을 선택해 주세요')
     }
   }
-
-  useEffect(() => {
-    if (currentNum == 1) {
-      setShowPrev(false)
-      setShowNext(false)
-    }
-    else if (currentNum == 2) {
-      setShowPrev(true)
-      setShowNext(true)
-    }
-    else if (currentNum == 3) {
-      setShowPrev(true)
-      setShowNext(true)
-    }
-    else if (currentNum == 4) {
-      setShowPrev(true)
-      setShowNext(true)
-    }
-    else if (currentNum == 5) {
-      setShowPrev(true)
-      setShowNext(false)
-    }
-  }, [currentNum])
-  
-
-
-
 
   return <div className="w-full h-full flex flex-col">
     {/* 현재 인덱스 표시 */}
@@ -79,22 +34,16 @@ export default function CreatePage() {
 
     {/* 입력칸 영역 */}
     <div className="w-full h-[85%] flex flex-row items-start justify-center">
-
-      {/* 이전으로 넘기는 화살표 버튼 */}
-      {/* <div className="w-[15%] h-[90%] flex flex-col items-center">
-        {showPrev && (
-        <button className="w-5 m-auto"
-        onClick={movePrev}><img src="./icon/angle_left.png" /></button>
-        )}   
-      </div> */}
       
       {currentNum !== 5 ? (
       <div className="w-[70%] h-[90%] bg-[#F0D5FA] rounded-xl shadow-lg  flex flex-col items-center">
         <div className="w-[80%] h-6 mt-[10%]">
+          {currentNum != 1 &&(
           <button onClick={(event) => setCurrentNum(currentNum -1)}>
             <img src="./icon/angle_left_purple.png" className="w-[10px]" />            
-          </button>
+          </button>)}
         </div>
+
         {/* 질문 */}
         <div className="w-[80%] h-[15%] flex flex-col justify-start text-center text-lg text-bold text-black">
         {currentNum === 1 && (
@@ -110,6 +59,7 @@ export default function CreatePage() {
           <p>기타 생김새를 <br /> 입력해주세요</p>
         )}
         </div>   
+
          {/* 이상형 성별 입력 받기 */}
         {currentNum == 1 ? (
         <div className="w-[80%] h-[60%] flex justify-center items-center bg-white rounded-xl px-4">
@@ -126,6 +76,7 @@ export default function CreatePage() {
             <p className="mt-6">여성</p>         
           </button>
         </div>)
+
         // 이상형 생김새 입력 받기
         : (
         <div className="w-[80%] h-[50%] flex justify-center items-center bg-white rounded-xl">
@@ -143,7 +94,7 @@ export default function CreatePage() {
         )}
         </div>)}
 
-        {/* 잘 모르겠어요 버튼 */}
+        {/* 입력완료, 잘 모르겠어요 버튼 */}
         {currentNum !== 1 && (
         <div className="w-[80%] h-[25%] flex flex-col items-center justify-center">
           <button className="w-[150px] h-[50px] bg-[#C776E3] rounded-2xl shadow-md text-center text-white text-lg hover:bg-[#AB42CF]"
@@ -171,14 +122,6 @@ export default function CreatePage() {
           </div>
         </div>
       )}
-
-      {/* 다음으로 넘기는 화살표 버튼 */}
-      {/* <div className="w-[15%] h-[90%] flex flex-col items-center">
-        {showNext && (
-        <button className="w-5 m-auto"
-        onClick={moveNext}><img src="./icon/angle_right.png" /></button> 
-        )}   
-      </div> */}
       
     </div>
   </div>
