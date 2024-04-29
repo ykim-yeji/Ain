@@ -6,15 +6,20 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 import useModalStore from '@/store/modalStore';
+import useUserStore from '@/store/userStore';
 
 export default function Home() {
   const router = useRouter();
   const { nicknameModalState, setNicknameModalState, testNum, increaseTestNum } = useModalStore();
 
+  const { isLogin, accessToken } = useUserStore();
+
   const confirm = () => {
     console.log('zustand상태확인');
-    console.log(nicknameModalState);
-    console.log(testNum);
+    // console.log(nicknameModalState);
+    // console.log(testNum);
+    console.log(isLogin);
+    console.log(accessToken);
   };
 
   const increase = () => {
@@ -29,7 +34,7 @@ export default function Home() {
     <main className='text-center'>
       <Image
         className='dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert'
-        src='/cuteHeart.png'
+        src='/image/cuteHeart.png'
         alt='귀여운 하트'
         width={180}
         height={37}
@@ -54,15 +59,16 @@ export default function Home() {
         style={{ backgroundColor: '#BE44E9' }}
       >
         주스탠드 테스트
-      </button>
-      <button
+      </button> */}
+
+      {/* <button
         type='button'
         onClick={increase}
         className='mb-10 text-md font-semibold px-7 py-1 rounded-full text-white'
         style={{ backgroundColor: '#BE44E9' }}
       >
         testNum 1 증가
-      </button> */}
+      </button>  */}
       {/* <button
         type='button'
         onClick={routerRedirect}

@@ -9,16 +9,20 @@ import { useRouter } from 'next/navigation';
 
 import useModalStore from '@/store/modalStore';
 
+import useUserStore from '@/store/userStore';
+
 import UserNicknameModifyModal from '@/components/modal/UserNicknameModify';
 
 export default function Header() {
-  const [isLogin, setIsLogin] = useState<boolean>(true);
+  // const [isLogin, setIsLogin] = useState<boolean>(true);
   // const [dropDown, setDropDown] = useState<boolean>(false);
 
   const router = useRouter();
 
   const { headerDropDown, setHeaderDropDown, nicknameModalState, setNicknameModalState, testNum, increaseTestNum } =
     useModalStore();
+
+  const { isLogin, setIsLogin, deleteAccessToken } = useUserStore();
 
   // useEffect(() => {
   //   const handleRouteChange = () => {
@@ -27,11 +31,12 @@ export default function Header() {
   // });
 
   const handleLoginState = () => {
-    if (isLogin === true) {
-      setIsLogin(false);
-    } else {
-      setIsLogin(true);
-    }
+    // if (isLogin === true) {
+    //   setIsLogin(false);
+    // } else {
+    //   setIsLogin(true);
+    // }
+    setIsLogin();
   };
 
   // const handleDropDown = () => {
@@ -66,10 +71,23 @@ export default function Header() {
   // };
 
   const logout = () => {
-    setIsLogin(false);
+    deleteAccessToken();
+    // setIsLogin();
+
     // setDropDown(false);
     setHeaderDropDown();
+    router.push('/');
   };
+
+  // useEffect(() => {
+  //   const unsubscribe = useUserStore.subscribe(() => {
+  //     setIsLogin();
+  //   });
+
+  //   return () => {
+  //     unsubscribe();
+  //   };
+  // }, []);
 
   return (
     <div>
@@ -77,12 +95,12 @@ export default function Header() {
         <div className='flex justify-between'>
           <div>
             {/* 로그인 상태 테스트 중 나중에 변경 */}
-            {/* <Link href='/'>
-                <Image src='/ainlogo.svg' alt='Ain Logo' className='ml-3' width={100} height={24} priority />
-              </Link> */}
-            <div onClick={handleLoginState}>
+            <Link href='/'>
+              <Image src='/Logo/ainlogo.svg' alt='Ain Logo' className='ml-3' width={120} height={30} priority />
+            </Link>
+            {/* <div onClick={handleLoginState}>
               <Image src='/logo/ainlogo.svg' alt='Ain Logo' className='ml-3' width={120} height={30} priority />
-            </div>
+            </div> */}
           </div>
           {/* <button
             type='button'
@@ -188,12 +206,35 @@ export default function Header() {
           </div>
         </div>
       </div>
-      {nicknameModalState && (
-        // <div className='z-10'>
-        <div className='z-50'>
-          <UserNicknameModifyModal closeModal={setNicknameModalState} />
-        </div>
-      )}
+      <div>
+        {/* <div className='relative'> */}
+        {/* {nicknameModalState && (
+            <div className='z-40'>
+              <UserNicknameModifyModal closeModal={setNicknameModalState} />
+            </div>
+          )}
+          {nicknameModalState && (
+            <div
+              className='overlay fixed top-0 left-0 w-full h-full bg-black opacity-70 z-30'
+              onClick={setNicknameModalState}
+            />
+          )} */}
+
+        {nicknameModalState && (
+          <div className='static'>
+            <div
+              className='overlay justify-center fixed top-0  w-full h-full bg-black opacity-70 z-30 max-w-md'
+              onClick={setNicknameModalState}
+            />
+            <div className='h-screen'>
+              <div className='z-40 absolute h-full w-full '>
+                <UserNicknameModifyModal closeModal={setNicknameModalState} />
+              </div>
+            </div>
+          </div>
+        )}
+        {/* </div> */}
+      </div>
     </div>
   );
 }
