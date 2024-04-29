@@ -2,7 +2,7 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://${EC2_ACCESS_IP}:3306/ain?serverTimezone=Asia/Seoul&useUnicode=true&characterEncoding=utf8&useLegacyDatetimeCode=false
-    username: root
+    username: ssafyAinDev
     password: ${MYSQL_PW}
   jpa:
     database: mysql

@@ -1,5 +1,6 @@
 package com.ssafy.ain.idealperson.entity;
 
+import com.ssafy.ain.global.constant.Gender;
 import com.ssafy.ain.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -22,5 +23,5 @@ public class FirstName extends BaseEntity {
 
     @Column(name = "gender", nullable = false)
     @Enumerated(EnumType.STRING)
-    private String gender;
+    private Gender gender;
 }

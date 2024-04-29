@@ -7,7 +7,7 @@ import com.ssafy.ain.member.constant.OauthProvider;
 import com.ssafy.ain.member.dto.AuthDTO.*;
 import com.ssafy.ain.member.entity.Member;
 import com.ssafy.ain.member.repository.MemberRepository;
-import com.ssafy.ain.member.service.OauthService;
+import com.ssafy.ain.member.service.OauthKakaoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -21,11 +21,11 @@ import org.springframework.web.client.RestTemplate;
 
 @Service
 @RequiredArgsConstructor
-public class OauthKakaoServiceImpl implements OauthService {
+public class OauthKakaoServiceImpl implements OauthKakaoService {
 
     private final MemberRepository memberRepository;
 
-    @Value("${oauth.kakao.grant-type}")
+    @Value("${oauth.kakao.authorization-grant-type}")
     private String authorizationGrantType;
     @Value("${oauth.kakao.client-id}")
     private String clientId;
@@ -46,13 +46,7 @@ public class OauthKakaoServiceImpl implements OauthService {
         //새로운 사용자일 경우 회원가입
         Member member = memberRepository.findByOauthIdAndOauthProvider(oauthId, OauthProvider.KAKAO);
         if (member == null) {
-            memberRepository.save(
-                    Member.builder()
-                            .oauthId(oauthId)
-                            .oauthProvider(OauthProvider.KAKAO)
-                            .build()
-            );
-            member = memberRepository.findByOauthIdAndOauthProvider(oauthId, OauthProvider.KAKAO);
+            member = signup(oauthId, OauthProvider.KAKAO);
         }
 
         return LoginResponse.builder()
@@ -77,7 +71,7 @@ public class OauthKakaoServiceImpl implements OauthService {
         body.add("client_id", clientId);
         body.add("redirect_id", redirectUri);
         body.add("code", authorizationCode);
-        //HTTP 요청 보내기
+        //HTTP 요청 보내기 및 응답 받기
         HttpEntity<MultiValueMap<String, String>> accessTokenRequest = new HttpEntity<>(body, headers);
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<String> accessTokenResponse = restTemplate.exchange("https://kauth.kakao.com/oauth/token",
@@ -104,7 +98,7 @@ public class OauthKakaoServiceImpl implements OauthService {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", "Bearer " + accessToken);
         headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
-        //HTTP 요청 보내기
+        //HTTP 요청 보내기 및 응답 받기
         HttpEntity<MultiValueMap<String, String>> kakaoUserRequest = new HttpEntity<>(headers);
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<String> kakaoUserResponse = restTemplate.exchange("https://kapi.kakao.com/v2/user/me",
@@ -119,5 +113,22 @@ public class OauthKakaoServiceImpl implements OauthService {
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    /**
+     * 회원가입
+     * @param oauthId 회원가입할 회원의 소셜 아이디
+     * @param oauthProvider 회원가입할 회원의 소셜 로그인 기관
+     * @return
+     */
+    private Member signup(Long oauthId, OauthProvider oauthProvider) {
+        memberRepository.save(
+                Member.builder()
+                        .oauthId(oauthId)
+                        .oauthProvider(oauthProvider)
+                        .build()
+        );
+
+        return memberRepository.findByOauthIdAndOauthProvider(oauthId, oauthProvider);
     }
 }

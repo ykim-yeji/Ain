@@ -47,6 +47,6 @@ public class IdealPerson extends BaseEntity {
     @Column(name = "thread_id", nullable = false, length = 100)
     private String threadId;
 
-    @Column(name = "rank", nullable = false)
-    private int rank;
+    @Column(name = "ranking", nullable = false)
+    private int ranking;
 }
