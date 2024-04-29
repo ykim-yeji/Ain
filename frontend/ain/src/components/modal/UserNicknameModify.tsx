@@ -66,12 +66,12 @@ export default function UserNicknameModifyModal({ closeModal }: Props) {
         </div>
       </div>
 
-      {nicknameModalState && (
+      {/* {nicknameModalState && (
         <div
-          className='overlay fixed top-0 left-0 w-full h-full bg-black opacity-70 z-10'
+          className='overlay fixed top-0 left-0 w-full h-full bg-black opacity-70 z-30'
           onClick={setNicknameModalState}
         />
-      )}
+      )} */}
     </div>
   );
 }
