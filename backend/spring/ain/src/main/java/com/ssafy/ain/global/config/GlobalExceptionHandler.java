@@ -4,8 +4,6 @@ import com.ssafy.ain.global.dto.ApiResponse;
 import com.ssafy.ain.global.exception.ExistException;
 import com.ssafy.ain.global.exception.InvalidException;
 import com.ssafy.ain.global.exception.NoExistException;
-import jakarta.validation.ConstraintViolation;
-import jakarta.validation.ConstraintViolationException;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.method.ParameterValidationResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -16,7 +14,6 @@ import org.springframework.web.method.annotation.HandlerMethodValidationExceptio
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.util.List;
-import java.util.Set;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
