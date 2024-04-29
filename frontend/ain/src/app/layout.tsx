@@ -3,6 +3,9 @@ import './globals.css';
 import Header from '@/components/common/Header';
 import Navigation from '@/components/common/Navigation';
 
+// useSearchParams should be wrapped in suspense boundary 에러를 해결하기 위해 Suspense로 감싸줍니다.
+import { Suspense } from 'react';
+
 // 아래는 next에서 FontAwesomeIcon 로딩중 발생하는 크기 문제를 해결하기위한 코드
 import { config } from '@fortawesome/fontawesome-svg-core';
 import '@fortawesome/fontawesome-svg-core/styles.css';
@@ -26,11 +29,11 @@ export default function RootLayout({
           <div className='fixed top-0 w-full max-w-md'>
             <Header />
           </div>
-          <div
-            className='flex flex-col items-center w-full h-full mt-[65px] mb-[68px]'
-          >
-            {children}
-          </div>
+
+          <Suspense fallback={<div>Loading</div>}>
+            <div className='flex flex-col items-center w-full h-full mt-[65px] mb-[68px]'>{children}</div>
+          </Suspense>
+
           <div className='fixed bottom-0 flex w-full max-w-md items-end justify-center'>
             <Navigation />
           </div>
