@@ -14,10 +14,11 @@ export default function Page() {
   const router = useRouter();
   const [authCode, setAuthCode] = useState('');
   // const [accessToken, setAccessTokenTemp] = useState('');
-  const [tokenExpiredDate, setTokenExpiredDate] = useState('');
+  // const [tokenExpiredDate, setTokenExpiredDate] = useState('');
   const [refreshToken, setRefreshToken] = useState('');
-  const [refreshExpiredDate, setRefreshExpiredDate] = useState('');
-  const [tokenType, setTokenType] = useState('');
+  // const [refreshExpiredDate, setRefreshExpiredDate] = useState('');
+  // const [tokenType, setTokenType] = useState('');
+  const [isNewMember, setIsNewMember] = useState(false);
 
   const { isLogin, setIsLogin, accessToken, setAccessToken } = userStore();
 
@@ -40,6 +41,7 @@ export default function Page() {
   //       });
 
   //       if (res.ok) {
+
   //         const data = await res.json();
 
   //         if (data && data.data && data.data.access_token) {
@@ -113,23 +115,52 @@ export default function Page() {
         if (res.ok) {
           const data = await res.json();
           setAccessToken(data.access_token);
-          // setIsLogin();
-          // setRefreshToken(data.refresh_token);
-          // setTokenExpiredDate(data.expires_in);
-          // setRefreshExpiredDate(data.refresh_token_expires_in);
+          setRefreshToken(data.refresh_token);
+          setIsNewMember(data.IsNewMember);
           console.log(accessToken);
           alert('성공');
-          // 여기서 분기를 나눠서 새 회원이면 닉네임 등록페이지로
-          // 기존 회원이면 메인페이지or채팅페이지로 보낸다.
-          router.push('/nickname');
-        } else {
-          // console.log(res.status);
+
+          if (isNewMember === true) {
+            router.push('/nickname');
+          } else {
+            router.push('/');
+          }
+        }
+
+        // if (res.ok) {
+        //   const result = await res.json();
+        //   if (result.code === 200) {
+        //     const data = await res.json();
+        //     setAccessToken(data.access_token);
+        //     setRefreshToken(data.refresh_token);
+        //     setIsNewMember(data.IsNewMember);
+        //     console.log(accessToken);
+        //     alert('성공');
+
+        //     // 여기서 분기를 나눠서 새 회원이면 닉네임 등록페이지로
+        //     // 기존 회원이면 메인페이지or채팅페이지로 보낸다.
+        //     if (isNewMember === true) {
+        //       router.push('/nickname');
+        //     } else {
+        //       router.push('/');
+        //     }
+
+        //     // 아래 형식은 우리 백엔드 서버에서 오는 응답이라
+        //     // 카카오 인가서버에 해당 X
+        //   } else if (result.code === 400) {
+        //     alert('요청 형식이 잘못되었습니다.');
+        //     return;
+        //   } else if (result.code === 403) {
+        //     alert('토큰의 유효기간이 만료되었습니다.');
+        //     return;
+        //   } else {
+        //     alert('400,403이 아닌 기타에러 발생');
+        //     return;
+        //   }
+        // }
+        else {
           alert('실패');
         }
-        // console.log(accessToken);
-        // console.log(refreshToken);
-        // console.log(tokenExpiredDate);
-        // console.log(refreshExpiredDate);
       } catch (error) {
         console.error(error);
         alert('에러로 실패');

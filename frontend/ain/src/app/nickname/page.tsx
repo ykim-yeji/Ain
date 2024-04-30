@@ -10,7 +10,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL;
 export default function Page() {
   const [inputValue, setInputValue] = useState<string>('');
 
-  const { accessToken } = userStore();
+  const { accessToken, setAccessToken, refreshToken } = userStore();
 
   const router = useRouter();
 
@@ -55,13 +55,37 @@ export default function Page() {
         });
 
         if (res.ok) {
-          console.log('닉네임 등록 성공!');
+          const result = await res.json();
+
+          if (result.code === 200) {
+            alert('닉네임 등록성공');
+            router.push('/');
+          } else if (result.code === 400) {
+            alert('ERROR_BAD_REQUEST');
+            return;
+          } else if (result.code === 401) {
+            alert('ERROR_UNAUTHORIZED, refreshToken으로 accessToken을 재발급합니다.');
+            // 여기서 토큰재발급 함수를 실행하려고 했는데...
+            return;
+          } else if (result.code === 403) {
+            alert('ERROR_FORBIDDEN');
+            return;
+          } else if (result.code === 404) {
+            alert('ERROR_NOT_FOUND');
+            return;
+          } else {
+            alert('400, 401, 403, 404 제외 에러 발생');
+            return;
+          }
         } else {
+          alert('닉네임 등록 실패');
           console.log(res.status);
+          return;
         }
       } catch (error) {
+        alert('에러 발생으로 닉네임 등록 실패');
         console.log(error);
-        throw new Error();
+        // throw new Error();
       }
     } else {
       alert('닉네임은 한글 1~5자 사이로 해주세요.');
@@ -85,8 +109,8 @@ export default function Page() {
       />
       <button
         type='button'
-        // onClick={postMyNickname}
-        onClick={setIdealNickname}
+        onClick={postMyNickname}
+        // onClick={setIdealNickname}
         className='mt-2 mb-10 w-40 border-solid rounded-full px-2 py-2 mx-4 text-lg text-white'
         style={{ backgroundColor: '#BE44E9' }}
       >
