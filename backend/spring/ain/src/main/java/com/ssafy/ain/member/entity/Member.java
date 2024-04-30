@@ -33,7 +33,7 @@ public class Member extends BaseEntity {
     private OauthProvider oauthProvider;
 
     @Column(name = "nickname", length = 20)
-    @ColumnDefault("사용자")
+    @ColumnDefault("'사용자'")
     private String nickname;
 
     @Column(name = "status", nullable = false)
