@@ -10,8 +10,13 @@ const withPWA = withPWAInit({
   reloadOnOnline: true,
   swcMinify: true,
   disable: false,
+
+  // test
+  // workboxPluginMode: 'GenerateSW',
+
   workboxOptions: {
     disableDevLogs: true,
+    // exclude: [/\.map$/, /_redirects/],
   },
 });
 
