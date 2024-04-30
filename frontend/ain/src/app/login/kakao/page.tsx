@@ -6,6 +6,9 @@ import { useEffect, useState } from 'react';
 import userStore from '@/store/userStore';
 import { useRouter } from 'next/navigation';
 
+const client_id = process.env.NEXT_PUBLIC_KAKAO_CLIENT_ID;
+const redirect_uri = process.env.NEXT_PUBLIC_KAKAO_REDIRECT_URI;
+
 export default function Page() {
   const param = useSearchParams();
   const router = useRouter();
@@ -101,8 +104,8 @@ export default function Page() {
           },
           body: makeFormData({
             grant_type: 'authorization_code',
-            client_id: '71b41504050946184b34444e97de6792',
-            redirect_uri: 'http://localhost:3000/login/kakao',
+            client_id: client_id,
+            redirect_uri: redirect_uri,
             code: authCode,
           }),
         });
@@ -116,7 +119,9 @@ export default function Page() {
           // setRefreshExpiredDate(data.refresh_token_expires_in);
           console.log(accessToken);
           alert('성공');
-          router.push('/');
+          // 여기서 분기를 나눠서 새 회원이면 닉네임 등록페이지로
+          // 기존 회원이면 메인페이지or채팅페이지로 보낸다.
+          router.push('/nickname');
         } else {
           // console.log(res.status);
           alert('실패');

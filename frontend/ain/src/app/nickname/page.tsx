@@ -3,8 +3,14 @@
 import { ChangeEvent, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
+import userStore from '@/store/userStore';
+
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
 export default function Page() {
   const [inputValue, setInputValue] = useState<string>('');
+
+  const { accessToken } = userStore();
 
   const router = useRouter();
 
@@ -21,8 +27,42 @@ export default function Page() {
   const setIdealNickname = () => {
     if (koreanRegex.test(inputValue) && inputValue !== '' && inputValue !== null) {
       // fetch post
-      alert('내 닉네임 설정이 완료되었습니다.');
-      router.push('/');
+
+      console.log(`${API_URL}/members`);
+      console.log(inputValue);
+      // alert('내 닉네임 설정이 완료되었습니다.');
+
+      // router.push('/');
+    } else {
+      alert('닉네임은 한글 1~5자 사이로 해주세요.');
+    }
+  };
+
+  const postMyNickname = async () => {
+    if (koreanRegex.test(inputValue) && inputValue !== '' && inputValue !== null) {
+      // fetch post
+
+      try {
+        const res = await fetch(`${API_URL}/members`, {
+          method: 'PATCH',
+          headers: {
+            Authorization: accessToken,
+            'Content=Type': 'application/json',
+          },
+          body: JSON.stringify({
+            memberNickname: inputValue,
+          }),
+        });
+
+        if (res.ok) {
+          console.log('닉네임 등록 성공!');
+        } else {
+          console.log(res.status);
+        }
+      } catch (error) {
+        console.log(error);
+        throw new Error();
+      }
     } else {
       alert('닉네임은 한글 1~5자 사이로 해주세요.');
     }
@@ -45,6 +85,7 @@ export default function Page() {
       />
       <button
         type='button'
+        // onClick={postMyNickname}
         onClick={setIdealNickname}
         className='mt-2 mb-10 w-40 border-solid rounded-full px-2 py-2 mx-4 text-lg text-white'
         style={{ backgroundColor: '#BE44E9' }}

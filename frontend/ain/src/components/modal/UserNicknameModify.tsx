@@ -3,17 +3,22 @@
 import React from 'react';
 import { useState, useEffect, ChangeEvent } from 'react';
 
+import userStore from '@/store/userStore';
+
 import useModalStore from '@/store/modalStore';
 
 interface Props {
   closeModal: any;
 }
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
 export default function UserNicknameModifyModal({ closeModal }: Props) {
   const [inputValue, setInputValue] = useState<string>('');
 
   const { nicknameModalState, setNicknameModalState, setHeaderDropDown } = useModalStore();
 
+  const { accessToken } = userStore();
   const koreanRegex = /^[가-힣]*$/;
 
   const modifyNickname = () => {
@@ -21,6 +26,35 @@ export default function UserNicknameModifyModal({ closeModal }: Props) {
       // fetch post
       console.log(inputValue);
       closeModal();
+    } else {
+      alert('닉네임은 한글 1~5자 사이로 해주세요.');
+    }
+  };
+
+  const modifyMyNickname = async () => {
+    if (koreanRegex.test(inputValue) && inputValue !== '' && inputValue !== null) {
+      // fetch post
+      try {
+        const res = await fetch(`${API_URL}/members`, {
+          method: 'PATCH',
+          headers: {
+            Authorization: accessToken,
+            'Content=Type': 'application/json',
+          },
+          body: JSON.stringify({
+            memberNickname: inputValue,
+          }),
+        });
+
+        if (res.ok) {
+          console.log('닉네임 수정 성공!');
+        } else {
+          console.log(res.status);
+        }
+      } catch (error) {
+        console.log(error);
+        throw new Error();
+      }
     } else {
       alert('닉네임은 한글 1~5자 사이로 해주세요.');
     }
@@ -57,7 +91,8 @@ export default function UserNicknameModifyModal({ closeModal }: Props) {
             onChange={(e) => handleInputChange(e)}
           />
           <button
-            onClick={modifyNickname}
+            // onClick={modifyNickname}
+            onClick={modifyMyNickname}
             className='mt-2 border-solid rounded-full  px-2 py-2 mx-10 text-lg text-white shadow-md'
             style={{ backgroundColor: '#BE44E9' }}
           >

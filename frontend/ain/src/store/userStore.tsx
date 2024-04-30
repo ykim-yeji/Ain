@@ -9,7 +9,9 @@ interface StoreState {
   deleteAccessToken: () => void;
   refreshToken: string;
   setRefreshToken: (refreshToken: string) => void;
-  memeberId: number;
+  memberId: number;
+  memberNickname: string;
+  setMemberNickname: (memberNickname: string) => void;
 }
 
 const useUserStore = create(
@@ -34,11 +36,12 @@ const useUserStore = create(
         set({
           refreshToken: refreshToken,
         }),
-      memeberId: 0,
       deleteAccessToken: () => {
         set({ accessToken: '' });
         set({ isLogin: false });
       },
+      memberId: 0,
+      memberNickname: '',
     }),
     {
       name: 'user',
