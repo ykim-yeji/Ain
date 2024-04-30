@@ -8,6 +8,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -32,6 +33,7 @@ public class Member extends BaseEntity {
     private OauthProvider oauthProvider;
 
     @Column(name = "nickname", length = 20)
+    @ColumnDefault("사용자")
     private String nickname;
 
     @Column(name = "status", nullable = false)

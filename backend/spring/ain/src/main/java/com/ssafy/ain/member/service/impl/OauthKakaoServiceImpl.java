@@ -45,14 +45,17 @@ public class OauthKakaoServiceImpl implements OauthKakaoService {
         Long oauthId = getKakaoUser(accessToken);
         //새로운 사용자일 경우 회원가입
         Member member = memberRepository.findByOauthIdAndOauthProvider(oauthId, OauthProvider.KAKAO);
+        boolean isNewMember = false;
         if (member == null) {
             member = signup(oauthId, OauthProvider.KAKAO);
+            isNewMember = true;
         }
 
         return LoginResponse.builder()
                 .memberId(member.getId())
                 .memberAccessToken(null)
                 .memberRefreshToken(null)
+                .isNewMember(isNewMember)
                 .build();
     }
 
