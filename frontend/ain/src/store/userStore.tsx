@@ -42,6 +42,7 @@ const useUserStore = create(
       },
       memberId: 0,
       memberNickname: '',
+      setMemberNickname(memberNickname) {},
     }),
     {
       name: 'user',
