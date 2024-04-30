@@ -3,6 +3,8 @@
 import React from 'react';
 import { useState, useEffect, ChangeEvent } from 'react';
 
+import { useRouter } from 'next/navigation';
+
 import userStore from '@/store/userStore';
 
 import useModalStore from '@/store/modalStore';
@@ -14,7 +16,9 @@ interface Props {
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export default function UserNicknameModifyModal({ closeModal }: Props) {
+  const router = useRouter();
   const [inputValue, setInputValue] = useState<string>('');
+  const [originNickname, setOriginNickname] = useState<string>('');
 
   const { nicknameModalState, setNicknameModalState, setHeaderDropDown } = useModalStore();
 
@@ -30,6 +34,49 @@ export default function UserNicknameModifyModal({ closeModal }: Props) {
       alert('닉네임은 한글 1~5자 사이로 해주세요.');
     }
   };
+
+  useEffect(() => {
+    const getMyNickname = async () => {
+      try {
+        const res = await fetch(`${API_URL}/members`, {
+          headers: {
+            Authorization: accessToken,
+          },
+        });
+
+        if (res.ok) {
+          const result = await res.json();
+
+          // 이때 store에 있는 유저 닉네임도 변경??
+          //  아니면 유저 닉네임을 기존 store에서 가져올까?
+          if (result.code === 200) {
+            setOriginNickname(result.data.memberNickname);
+          } else if (result.code === 401) {
+            alert('ERROR UNAUTHORIZED');
+            return;
+          } else if (result.code === 403) {
+            alert('ERROR FORBIDDEN');
+            return;
+          } else if (result.code === 404) {
+            alert('ERROR NOT FOUND');
+            return;
+          } else {
+            alert('401, 403, 404 이외 에러 발생');
+            return;
+          }
+        } else {
+          console.log('에러발생');
+          return;
+        }
+      } catch (error) {
+        alert('에러발생으로 닉네임 정보 불러오기 실패');
+        console.log(error);
+      }
+    };
+
+    // 로그인이 되어있어야 자동 실행되게끔...?
+    getMyNickname();
+  }, []);
 
   const modifyMyNickname = async () => {
     if (koreanRegex.test(inputValue) && inputValue !== '' && inputValue !== null) {
@@ -47,11 +94,34 @@ export default function UserNicknameModifyModal({ closeModal }: Props) {
         });
 
         if (res.ok) {
-          console.log('닉네임 수정 성공!');
+          const result = await res.json();
+
+          if (result.code === 200) {
+            alert('닉네임 수정성공');
+            closeModal();
+          } else if (result.code === 400) {
+            alert('ERROR_BAD_REQUEST');
+            return;
+          } else if (result.code === 401) {
+            alert('ERROR_UNAUTHORIZED');
+            return;
+          } else if (result.code === 403) {
+            alert('ERROR_FORBIDDEN');
+            return;
+          } else if (result.code === 404) {
+            alert('ERROR_NOT_FOUND');
+            return;
+          } else {
+            alert('400, 401, 403, 404 제외 에러 발생');
+            return;
+          }
         } else {
+          alert('닉네임 수정 실패');
           console.log(res.status);
+          return;
         }
       } catch (error) {
+        alert('에러 발생으로 닉네임 수정 실패');
         console.log(error);
         throw new Error();
       }
