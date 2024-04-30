@@ -13,11 +13,15 @@ import useUserStore from '@/store/userStore';
 
 import UserNicknameModifyModal from '@/components/modal/UserNicknameModify';
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
 export default function Header() {
   // const [isLogin, setIsLogin] = useState<boolean>(true);
   // const [dropDown, setDropDown] = useState<boolean>(false);
 
   const router = useRouter();
+
+  const { accessToken } = useUserStore();
 
   const { headerDropDown, setHeaderDropDown, nicknameModalState, setNicknameModalState, testNum, increaseTestNum } =
     useModalStore();
@@ -77,6 +81,48 @@ export default function Header() {
     // setDropDown(false);
     setHeaderDropDown();
     router.push('/');
+  };
+
+  const oauthLogout = async () => {
+    try {
+      const res = await fetch(`${API_URL}/auth/logout`, {
+        headers: {
+          Authorization: accessToken,
+        },
+      });
+
+      if (res.ok) {
+        const result = await res.json();
+
+        if (result.code === 200) {
+          deleteAccessToken();
+          setHeaderDropDown();
+          console.log('로그아웃 성공');
+          router.push('/');
+        } else if (result.code === 401) {
+          alert('ERROR_UNAUTHORIZED');
+          return;
+        } else if (result.code === 403) {
+          alert('ERROR_FORBIDDEN');
+          return;
+        } else if (result.code === 404) {
+          alert('ERROR_NOT_FOUND');
+          return;
+        } else {
+          alert('401,403,404 이외의 에러 발생');
+          return;
+        }
+      } else {
+        console.log('로그아웃 실패');
+        console.log(res.status);
+        return;
+      }
+    } catch (error) {
+      console.log('에러로 로그아웃 실패');
+      console.log(error);
+      // throw new Error();
+      return;
+    }
   };
 
   // useEffect(() => {
@@ -179,7 +225,8 @@ export default function Header() {
                     <div>
                       <button
                         type='button'
-                        onClick={logout}
+                        // onClick={logout}
+                        onClick={oauthLogout}
                         className='mt-1 bg-white rounded-full text-xs w-28 px-2 py-2 font-semibold font-sans'
                         style={{ fontSize: '13px' }}
                       >
