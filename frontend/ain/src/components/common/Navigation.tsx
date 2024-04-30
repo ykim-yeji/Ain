@@ -41,7 +41,25 @@ export default function Navigation() {
         {/* <button type='button' onClick={() => confirm()}>
           이즈로긴?
         </button> */}
-        {isLogin === true ? (
+
+        <Link href='/chat'>
+          <div
+            className='flex 
+ flex-col cursor-pointer'
+          >
+            <FontAwesomeIcon
+              style={{ color: pathName.startsWith('/chat') ? '#C776E3' : 'white' }}
+              icon={faComments}
+              size='xl'
+            />
+            <div style={{ color: pathName.startsWith('/chat') ? '#C776E3' : 'white' }} className='text-sm'>
+              Chat
+            </div>
+          </div>
+        </Link>
+
+        {/* 아래는 회원이냐 아니냐에 따라 접근을 막는 코드 */}
+        {/* {isLogin === true ? (
           <Link href='/chat'>
             <div
               className='flex 
@@ -64,7 +82,7 @@ export default function Navigation() {
               Chat
             </div>
           </div>
-        )}
+        )} */}
       </div>
       <div className='flex justify-center'>
         <Link href='/'>
@@ -88,7 +106,8 @@ export default function Navigation() {
         </Link>
       </div>
       <div className='flex justify-center'>
-        {isLogin === true ? (
+        {/* 아래는 회원이냐 아니냐에 따라 접근을 막는 코드 */}
+        {/* {isLogin === true ? (
           <Link href='/photo'>
             <div className='flex flex-col cursor-pointer'>
               <FontAwesomeIcon
@@ -108,7 +127,20 @@ export default function Navigation() {
               Photo
             </div>
           </div>
-        )}
+        )} */}
+
+        <Link href='/photo'>
+          <div className='flex flex-col cursor-pointer'>
+            <FontAwesomeIcon
+              style={{ color: pathName.startsWith('/photo') ? '#C776E3' : 'white' }}
+              icon={faCamera}
+              size='xl'
+            />
+            <div style={{ color: pathName.startsWith('/photo') ? '#C776E3' : 'white' }} className='text-sm'>
+              Photo
+            </div>
+          </div>
+        </Link>
       </div>
       {navOverlay && (
         <div onClick={setNicknameModalState} className='absolute top-0 left-0 w-full h-full bg-black opacity-70 z-0' />
