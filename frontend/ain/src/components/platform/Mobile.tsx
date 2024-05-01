@@ -3,60 +3,84 @@ import React, { useState, useEffect, CSSProperties } from 'react';
 import { savePicture } from '../camera/savePicture';
 import { useCamera } from '../camera/useCamera';
 import { usePhotoCapture } from '../camera/usePhotoCapture';
+import { CreateIdealPersonPage } from './CreateIdealPerson';
 
 export const MobilePage = () => {
- const [idealPersons, setIdealPersons] = useState<IdealPerson[] | null>(null);
- const [selectedIdealPersonImage, setSelectedIdealPersonImage] = useState('');
- const { videoRef, isCameraOn, startCamera, stopCamera } = useCamera();
- const { image, takePicture } = usePhotoCapture(videoRef, selectedIdealPersonImage); // Pass as prop
- const [carouselIndex, setCarouselIndex] = useState(0); // 케러셀의 인덱스 상태
- const [isPictureTaken, setIsPictureTaken] = useState(false); // 사진 촬영 여부 상태 추가
+  const [idealPersons, setIdealPersons] = useState<IdealPerson[] | null>(null);
+  const [selectedIdealPersonImage, setSelectedIdealPersonImage] = useState('');
+  const { videoRef, isCameraOn, startCamera, stopCamera } = useCamera();
+  const { image, takePicture } = usePhotoCapture(videoRef, selectedIdealPersonImage);
+  const [carouselIndex, setCarouselIndex] = useState(0);
+  const [isPictureTaken, setIsPictureTaken] = useState(false);
+  const [idealPersonCount, setIdealPersonCount] = useState<number | null>(null);
 
- useEffect(() => {
-  if (image) {
-   setIsPictureTaken(true); // 사진 촬영 완료 시 상태 변경
-  }
- }, [image]);
-
- const handleSavePicture = () => {
-  if (image) {
-   savePicture(image);
-   setIsPictureTaken(false); // 사진 저장 후 촬영 상태 초기화
-  }
- };
-
- // 케러셀을 위한 스타일
- const carouselStyle: CSSProperties = {
-  display: 'flex',
-  overflowX: 'scroll',
-  padding: '10px',
-  gap: '10px',
- };
-
- // 케러셀 아이템을 위한 스타일
- const carouselItemStyle = {
-  flex: '0 0 auto',
-  width: '100px', // 적절한 크기 조정이 필요할 수 있습니다.
- };
-
- useEffect(() => {
-  const fetchIdealPersons = async () => {
-   try {
-    const response = await fetch('https://8ca20285-b1c8-4df8-af3b-2002f85a8f22.mock.pstmn.io/api/ideal-people');
-    const data = await response.json();
-    if (data.code === 201 && data.status === 'CREATED') {
-     setIdealPersons(data.data.idealPersons);
+  useEffect(() => {
+    if (image) {
+      setIsPictureTaken(true);
     }
-   } catch (error) {
-    console.error('이상형 정보 가져오기 실패:', error);
-   }
-  };
-  fetchIdealPersons();
- }, []);
+  }, [image]);
 
- const selectIdealPersonImage = (idealPersonImage: string) => {
-  setSelectedIdealPersonImage(idealPersonImage);
- };
+  const handleSavePicture = () => {
+    if (image) {
+      savePicture(image);
+      setIsPictureTaken(false);
+    }
+  };
+
+  const carouselStyle: CSSProperties = {
+    display: 'flex',
+    overflowX: 'scroll',
+    padding: '10px',
+    gap: '10px',
+  };
+
+  const carouselItemStyle = {
+    flex: '0 0 auto',
+    width: '100px',
+  };
+
+  useEffect(() => {
+    const fetchIdealPersonsCount = async () => {
+      try {
+        const response = await fetch('https://8ca20285-b1c8-4df8-af3b-2002f85a8f22.mock.pstmn.io/api/ideal-people/count');
+        const data = await response.json();
+        if (data.code === 200 && data.status === 'CREATED') {
+          setIdealPersonCount(data.data.idealPersonCount);
+        }
+      } catch (error) {
+        console.error('이상형 개수 정보 가져오기 실패:', error);
+      }
+    };
+    fetchIdealPersonsCount();
+  }, []);
+
+  useEffect(() => {
+    if (idealPersonCount === 0) {
+      // 이상형이 없을 경우 로직 실행하지 않음
+      return;
+    }
+
+    const fetchIdealPersons = async () => {
+      try {
+        const response = await fetch('https://8ca20285-b1c8-4df8-af3b-2002f85a8f22.mock.pstmn.io/api/ideal-people');
+        const data = await response.json();
+        if (data.code === 201 && data.status === 'CREATED') {
+          setIdealPersons(data.data.idealPersons);
+        }
+      } catch (error) {
+        console.error('이상형 정보 가져오기 실패:', error);
+      }
+    };
+    fetchIdealPersons();
+  }, [idealPersonCount]);
+
+  const selectIdealPersonImage = (idealPersonImage: string) => {
+    setSelectedIdealPersonImage(idealPersonImage);
+  };
+
+  if (idealPersonCount === 0) {
+    return <CreateIdealPersonPage />;
+  }
 
   return (
     <div className='relative' style={{height: 'calc(100vh - 헤더 높이 - 네비게이션 바 높이)', overflowY: 'auto'}}>
