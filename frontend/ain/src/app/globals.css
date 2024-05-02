@@ -18,7 +18,9 @@
   font-style: normal;
 }
 
-*{ font-family: 'GmarketSansMedium'; }
+* {
+  font-family: 'GmarketSansMedium';
+}
 
 /* :root {
   --foreground-rgb: 0, 0, 0;
@@ -48,4 +50,8 @@
 
 * {
   font-family: 'GmarketSansMedium';
+}
+
+::-webkit-scrollbar {
+  display: none;
 }
