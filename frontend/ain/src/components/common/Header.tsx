@@ -244,8 +244,8 @@ export default function Header() {
                   src='/icon/login.svg'
                   alt='로그인'
                   className='mr-6 cursor-pointer'
-                  width={20}
-                  height={20}
+                  width={28}
+                  height={28}
                   priority
                 />
               </Link>

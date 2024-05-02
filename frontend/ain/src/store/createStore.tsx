@@ -1,11 +1,13 @@
 import { create } from 'zustand';
 
 interface StoreState {
-     mergeInput: string
+     mergeInput: string,
+     genderInput: number
   }
   
 const useCreateStore = create<StoreState>(set => ({
-    mergeInput: ''
+    mergeInput: '',
+    genderInput: 0
 }))
   
 export default useCreateStore;

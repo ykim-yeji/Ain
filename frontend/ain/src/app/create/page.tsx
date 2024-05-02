@@ -17,10 +17,10 @@ export default function CreatePage() {
   const submitInput = () => {
     if (genderInput !== 0) {
       useCreateStore.setState(state => ({ mergeInput: faceInput + shapeInput + ectInput}))
-      // router.push('/loading');
     }
     else {
       alert('성별을 선택해 주세요')
+      setCurrentNum(1)
     }
   }
 
