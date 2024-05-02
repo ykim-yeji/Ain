@@ -1,3 +1,5 @@
-export default function Page() {
-  return <div>Chat페이지</div>;
+export default function ChatPage() {
+  return <div>
+    
+  </div>;
 }
