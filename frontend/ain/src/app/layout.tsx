@@ -25,13 +25,13 @@ export default function RootLayout({
   return (
     <html lang='en'>
       <body className='flex justify-center items-center h-screen'>
-        <div className='flex flex-col justify-center h-full w-full max-w-md bg-gradient-to-b from-[#C776E3] via-[#9772CA] to-[#6B6EB2]'>
+        <div className='flex flex-col justify-center h-full w-full max-w-md bg-gradient-to-b from-[#C776E3] via-[#9772CA] to-[#6B6EB2] overflow-auto'>
           <div className='fixed top-0 w-full max-w-md'>
             <Header />
           </div>
 
           <Suspense fallback={<div>Loading</div>}>
-            <div className='flex flex-col items-center w-full h-full mt-[65px] mb-[68px]'>{children}</div>
+            <div className='flex flex-col items-center w-full h-full mt-[65px] mb-[68px] overflow-auto'>{children}</div>
           </Suspense>
 
           <div className='fixed bottom-0 flex w-full max-w-md items-end justify-center'>

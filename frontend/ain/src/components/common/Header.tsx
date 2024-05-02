@@ -6,6 +6,7 @@ import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 
 import useModalStore from '@/store/modalStore';
 
@@ -18,7 +19,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL;
 export default function Header() {
   // const [isLogin, setIsLogin] = useState<boolean>(true);
   // const [dropDown, setDropDown] = useState<boolean>(false);
-
+  const pathName = usePathname();
   const router = useRouter();
 
   const { accessToken } = useUserStore();
@@ -136,19 +137,20 @@ export default function Header() {
   // }, []);
 
   return (
-    <div>
-      <div className='z-10 w-full text-sm'>
-        <div className='flex justify-between'>
-          <div>
-            {/* 로그인 상태 테스트 중 나중에 변경 */}
-            <Link href='/'>
-              <Image src='/Logo/ainlogo.svg' alt='Ain Logo' className='ml-3' width={120} height={30} priority />
-            </Link>
-            {/* <div onClick={handleLoginState}>
+    pathName !== '/chat/chatroom' && (
+      <div>
+        <div className='z-10 w-full text-sm'>
+          <div className='flex justify-between'>
+            <div>
+              {/* 로그인 상태 테스트 중 나중에 변경 */}
+              <Link href='/'>
+                <Image src='/Logo/ainlogo.svg' alt='Ain Logo' className='ml-3' width={120} height={30} priority />
+              </Link>
+              {/* <div onClick={handleLoginState}>
               <Image src='/logo/ainlogo.svg' alt='Ain Logo' className='ml-3' width={120} height={30} priority />
             </div> */}
-          </div>
-          {/* <button
+            </div>
+            {/* <button
             type='button'
             onClick={confirm}
             className='mb-10 text-md font-semibold px-7 py-1 rounded-full text-white'
@@ -164,98 +166,98 @@ export default function Header() {
           >
             testNum 1 증가
           </button> */}
-          <div className='flex items-center relative'>
-            {isLogin ? (
-              <div className='flex flex-col'>
-                {/* <div className='flex' onClick={handleDropDown}>
-                 */}
-                <div className='flex' onClick={setHeaderDropDown}>
-                  <div>
-                    <Image
-                      src='/icon/islogin.svg'
-                      alt='로그인한 상태'
-                      className='mr-2 cursor-pointer'
-                      width={28}
-                      height={28}
-                      priority
-                    />
-                  </div>
+            <div className='flex items-center relative'>
+              {isLogin ? (
+                <div className='flex flex-col'>
+                  {/* <div className='flex' onClick={handleDropDown}>
+                   */}
+                  <div className='flex' onClick={setHeaderDropDown}>
+                    <div>
+                      <Image
+                        src='/icon/islogin.svg'
+                        alt='로그인한 상태'
+                        className='mr-2 cursor-pointer'
+                        width={28}
+                        height={28}
+                        priority
+                      />
+                    </div>
 
+                    {/* {dropDown ? ( */}
+                    {headerDropDown ? (
+                      <div className='flex items-center'>
+                        <Image
+                          // src='/역삼각형.svg'
+                          src='/icon/dropdown-triangle.svg'
+                          alt='드롭다운 활성화'
+                          className='mr-6 cursor-pointer'
+                          width={10}
+                          height={10}
+                          priority
+                        />
+                      </div>
+                    ) : (
+                      <div className='flex items-center'>
+                        <Image
+                          // src='/삼각형.svg'
+                          src='/icon/dropdown-triangle-revert.svg'
+                          alt='드롭다운 활성화'
+                          className='mr-6 cursor-pointer'
+                          width={10}
+                          height={10}
+                          priority
+                        />
+                      </div>
+                    )}
+                  </div>
                   {/* {dropDown ? ( */}
                   {headerDropDown ? (
-                    <div className='flex items-center'>
-                      <Image
-                        // src='/역삼각형.svg'
-                        src='/icon/dropdown-triangle.svg'
-                        alt='드롭다운 활성화'
-                        className='mr-6 cursor-pointer'
-                        width={10}
-                        height={10}
-                        priority
-                      />
+                    <div className='absolute top-10 right-4'>
+                      <div>
+                        <button
+                          type='button'
+                          // onClick={handleNicknameModal}
+                          onClick={setNicknameModalState}
+                          className='mt-4 bg-white rounded-full text-xs w-28 px-2 py-2 font-semibold font-sans'
+                          style={{ fontSize: '13px' }}
+                        >
+                          닉네임 수정
+                        </button>
+                      </div>
+                      <div>
+                        <button
+                          type='button'
+                          // onClick={logout}
+                          onClick={oauthLogout}
+                          className='mt-1 bg-white rounded-full text-xs w-28 px-2 py-2 font-semibold font-sans'
+                          style={{ fontSize: '13px' }}
+                        >
+                          로그아웃
+                        </button>
+                      </div>
                     </div>
                   ) : (
-                    <div className='flex items-center'>
-                      <Image
-                        // src='/삼각형.svg'
-                        src='/icon/dropdown-triangle-revert.svg'
-                        alt='드롭다운 활성화'
-                        className='mr-6 cursor-pointer'
-                        width={10}
-                        height={10}
-                        priority
-                      />
-                    </div>
+                    ''
                   )}
                 </div>
-                {/* {dropDown ? ( */}
-                {headerDropDown ? (
-                  <div className='absolute top-10 right-4'>
-                    <div>
-                      <button
-                        type='button'
-                        // onClick={handleNicknameModal}
-                        onClick={setNicknameModalState}
-                        className='mt-4 bg-white rounded-full text-xs w-28 px-2 py-2 font-semibold font-sans'
-                        style={{ fontSize: '13px' }}
-                      >
-                        닉네임 수정
-                      </button>
-                    </div>
-                    <div>
-                      <button
-                        type='button'
-                        // onClick={logout}
-                        onClick={oauthLogout}
-                        className='mt-1 bg-white rounded-full text-xs w-28 px-2 py-2 font-semibold font-sans'
-                        style={{ fontSize: '13px' }}
-                      >
-                        로그아웃
-                      </button>
-                    </div>
-                  </div>
-                ) : (
-                  ''
-                )}
-              </div>
-            ) : (
-              <Link href='/login'>
-                <Image
-                  src='/icon/login.svg'
-                  alt='로그인'
-                  className='mr-6 cursor-pointer'
-                  width={20}
-                  height={20}
-                  priority
-                />
-              </Link>
-            )}
+              ) : (
+                <Link href='/login'>
+                  <Image
+                    src='/icon/login.svg'
+                    alt='로그인'
+                    className='mr-6 cursor-pointer'
+                    width={20}
+                    height={20}
+                    priority
+                  />
+                </Link>
+              )}
+            </div>
           </div>
         </div>
-      </div>
-      <div>
-        {/* <div className='relative'> */}
-        {/* {nicknameModalState && (
+        <div>
+          {/* <div className='relative'> */}
+          {/* {nicknameModalState && (
             <div className='z-40'>
               <UserNicknameModifyModal closeModal={setNicknameModalState} />
             </div>
@@ -267,21 +269,22 @@ export default function Header() {
             />
           )} */}
 
-        {nicknameModalState && (
-          <div className='static'>
-            <div
-              className='overlay justify-center fixed top-0  w-full h-full bg-black opacity-70 z-30 max-w-md'
-              onClick={setNicknameModalState}
-            />
-            <div className='h-screen'>
-              <div className='z-40 absolute h-full w-full '>
-                <UserNicknameModifyModal closeModal={setNicknameModalState} />
+          {nicknameModalState && (
+            <div className='static'>
+              <div
+                className='overlay justify-center fixed top-0  w-full h-full bg-black opacity-70 z-30 max-w-md'
+                onClick={setNicknameModalState}
+              />
+              <div className='h-screen'>
+                <div className='z-40 absolute h-full w-full '>
+                  <UserNicknameModifyModal closeModal={setNicknameModalState} />
+                </div>
               </div>
             </div>
-          </div>
-        )}
-        {/* </div> */}
+          )}
+          {/* </div> */}
+        </div>
       </div>
-    </div>
+    )
   );
 }
