@@ -3,7 +3,7 @@
 import withPWAInit from '@ducanh2912/next-pwa';
 
 const withPWA = withPWAInit({
-  // reactstrictmode: false,
+  reactstrictmode: false,
   dest: 'public',
   cacheOnFrontEndNav: true,
   aggressiveFrontEndNavCaching: true,
