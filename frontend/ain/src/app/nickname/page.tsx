@@ -47,7 +47,7 @@ export default function Page() {
           method: 'PATCH',
           headers: {
             Authorization: accessToken,
-            'Content=Type': 'application/json',
+            'Content-Type': 'application/json',
           },
           body: JSON.stringify({
             memberNickname: inputValue,
