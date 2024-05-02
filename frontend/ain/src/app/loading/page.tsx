@@ -1,11 +1,13 @@
 'use client'
 import useCreateStore from "@/store/createStore";
+import { generateKey } from "crypto";
 
 export default function LoadingPage() {
 
-  const { mergeInput } = useCreateStore();
+  const { mergeInput, genderInput } = useCreateStore();
 
   console.log(mergeInput)
+  console.log(genderInput)
 
     return <div className="relative w-full h-full flex flex-col justify-center items-center">
       <img src="./gif/loading_circle.gif" className="w-[55%] rounded-full shadow-xl" />

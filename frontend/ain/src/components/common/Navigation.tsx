@@ -36,30 +36,36 @@ export default function Navigation() {
   // }, []);
 
   return (
-    <div className='flex justify-around bottom-0 left-0 right-0 py-3 w-full bg-[#5F0F7A]'>
-      <div className='flex justify-center'>
-        {/* <button type='button' onClick={() => confirm()}>
+    pathName !== '/chat/chatroom' && (
+      <div className='flex justify-around bottom-0 left-0 right-0 py-3 w-full bg-[#5F0F7A]'>
+        <div className='flex justify-center'>
+          {/* <button type='button' onClick={() => confirm()}>
           이즈로긴?
         </button> */}
 
-        <Link href='/chat'>
-          <div
-            className='flex 
+          <Link href='/chat'>
+            <div
+              className='flex 
  flex-col cursor-pointer'
-          >
-            <FontAwesomeIcon
-              style={{ color: pathName.startsWith('/chat') ? '#C776E3' : 'white' }}
-              icon={faComments}
-              size='xl'
-            />
-            <div style={{ color: pathName.startsWith('/chat') ? '#C776E3' : 'white' }} className='text-sm'>
-              Chat
+            >
+              <FontAwesomeIcon
+                // style={{ color: pathName.startsWith('/chat') ? '#C776E3' : 'white' }}
+                style={{ color: pathName === '/chat' ? '#C776E3' : 'white' }}
+                icon={faComments}
+                size='xl'
+              />
+              <div
+                // style={{ color: pathName.startsWith('/chat') ? '#C776E3' : 'white' }}
+                style={{ color: pathName === '/chat' ? '#C776E3' : 'white' }}
+                className='text-sm'
+              >
+                Chat
+              </div>
             </div>
-          </div>
-        </Link>
+          </Link>
 
-        {/* 아래는 회원이냐 아니냐에 따라 접근을 막는 코드 */}
-        {/* {isLogin === true ? (
+          {/* 아래는 회원이냐 아니냐에 따라 접근을 막는 코드 */}
+          {/* {isLogin === true ? (
           <Link href='/chat'>
             <div
               className='flex 
@@ -83,31 +89,31 @@ export default function Navigation() {
             </div>
           </div>
         )} */}
-      </div>
-      <div className='flex justify-center'>
-        <Link href='/'>
-          <div className='flex flex-col cursor-pointer'>
-            <FontAwesomeIcon
-              style={{
-                color: pathName === '/' || pathName === '/create' || pathName === 'loading' ? '#C776E3' : 'white',
-              }}
-              icon={faHouse}
-              size='xl'
-            />
-            <div
-              style={{
-                color: pathName === '/' || pathName === '/create' || pathName === 'loading' ? '#C776E3' : 'white',
-              }}
-              className='text-sm'
-            >
-              Home
+        </div>
+        <div className='flex justify-center'>
+          <Link href='/'>
+            <div className='flex flex-col cursor-pointer'>
+              <FontAwesomeIcon
+                style={{
+                  color: pathName === '/' || pathName === '/create' || pathName === 'loading' ? '#C776E3' : 'white',
+                }}
+                icon={faHouse}
+                size='xl'
+              />
+              <div
+                style={{
+                  color: pathName === '/' || pathName === '/create' || pathName === 'loading' ? '#C776E3' : 'white',
+                }}
+                className='text-sm'
+              >
+                Home
+              </div>
             </div>
-          </div>
-        </Link>
-      </div>
-      <div className='flex justify-center'>
-        {/* 아래는 회원이냐 아니냐에 따라 접근을 막는 코드 */}
-        {/* {isLogin === true ? (
+          </Link>
+        </div>
+        <div className='flex justify-center'>
+          {/* 아래는 회원이냐 아니냐에 따라 접근을 막는 코드 */}
+          {/* {isLogin === true ? (
           <Link href='/photo'>
             <div className='flex flex-col cursor-pointer'>
               <FontAwesomeIcon
@@ -129,22 +135,26 @@ export default function Navigation() {
           </div>
         )} */}
 
-        <Link href='/photo'>
-          <div className='flex flex-col cursor-pointer'>
-            <FontAwesomeIcon
-              style={{ color: pathName.startsWith('/photo') ? '#C776E3' : 'white' }}
-              icon={faCamera}
-              size='xl'
-            />
-            <div style={{ color: pathName.startsWith('/photo') ? '#C776E3' : 'white' }} className='text-sm'>
-              Photo
+          <Link href='/photo'>
+            <div className='flex flex-col cursor-pointer'>
+              <FontAwesomeIcon
+                style={{ color: pathName.startsWith('/photo') ? '#C776E3' : 'white' }}
+                icon={faCamera}
+                size='xl'
+              />
+              <div style={{ color: pathName.startsWith('/photo') ? '#C776E3' : 'white' }} className='text-sm'>
+                Photo
+              </div>
             </div>
-          </div>
-        </Link>
+          </Link>
+        </div>
+        {navOverlay && (
+          <div
+            onClick={setNicknameModalState}
+            className='absolute top-0 left-0 w-full h-full bg-black opacity-70 z-0'
+          />
+        )}
       </div>
-      {navOverlay && (
-        <div onClick={setNicknameModalState} className='absolute top-0 left-0 w-full h-full bg-black opacity-70 z-0' />
-      )}
-    </div>
+    )
   );
 }
