@@ -24,8 +24,16 @@ export default function Header() {
 
   const { accessToken } = useUserStore();
 
-  const { headerDropDown, setHeaderDropDown, nicknameModalState, setNicknameModalState, testNum, increaseTestNum } =
-    useModalStore();
+  const {
+    headerDropDown,
+    setHeaderDropDown,
+    nicknameModalState,
+    setNicknameModalState,
+    testNum,
+    increaseTestNum,
+    idealDropDown,
+    setIdealDropDownFalse,
+  } = useModalStore();
 
   const { isLogin, setIsLogin, deleteAccessToken } = useUserStore();
 
@@ -139,7 +147,7 @@ export default function Header() {
   return (
     pathName !== '/chat/chatroom' && (
       <div>
-        <div className='z-10 w-full text-sm'>
+        <div className='z-50 w-full text-sm'>
           <div className='flex justify-between'>
             <div>
               {/* 로그인 상태 테스트 중 나중에 변경 */}
@@ -188,7 +196,7 @@ export default function Header() {
                       <div className='flex items-center'>
                         <Image
                           // src='/역삼각형.svg'
-                          src='/icon/dropdown-triangle.svg'
+                          src='/icon/dropdown_triangle.svg'
                           alt='드롭다운 활성화'
                           className='mr-6 cursor-pointer'
                           width={10}
@@ -200,7 +208,7 @@ export default function Header() {
                       <div className='flex items-center'>
                         <Image
                           // src='/삼각형.svg'
-                          src='/icon/dropdown-triangle-revert.svg'
+                          src='/icon/dropdown_triangle_revert.svg'
                           alt='드롭다운 활성화'
                           className='mr-6 cursor-pointer'
                           width={10}
@@ -212,14 +220,14 @@ export default function Header() {
                   </div>
                   {/* {dropDown ? ( */}
                   {headerDropDown ? (
-                    <div className='absolute top-10 right-4'>
+                    <div className='absolute top-10 right-4 z-40'>
                       <div>
                         <button
                           type='button'
                           // onClick={handleNicknameModal}
                           onClick={setNicknameModalState}
-                          className='mt-4 bg-white rounded-full text-xs w-28 px-2 py-2 font-semibold font-sans'
-                          style={{ fontSize: '13px' }}
+                          className='mt-4 bg-white border-2  text-xs w-32 px-2 py-3 font-semibold font-sans'
+                          style={{ fontSize: '16px' }}
                         >
                           닉네임 수정
                         </button>
@@ -229,8 +237,8 @@ export default function Header() {
                           type='button'
                           // onClick={logout}
                           onClick={oauthLogout}
-                          className='mt-1 bg-white rounded-full text-xs w-28 px-2 py-2 font-semibold font-sans'
-                          style={{ fontSize: '13px' }}
+                          className='border-2 border-t-1 bg-white  text-xs w-32 px-2 py-3 font-semibold font-sans'
+                          style={{ fontSize: '16px' }}
                         >
                           로그아웃
                         </button>
@@ -272,7 +280,7 @@ export default function Header() {
           {nicknameModalState && (
             <div className='static'>
               <div
-                className='overlay justify-center fixed top-0  w-full h-full bg-black opacity-70 z-30 max-w-md'
+                className='overlay justify-center fixed top-0 w-full h-full bg-black opacity-70 z-30 max-w-md'
                 onClick={setNicknameModalState}
               />
               <div className='h-screen'>
