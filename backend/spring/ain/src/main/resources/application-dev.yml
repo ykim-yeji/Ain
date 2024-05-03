@@ -16,3 +16,7 @@ spring:
       hibernate:
         format_sql: true
         show_sql: true
+  jwt:
+    secret: ${JWT_SECRET_KEY}
+    live:
+      access: 3600000
