@@ -24,7 +24,7 @@ export default function CreatePage() {
     }
   }
 
-  return <div className="w-full h-full flex flex-col">
+  return <div className="mt-[65px] mb-[68px] w-full h-full flex flex-col">
     {/* 현재 인덱스 표시 */}
     <div className="w-full h-[15%] flex items-center justify-center">
       <div  className={`w-3 h-3 mx-2 ${currentNum === 1 ? 'bg-white' : 'bg-[#D9D9D9]'} rounded-full shadow-md`}></div>

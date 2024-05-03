@@ -31,7 +31,7 @@ export default function RootLayout({
           </div>
 
           <Suspense fallback={<div>Loading</div>}>
-            <div className='flex flex-col items-center w-full h-full mt-[65px] mb-[68px] overflow-auto'>{children}</div>
+            <div className='flex flex-col items-center w-full h-full overflow-auto'>{children}</div>
           </Suspense>
 
           <div className='fixed bottom-0 flex w-full max-w-md items-end justify-center'>

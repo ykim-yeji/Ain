@@ -5,14 +5,14 @@ export default function ResultPage() {
     const [characterImage, setCharacterImage] = useState<string>('')
     const [characterName, setCharacterName] = useState<string>('')
 
-    return <div className="relative w-full h-full flex flex-col justify-evenly items-center">
+    return <div className="relative mt-[65px] mb-[68px] w-full h-full flex flex-col justify-evenly items-center">
         <img src="./gif/result_firework2.gif" className="absolute top-[180px] left-1/2 transform -translate-x-1/2 -translate-y-1/2"/>
 
         {/* 이상형 정보 */}
         <div className="w-full h-[75%] flex flex-col justify-center items-center">
             <div className="relative w-full flex justify-center items-center">
               <img src="./image/purple_speech.png" alt="" className="w-[300px] mb-4 z-10"/> 
-              <p className="absolute top-[50px] left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10">
+              <p className="absolute top-[50px] left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10 text-[15px]">
                  제 이름은 <span className="text-[#FF7FCE] text-xl">한태빈</span> 입니다. <br />만나서 반가워요!</p>  
             </div>
                           
