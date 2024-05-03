@@ -10,7 +10,6 @@ export const useCamera = () => {
       const stream = await navigator.mediaDevices.getUserMedia({ video: true });
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
-        videoRef.current.play();
         setIsCameraOn(true);
       }
     } catch (error) {
@@ -24,6 +23,7 @@ export const useCamera = () => {
       const tracks = stream.getTracks();
       tracks.forEach((track) => track.stop());
       setIsCameraOn(false);
+      videoRef.current.pause(); // 촬영 종료 후 영상 일시정지
     }
   };
 

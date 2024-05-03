@@ -8,7 +8,7 @@ export default function Page() {
   const { isMobile } = useUserAgent();
 
   return (
-    <div>
+    <div className="w-full h-full">
       {isMobile ? (
         <MobilePage />
       ) : (

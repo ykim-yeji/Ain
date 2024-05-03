@@ -13,6 +13,7 @@ export const MobilePage = () => {
   const [carouselIndex, setCarouselIndex] = useState(0);
   const [isPictureTaken, setIsPictureTaken] = useState(false);
   const [idealPersonCount, setIdealPersonCount] = useState<number | null>(null);
+  const [showIntro, setShowIntro] = useState(true); // 카메라 기능 소개글 표시 상태 추가
 
   useEffect(() => {
     if (image) {
@@ -25,18 +26,6 @@ export const MobilePage = () => {
       savePicture(image);
       setIsPictureTaken(false);
     }
-  };
-
-  const carouselStyle: CSSProperties = {
-    display: 'flex',
-    overflowX: 'scroll',
-    padding: '10px',
-    gap: '10px',
-  };
-
-  const carouselItemStyle = {
-    flex: '0 0 auto',
-    width: '100px',
   };
 
   useEffect(() => {
@@ -56,7 +45,6 @@ export const MobilePage = () => {
 
   useEffect(() => {
     if (idealPersonCount === 0) {
-      // 이상형이 없을 경우 로직 실행하지 않음
       return;
     }
 
@@ -78,55 +66,81 @@ export const MobilePage = () => {
     setSelectedIdealPersonImage(idealPersonImage);
   };
 
+  const handleStartCamera = () => {
+    startCamera();
+    setShowIntro(false); // 카메라 시작 시 소개글 숨기기
+  };
+
   if (idealPersonCount === 0) {
-    return <CreateIdealPersonPage />;
+    return <CreateIdealPersonPage/>;
+  }
+
+  if (showIntro) {
+    // 소개 페이지 표시
+    return (
+      <div className="intro-page w-full h-full flex flex-col justify-center items-center" style={{ textAlign: 'center'}}>
+        <h1 className="text-white text-2xl mb-5" style={{ fontWeight: 'bold' }}>아인과 함께 사진을 찍어요!</h1>
+        <div className="flex justify-center items-center mb-7">
+            <img src="./gif/camera_start.gif" className="w-[70%]" />
+        </div>
+        <p className="text-gray-300 text-xl mb-7">아인과 멋진 사진을 남기고 싶다면, <br/>카메라 권한을 허용해 주세요!</p>
+        <button onClick={handleStartCamera} 
+          className='w-[200px] h-12 mb-2 bg-[#AB42CF] rounded-full text-center text-white text-xl shadow-md'>
+            카메라 시작
+        </button>
+      </div>
+    );
   }
 
   return (
-    <div className='relative' style={{height: 'calc(100vh - 헤더 높이 - 네비게이션 바 높이)', overflowY: 'auto'}}>
-      <h1 style={{marginTop: '20px'}}>모바일 기기로 접근했습니다.</h1>
-      <div className='relative w-10/12'>
+    <div className="relative" style={{ height: "calc(100vh - 헤더 높이 - 네비게이션 바 높이)", overflowY: "auto" }}>
+      {!isCameraOn && <h1 style={{ marginTop: "20px" }}>카메라 기능을 사용하여 이상형의 사진을 찍어보세요.</h1>}
+      <div className="relative w-10/12">
         {isCameraOn ? (
           isPictureTaken ? (
-            <button onClick={handleSavePicture}>사진 저장</button> // 사진 촬영 후 사진 저장 버튼으로 변경
+            <button onClick={handleSavePicture}>사진 저장</button> // 사진 저장 버튼
           ) : (
-            <button onClick={takePicture}>사진 촬영</button>
+            <button onClick={takePicture}>사진 촬영</button> // 사진 촬영 버튼
           )
         ) : (
-          <button onClick={startCamera}>카메라 시작</button>
+          <button onClick={startCamera}>카메라 시작</button> // 카메라 시작 버튼
         )}
         {image ? (
-          <img src={image} className='w-full' alt='Captured' />
+          <img src={image} className="w-full" alt="Captured" /> // 캡처된 이미지 표시
         ) : (
-          <video ref={videoRef} className='w-full'></video>
+          <video ref={videoRef} autoPlay muted /> // 비디오 스트림 표시
         )}
-        {isCameraOn && selectedIdealPersonImage && ( // 사진이 촬영되었고, 선택된 이상형 이미지가 있을 경우에만 오른쪽 하단에 표시
-          <div style={{ position: 'absolute', right: '0', bottom: '0' }}>
+        {isCameraOn && selectedIdealPersonImage && (
+          <div style={{ position: "absolute", right: "0", bottom: "0" }}>
             <img
               src={selectedIdealPersonImage}
-              className='w-auto h-auto pointer-events-none'
-              alt='Overlay'
-              style={{ width: '134px', height: '134px' }}
+              className="w-auto h-auto pointer-events-none"
+              alt="Overlay"
+              style={{ width: "134px", height: "134px" }}
             />
           </div>
         )}
       </div>
-      <div className='mt-4' style={{height: '85px', overflowX: 'auto', display: 'flex'}}> {/* 케러셀 화면 컨테이너의 위치 및 marginBottom 조정 */}
-        <div style={{display: 'flex', alignItems: 'center', paddingLeft: '5px'}}>
-          {idealPersons && idealPersons.map((idealPerson, index) => (
-            <img
-              key={idealPerson.idealPersonId}
-              src={idealPerson.idealPersonImage}
-              className='w-auto h-auto cursor-pointer'
-              onClick={() => selectIdealPersonImage(idealPerson.idealPersonImage)}
-              alt={idealPerson.idealPersonNickname}
-              style={{marginRight: '5px', width: '80px', height: '80px', objectFit: 'cover'}}
-            />
-          ))}
+      {isCameraOn && (
+        <div className="mt-4" style={{ height: "85px", overflowX: "auto", display: "flex" }}>
+          {/* 케러셀 이미지 표시 */}
+          <div style={{ display: "flex", alignItems: "center", paddingLeft: "5px" }}>
+            {idealPersons &&
+              idealPersons.map((idealPerson, index) => (
+                <img
+                  key={idealPerson.idealPersonId}
+                  src={idealPerson.idealPersonImage}
+                  className="w-auto h-auto cursor-pointer"
+                  onClick={() => selectIdealPersonImage(idealPerson.idealPersonImage)}
+                  alt={idealPerson.idealPersonNickname}
+                  style={{ marginRight: "5px", width: "80px", height: "80px", objectFit: "cover" }}
+                />
+              ))}
+          </div>
         </div>
-      </div>
+      )}
     </div>
-  );
+  );   
 }  
 
 interface IdealPerson {
