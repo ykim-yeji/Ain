@@ -1,7 +1,5 @@
 package com.ssafy.ain.global.dto;
 
-import com.ssafy.ain.global.constant.MemberRole;
-import com.ssafy.ain.global.constant.OAuthProvider;
 import lombok.*;
 
 @Getter
