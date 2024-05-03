@@ -79,7 +79,7 @@ export const MobilePage = () => {
   };
 
   if (idealPersonCount === 0) {
-    return <CreateIdealPersonPage />;
+    return <CreateIdealPersonPage/>;
   }
 
   return (

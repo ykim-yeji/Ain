@@ -47,7 +47,7 @@ const handleCopyUrlToClipboard = async () => {
 
 export const DesktopPage = () => {
     return (
-      <div style={{ textAlign: 'center', padding: '50px' }}>
+      <div className='w-full h-full flex flex-col justify-center px-[50px]' style={{ textAlign: 'center'}}>
          <h1 className="text-white text-2xl mb-5" style={{ fontWeight: 'bold' }}>모바일로 접속해주세요!</h1>
          <div className="flex justify-center items-center mb-7">
             <img src="./gif/mobile-camera.gif" className="w-[80%] rounded-full" />

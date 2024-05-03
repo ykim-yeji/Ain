@@ -37,7 +37,7 @@ const GradientText = styled(motion.p)`
 
 export const CreateIdealPersonPage = () => {
   return (
-    <div className="create-ideal-person-page" style={{ textAlign: 'center', padding: '50px' }}>
+    <div className="create-ideal-person-page px-[50px] flex flex-col justify-center items-center w-full h-full" style={{ textAlign: 'center',  overflow: 'hidden' }}>
        <h1 className="text-white text-2xl mb-5" style={{ fontWeight: 'bold' }}>생성된 아인이 없어요...</h1>
       <div className="flex justify-center items-center mb-7">
           <img src="./gif/no-data.gif" className="w-[90%] rounded-full" />
