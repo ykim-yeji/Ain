@@ -7,7 +7,6 @@ export default function LoadingPage() {
   const { mergeInput, genderInput } = useCreateStore();
 
   console.log(mergeInput)
-  console.log(genderInput)
 
 
     useEffect(() => {
