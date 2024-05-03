@@ -1,6 +1,6 @@
 'use client'
 import useCreateStore from "@/store/createStore";
-import { generateKey } from "crypto";
+import { useState, useEffect } from "react";
 
 export default function LoadingPage() {
 
@@ -8,6 +8,41 @@ export default function LoadingPage() {
 
   console.log(mergeInput)
   console.log(genderInput)
+
+
+    useEffect(() => {
+      const fetchData = async () => {
+  
+        const requestBody = {
+          idealPersonDescriptions: mergeInput,
+          idealPersonGender: genderInput
+        };
+  
+        try {
+          const response = await fetch('https://myain/fastapi/api/ideal-people/images', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(requestBody),
+          });
+  
+          if (response.ok) {
+            const data = await response.json();
+            console.log('data:', data )
+            
+          } else {
+            // 서버로부터 오류 응답 받음
+            throw new Error('Something went wrong');
+          }
+        } catch (error) {
+          console.error('API request failed: ', error);
+        } 
+      };
+  
+      fetchData();
+    }, [])
+  
 
     return <div className="relative w-full h-full flex flex-col justify-center items-center">
       <img src="./gif/loading_circle.gif" className="w-[55%] rounded-full shadow-xl" />

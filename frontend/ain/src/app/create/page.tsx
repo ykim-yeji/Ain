@@ -16,7 +16,7 @@ export default function CreatePage() {
 
   const submitInput = () => {
     if (genderInput !== 0) {
-      useCreateStore.setState(state => ({ mergeInput: faceInput + shapeInput + ectInput}))
+      useCreateStore.setState(state => ({ mergeInput: faceInput + shapeInput + ectInput, genderInput: genderInput}))
     }
     else {
       alert('성별을 선택해 주세요')
