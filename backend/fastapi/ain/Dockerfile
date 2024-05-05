@@ -4,7 +4,12 @@ EXPOSE 8000
 RUN apt-get update && \
     apt-get install -y gcc git wget
 
+COPY . /app
+WORKDIR /app
+
 # requirements.txt 설치
 RUN pip install --use-deprecated=legacy-resolver -r requirements.txt
-COPY . /app
-ENTRYPOINT ["uvicorn", "main:app", "--reload", "--host", "0.0.0.0"]
+RUN pip install uvicorn
+RUN pip install fastapi
+
+ENTRYPOINT ["uvicorn", "main:app", "--reload", "--hostg", "0.0.0.0"]
