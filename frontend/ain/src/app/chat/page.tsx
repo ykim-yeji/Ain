@@ -287,6 +287,7 @@ export default function Page() {
                       handleModalTest(item.idealPersonNickname, item.idealPersonFullName, item.idealPersonImageUrl)
                     }
                     className='flex flex-col text-center rounded-2xl h-38 w-38 cursor-pointer '
+                    // className='flex flex-col text-center rounded-2xl h-38 cursor-pointer shadow-[3px_3px_10px_3px_rgba(0,0,0,0.3)] '
                     key={index}
                   >
                     <img
