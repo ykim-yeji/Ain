@@ -4,17 +4,24 @@ import { createJSONStorage, persist } from 'zustand/middleware';
 interface StoreState {
   headerDropDown: boolean;
   setHeaderDropDown: () => void;
+  setHeaderDropDownFalse: () => void;
   nicknameModalState: boolean;
   setNicknameModalState: () => void;
   testNum: number;
   increaseTestNum: () => void;
   navOverlay: boolean;
   toggleNavOverlay: () => void;
+  idealDetailModalOpen: boolean;
+  setIdealDetailModalTrue: () => void;
+  setIdealDetailModalFalse: () => void;
   idealDropDown: boolean;
   setIdealDropDownTrue: () => void;
   setIdealDropDownFalse: () => void;
   idealNicknameModalState: boolean;
   setIdealNicknameModalState: () => void;
+  hideIdealList: boolean;
+  setHideIdealListTrue: () => void;
+  setHideIdealListFalse: () => void;
 }
 
 const useModalStore = create<StoreState>((set, get) => ({
@@ -24,6 +31,7 @@ const useModalStore = create<StoreState>((set, get) => ({
       headerDropDown: !state.headerDropDown,
       idealDropDown: false,
     })),
+  setHeaderDropDownFalse: () => set({ headerDropDown: false }),
   nicknameModalState: false,
   setNicknameModalState: () =>
     set((state) => ({
@@ -38,6 +46,9 @@ const useModalStore = create<StoreState>((set, get) => ({
     set((state) => ({
       navOverlay: !state.navOverlay,
     })),
+  idealDetailModalOpen: false,
+  setIdealDetailModalTrue: () => set({ idealDetailModalOpen: true }),
+  setIdealDetailModalFalse: () => set({ idealDetailModalOpen: false }),
   idealDropDown: false,
   setIdealDropDownTrue: () =>
     set({
@@ -55,6 +66,13 @@ const useModalStore = create<StoreState>((set, get) => ({
       idealDropDown: false,
       // navOverlay: !state.navOverlay,
     })),
+  hideIdealList: false,
+  setHideIdealListTrue: () => {
+    set({ hideIdealList: true });
+  },
+  setHideIdealListFalse: () => {
+    set({ hideIdealList: false });
+  },
 }));
 
 export default useModalStore;
