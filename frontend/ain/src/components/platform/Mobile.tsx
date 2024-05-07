@@ -1,8 +1,8 @@
 // MobilePage.tsx
 import React, { useState, useEffect, CSSProperties } from 'react';
-import { savePicture } from '../camera/savePicture';
-import { useCamera } from '../camera/useCamera';
-import { usePhotoCapture } from '../camera/usePhotoCapture';
+import { savePicture } from '../mobile_camera/savePicture';
+import { useCamera } from '../mobile_camera/useCamera';
+import { usePhotoCapture } from '../mobile_camera/usePhotoCapture';
 import { CreateIdealPersonPage } from './CreateIdealPerson';
 
 export const MobilePage = () => {
@@ -14,6 +14,10 @@ export const MobilePage = () => {
   const [isPictureTaken, setIsPictureTaken] = useState(false);
   const [idealPersonCount, setIdealPersonCount] = useState<number | null>(null);
   const [showIntro, setShowIntro] = useState(true); // 카메라 기능 소개글 표시 상태 추가
+  const [currentPage, setCurrentPage] = useState(0);
+  const [isHovering, setIsHovering] = useState(false);
+  const [isClicked, setIsClicked] = useState(false);
+  const itemsPerPage = 3;
 
   useEffect(() => {
     if (image) {
@@ -31,7 +35,7 @@ export const MobilePage = () => {
   useEffect(() => {
     const fetchIdealPersonsCount = async () => {
       try {
-        const response = await fetch('https://8ca20285-b1c8-4df8-af3b-2002f85a8f22.mock.pstmn.io/api/ideal-people/count');
+        const response = await fetch('https://bad7e4c4-8676-4672-86a2-212cf9b3de90.mock.pstmn.io/api/ideal-people/count');
         const data = await response.json();
         if (data.code === 200 && data.status === 'CREATED') {
           setIdealPersonCount(data.data.idealPersonCount);
@@ -50,7 +54,7 @@ export const MobilePage = () => {
 
     const fetchIdealPersons = async () => {
       try {
-        const response = await fetch('https://8ca20285-b1c8-4df8-af3b-2002f85a8f22.mock.pstmn.io/api/ideal-people');
+        const response = await fetch('https://bad7e4c4-8676-4672-86a2-212cf9b3de90.mock.pstmn.io/api/ideal-people');
         const data = await response.json();
         if (data.code === 201 && data.status === 'CREATED') {
           setIdealPersons(data.data.idealPersons);
@@ -61,6 +65,26 @@ export const MobilePage = () => {
     };
     fetchIdealPersons();
   }, [idealPersonCount]);
+
+  useEffect(() => {
+    if (idealPersons && idealPersons.length > 0) {
+      // 첫 번째 이상형의 이미지를 선택
+      setSelectedIdealPersonImage(idealPersons[0].idealPersonImage);
+    }
+  }, [idealPersons]);
+
+  const handleNextClick = () => {
+    // 다음 페이지로 이동
+    setCurrentPage((prevPage) => prevPage + 1);
+  };
+
+  const handlePrevClick = () => {
+    // 이전 페이지로 이동
+    setCurrentPage((prevPage) => Math.max(prevPage - 1, 0));
+  };
+
+  // 현재 페이지에 해당하는 이상형 목록 계산
+  const currentPageIdealPersons = idealPersons ? idealPersons.slice(currentPage * itemsPerPage, (currentPage + 1) * itemsPerPage) : [];
 
   const selectIdealPersonImage = (idealPersonImage: string) => {
     setSelectedIdealPersonImage(idealPersonImage);
@@ -92,19 +116,16 @@ export const MobilePage = () => {
     );
   }
 
+  const cameraImgStyle = {
+    cursor: 'pointer',
+    width: isClicked ? '60px' : '64px', // 클릭 시 작아졌다 커지는 효과
+    height: isClicked ? '60px' : '64px',
+    transition: 'all 0.2s ease', // 부드러운 전환 효과
+  };
+
   return (
-    <div className="relative" style={{ height: "calc(100vh - 헤더 높이 - 네비게이션 바 높이)", overflowY: "auto" }}>
-      {!isCameraOn && <h1 style={{ marginTop: "20px" }}>카메라 기능을 사용하여 이상형의 사진을 찍어보세요.</h1>}
-      <div className="relative w-10/12">
-        {isCameraOn ? (
-          isPictureTaken ? (
-            <button onClick={handleSavePicture}>사진 저장</button> // 사진 저장 버튼
-          ) : (
-            <button onClick={takePicture}>사진 촬영</button> // 사진 촬영 버튼
-          )
-        ) : (
-          <button onClick={startCamera}>카메라 시작</button> // 카메라 시작 버튼
-        )}
+    <div className="flex flex-col justify-center items-center" style={{ height: "calc(100vh)", overflowY: "auto" }}>
+      <div className="relative w-4/5">
         {image ? (
           <img src={image} className="w-full" alt="Captured" /> // 캡처된 이미지 표시
         ) : (
@@ -121,26 +142,51 @@ export const MobilePage = () => {
           </div>
         )}
       </div>
+      <div className='flex flex-row justify-center items-center space-x-2'>
+      <button onClick={handlePrevClick}>
+              <img src="./icon/angle_left_white.png" alt="이전" className='w-4'/>
+          </button>
       {isCameraOn && (
-        <div className="mt-4" style={{ height: "85px", overflowX: "auto", display: "flex" }}>
-          {/* 케러셀 이미지 표시 */}
-          <div style={{ display: "flex", alignItems: "center", paddingLeft: "5px" }}>
-            {idealPersons &&
-              idealPersons.map((idealPerson, index) => (
-                <img
-                  key={idealPerson.idealPersonId}
-                  src={idealPerson.idealPersonImage}
-                  className="w-auto h-auto cursor-pointer"
-                  onClick={() => selectIdealPersonImage(idealPerson.idealPersonImage)}
-                  alt={idealPerson.idealPersonNickname}
-                  style={{ marginRight: "5px", width: "80px", height: "80px", objectFit: "cover" }}
-                />
-              ))}
-          </div>
+        <div className="mt-4 mb-4" style={{ height: "85px", overflowX: "auto", display: "flex", justifyContent: "space-between" }}>
+        <div style={{ display: "flex", alignItems: "center", paddingLeft: "5px" }}>
+          {idealPersons && 
+            currentPageIdealPersons.map((idealPerson, index) => (
+              <img
+                key={idealPerson.idealPersonId}
+                src={idealPerson.idealPersonImage}
+                className="w-auto h-auto cursor-pointer"
+                onClick={() => selectIdealPersonImage(idealPerson.idealPersonImage)}
+                alt={idealPerson.idealPersonNickname}
+                style={{ marginRight: "5px", width: "80px", height: "80px", objectFit: "cover" }}
+              />
+            ))}
         </div>
+      </div>
       )}
+      <button onClick={handleNextClick}>
+              <img src="./icon/angle_left_white.png" alt="다음" className='w-4' style={{ transform: 'scaleX(-1)' }} />
+          </button>
+      </div>
+      <div className='flex flex-row justify-center items-center space-x-32'>
+          {isCameraOn ? (
+              isPictureTaken ? (
+                  <button onClick={handleSavePicture}>사진 저장</button> // 사진 저장 버튼
+              ) : (
+                <img
+                  src={isHovering ? "./icon/camera_start2.png" : "./icon/camera_start.png"} // 마우스 오버 시 이미지 변경
+                  alt="사진 촬영"
+                  onClick={takePicture}
+                  onMouseEnter={() => setIsHovering(true)}
+                  onMouseLeave={() => setIsHovering(false)}
+                  style={cameraImgStyle}
+                />
+              )
+          ) : (
+              <button onClick={startCamera}><img src="./icon/camera_start.png" alt="카메라 시작" className="w-16 h-16"/></button> // 카메라 시작 버튼에 아이콘 추가
+          )}
+      </div>
     </div>
-  );   
+  );  
 }  
 
 interface IdealPerson {
