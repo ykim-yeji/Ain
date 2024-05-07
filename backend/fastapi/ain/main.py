@@ -36,7 +36,7 @@ class IPContent(BaseModel):
     idealPersonGender: int
 
 
-@app.post("/api/assistants/ideal-people")
+@app.post("/assistants/ideal-people")
 async def add_ideal_person_chatbot(
 ):
     try:
@@ -47,7 +47,7 @@ async def add_ideal_person_chatbot(
         logging.error(e)
 
 
-@app.post("/api/ideal-people/images")
+@app.post("/ideal-people/images")
 async def generate_image(
         ip_content: IPContent,
 ):
