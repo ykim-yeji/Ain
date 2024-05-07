@@ -12,9 +12,10 @@ import useModalStore from '@/store/modalStore';
 interface Props {
   closeModal: any;
   tempNickname: string;
+  tempFullName: string;
 }
 
-export default function IdealNicknameModify({ closeModal, tempNickname }: Props) {
+export default function IdealNicknameModify({ closeModal, tempNickname, tempFullName }: Props) {
   const router = useRouter();
   const [inputValue, setInputValue] = useState<string>(tempNickname);
   // const [originNickname, setOriginNickname] = useState<string>(tempNickname);
@@ -68,7 +69,7 @@ export default function IdealNicknameModify({ closeModal, tempNickname }: Props)
             value={inputValue}
             // value={originNickname}
             style={{ backgroundColor: '#C37CDB' }}
-            placeholder='본명'
+            placeholder={tempFullName}
             maxLength={5}
             onChange={(e) => handleInputChange(e)}
           />
