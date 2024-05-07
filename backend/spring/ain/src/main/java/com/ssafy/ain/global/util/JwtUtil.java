@@ -19,16 +19,24 @@ public class JwtUtil {
     }
 
     public Long getMemberId(String token) {
+
         return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("memberId", Long.class);
     }
 
+    public String getCategory(String token) {
+
+        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("category", String.class);
+    }
+
     public Boolean isExpired(String token) {
+
         return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().getExpiration().before(new Date());
     }
 
-    public String createJwt(Long memberId, Long expiredMs) {
+    public String createJwt(String category, Long memberId, Long expiredMs) {
 
         return Jwts.builder()
+                .claim("category", category)
                 .claim("memberId", memberId)
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + expiredMs))

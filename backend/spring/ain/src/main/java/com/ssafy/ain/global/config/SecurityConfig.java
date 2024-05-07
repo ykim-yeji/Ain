@@ -61,6 +61,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(
                         (request) -> request
                                 .requestMatchers("/").permitAll()
+                                .requestMatchers("/api/auth/reissue").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .addFilterBefore(new JWTFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);

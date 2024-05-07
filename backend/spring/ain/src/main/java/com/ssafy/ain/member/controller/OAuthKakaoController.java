@@ -10,4 +10,11 @@ import org.springframework.web.bind.annotation.*;
 public class OAuthKakaoController {
 
     private final OAuthKakaoService oauthKakaoService;
+
+    @GetMapping("/test")
+    public String test() {
+        System.out.println("여기까지");
+
+        return "로그인 성공 확인!!";
+    }
 }
