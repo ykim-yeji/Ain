@@ -9,6 +9,7 @@ import { usePathname } from 'next/navigation';
 
 import modalStore from '@/store/modalStore';
 import userStore from '@/store/userStore';
+import IdealDetailModal from '../modal/IdealDetailModal';
 
 export default function Navigation() {
   const pathName = usePathname();
@@ -17,9 +18,24 @@ export default function Navigation() {
 
   const [isLogin] = userStore((state) => [state.isLogin]);
 
-  const { navOverlay, toggleNavOverlay, setNicknameModalState } = modalStore();
+  const {
+    navOverlay,
+    toggleNavOverlay,
+    setNicknameModalState,
+    idealDetailModalOpen,
+    setIdealDetailModalFalse,
+    setHideIdealListFalse,
+    setHeaderDropDownFalse,
+  } = modalStore();
 
   const { setIsLogin } = userStore();
+
+  const modalClose = () => {
+    setIdealDetailModalFalse();
+    setHideIdealListFalse();
+    setHeaderDropDownFalse();
+    console.log(idealDetailModalOpen);
+  };
 
   // const confirm = () => {
   //   alert(isLogin);
@@ -37,13 +53,13 @@ export default function Navigation() {
 
   return (
     pathName !== '/chat/chatroom' && (
-      <div className='flex justify-around bottom-0 left-0 right-0 py-3 w-full bg-[#5F0F7A]'>
+      <div className='flex justify-around bottom-0 left-0 right-0 py-3 w-full bg-[#5F0F7A] '>
         <div className='flex justify-center'>
           {/* <button type='button' onClick={() => confirm()}>
           이즈로긴?
         </button> */}
 
-          <Link href='/chat'>
+          <Link href='/chat' onClick={modalClose}>
             <div
               className='flex 
  flex-col cursor-pointer'
@@ -63,6 +79,7 @@ export default function Navigation() {
               </div>
             </div>
           </Link>
+          {/* <div onClick={modalClose}>TEST</div> */}
 
           {/* 아래는 회원이냐 아니냐에 따라 접근을 막는 코드 */}
           {/* {isLogin === true ? (
@@ -91,7 +108,7 @@ export default function Navigation() {
         )} */}
         </div>
         <div className='flex justify-center'>
-          <Link href='/'>
+          <Link href='/' onClick={setHeaderDropDownFalse}>
             <div className='flex flex-col cursor-pointer'>
               <FontAwesomeIcon
                 style={{
@@ -135,7 +152,7 @@ export default function Navigation() {
           </div>
         )} */}
 
-          <Link href='/photo'>
+          <Link href='/photo' onClick={setHeaderDropDownFalse}>
             <div className='flex flex-col cursor-pointer'>
               <FontAwesomeIcon
                 style={{ color: pathName.startsWith('/photo') ? '#C776E3' : 'white' }}
