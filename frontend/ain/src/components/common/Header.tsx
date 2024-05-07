@@ -226,7 +226,7 @@ export default function Header() {
                           type='button'
                           // onClick={handleNicknameModal}
                           onClick={setNicknameModalState}
-                          className='mt-4 bg-white border-2  text-xs w-32 px-2 py-3 font-semibold font-sans'
+                          className='mt-4 bg-white border-2 text-xs w-32 px-2 py-3 font-semibold font-sans'
                           style={{ fontSize: '16px' }}
                         >
                           닉네임 수정
