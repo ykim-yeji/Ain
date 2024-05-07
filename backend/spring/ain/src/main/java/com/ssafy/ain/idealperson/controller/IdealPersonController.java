@@ -10,7 +10,7 @@ import com.ssafy.ain.global.constant.SuccessCode;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/ideal-people")
+@RequestMapping("/ideal-people")
 public class IdealPersonController {
 
     private final IdealPersonService idealPersonService;
