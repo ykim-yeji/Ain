@@ -12,4 +12,4 @@ RUN pip install --use-deprecated=legacy-resolver -r requirements.txt
 RUN pip install uvicorn
 RUN pip install fastapi
 
-ENTRYPOINT ["uvicorn", "main:app", "--reload", "--hostg", "0.0.0.0"]
+ENTRYPOINT ["uvicorn", "main:app", "--reload", "--host", "0.0.0.0"]
