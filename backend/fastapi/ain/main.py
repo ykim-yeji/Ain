@@ -21,7 +21,7 @@ if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0")
 
 # cors 설정
-origins = ["http://localhost:3000"]
+origins = ["https://myain.co.kr", "http://localhost:3000"]
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
