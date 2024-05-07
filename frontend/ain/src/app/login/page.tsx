@@ -17,9 +17,9 @@ export default function Page() {
   };
 
   return (
-    <div className='relative w-full h-full flex flex-col items-center justify-start'>
+    <div className='relative mt-[65px] mb-[68px] w-full h-full flex flex-col items-center justify-start'>
       <div className='w-[60%] h-[50%] flex items-center'>
-        <img src='/gif/rainbow-heart.gif'  />
+        <img src='./gif/rainbow_heart.gif'  />
       </div>
       <div className='w-full h-[40%] flex flex-col justify-start items-center'>
         <div className='text-lg text-center text-white leading-relaxed'>더 많은 기능을 이용하시려면 <br />로그인을 진행해 주세요</div>
