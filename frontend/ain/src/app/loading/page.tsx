@@ -1,45 +1,86 @@
 'use client'
+
 import useCreateStore from "@/store/createStore";
 import { useState, useEffect } from "react";
+import { useRouter } from 'next/navigation'
 
 export default function LoadingPage() {
 
+  const router = useRouter()
+
   const { mergeInput, genderInput } = useCreateStore();
+  const [mbtiValue, setMbtiValue] = useState<string>('')
 
-  console.log(mergeInput)
+  const fetchCharacterImage = async () => {
+  
+    const requestBody = {
+      idealPersonDescriptions: mergeInput,
+      idealPersonGender: genderInput
+    };
 
+    try {
+      await fetch('https://myain.co.kr/fast/ideal-people/images', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(requestBody),
+      })
+
+      .then((response: {blob(): any; headers: { get: (arg0: string) => any; }; 
+        }) => {
+
+        // 응답 헤더에서 'Mbti' 값을 추출
+        const newMbti: string = response.headers.get('mbti');
+        setMbtiValue(newMbti) 
+        return response.blob();
+
+      }) .then(blob => {
+        // 받은 파일(blob)을 처리하는 로직을 작성합니다.
+        const newUrl: string = URL.createObjectURL(blob); // blob 객체를 가리키는 URL을 생성
+        useCreateStore.setState(state => ({ mbti: mbtiValue, imageUrl: newUrl }))
+        // const image = document.createElement('img'); //새로운 <img> HTML 요소를 생성
+        // image.src = url; //생성된 이미지 요소(image)의 소스(src) 속성에, 2단계에서 생성된 blob URL을 할당
+        // document.body.appendChild(image);//이미지 요소를 문서의 body에 추가
+
+    })
+    } catch (error) {
+      console.error('API request failed: ', error);
+    } 
+  };
+
+  const fetchCharacterName = async () => {
+    const requestBody = {
+      idealPersonGender: genderInput
+    };
+
+    try {
+      // await fetch('https://myain.co.kr/api/ideal-people/names', {
+        const response = await fetch('https://bad7e4c4-8676-4672-86a2-212cf9b3de90.mock.pstmn.io/api/ideal-people/names', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(requestBody),
+      })
+      return response.json()
+
+      .then((response): any  => {
+
+        const newCharacterName : string = response.data.idealPersonName
+        useCreateStore.setState(state => ({ characterName: newCharacterName }))
+        
+      }) 
+    } catch (error) {
+      console.error('API request failed: ', error);
+    } 
+  }
 
     useEffect(() => {
-      const fetchData = async () => {
-  
-        const requestBody = {
-          idealPersonDescriptions: mergeInput,
-          idealPersonGender: genderInput
-        };
-  
-        try {
-          const response = await fetch('https://myain.co.kr/fast/ideal-people/images', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(requestBody),
-          });
-  
-          if (response.ok) {
-            console.log(response)
-            console.log(response.headers.get('MBTI'))
-            
-          } else {
-            // 서버로부터 오류 응답 받음
-            throw new Error('Something went wrong');
-          }
-        } catch (error) {
-          console.error('API request failed: ', error);
-        } 
-      };
-  
-      fetchData();
+
+      fetchCharacterImage();
+      fetchCharacterName()
+      router.push('/result')
     }, [])
   
 
@@ -50,4 +91,4 @@ export default function LoadingPage() {
       <img src="./background/loading_bottom.png" className="absolute bottom-0 left-0 w-[60%]"/>
     </div>;
   }
-  
+

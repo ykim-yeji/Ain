@@ -1,6 +1,5 @@
 'use client'
 
-import router from "next/router"
 import useCreateStore from "@/store/createStore"
 import { useState } from "react"
 import Link from "next/link"
@@ -9,13 +8,13 @@ export default function CreatePage() {
 
   const [currentNum, setCurrentNum] = useState<number>(1)
 
-  const [genderInput, setGenderInput] = useState<number>(0)
+  const [genderInput, setGenderInput] = useState<string|null>(null)
   const [faceInput, setFaceInput] = useState<string>('')
   const [shapeInput, setShapeInput] = useState<string>('')
   const [ectInput, setEctInput] = useState<string>('')
 
   const submitInput = () => {
-    if (genderInput !== 0) {
+    if (genderInput !== null) {
       useCreateStore.setState(state => ({ mergeInput: faceInput + shapeInput + ectInput, genderInput: genderInput}))
     }
     else {
@@ -66,14 +65,14 @@ export default function CreatePage() {
         {currentNum == 1 ? (
         <div className="w-[80%] h-[60%] flex justify-center items-center bg-white rounded-xl px-4">
           <button  className={`flex flex-col items-center py-2 border-r-2 border-dashed rounded-md 
-          ${genderInput === 1 ? 'bg-[#C5EEFF]' : 'hover:bg-[#C5EEFF]'}`}
-          onClick={(event)=> {setGenderInput(1), setCurrentNum(2)}}>
+          ${genderInput === 'MALE' ? 'bg-[#C5EEFF]' : 'hover:bg-[#C5EEFF]'}`}
+          onClick={(event)=> {setGenderInput('MALE'), setCurrentNum(2)}}>
             <img src="./icon/boy.png" className="w-[80%]"/>
             <p className="mt-6">남성</p>
           </button>
           <button  className={`flex flex-col items-center py-2 rounded-md 
-          ${genderInput === 2 ? 'bg-[#FFD2F2]' : 'hover:bg-[#FFD2F2]'}`}
-          onClick={(event)=> {setGenderInput(2), setCurrentNum(2)}}>
+          ${genderInput === 'FEMALE' ? 'bg-[#FFD2F2]' : 'hover:bg-[#FFD2F2]'}`}
+          onClick={(event)=> {setGenderInput('FEMALE'), setCurrentNum(2)}}>
             <img src="./icon/girl.png" className="w-[80%]"/>   
             <p className="mt-6">여성</p>         
           </button>
