@@ -57,7 +57,7 @@ public class CustomLogoutFilter extends GenericFilterBean {
 			return;
 		}
 
-		String cookie = request.getHeader(HttpHeaders.SET_COOKIE);
+		String cookie = request.getHeader("Cookie");
 		log.info("refreshToken header(" + cookie + ")");
 		if (cookie == null || !cookie.startsWith(REFRESH_TOKEN + "=")) {
 
