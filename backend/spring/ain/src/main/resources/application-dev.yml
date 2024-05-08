@@ -16,3 +16,11 @@ spring:
       hibernate:
         format_sql: true
         show_sql: true
+  jwt:
+    secret: ${JWT_SECRET_KEY}
+    live:
+      access: 3600000 # 1시간
+      refresh: 1209600000 # 2주
+    redis:
+      host: ${EC2_ACCESS_IP}
+      port: 6379

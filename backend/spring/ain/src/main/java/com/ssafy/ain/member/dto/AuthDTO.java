@@ -13,5 +13,6 @@ public class AuthDTO {
         private Long memberId;
         private String memberAccessToken;
         private String memberRefreshToken;
+        private boolean isNewMember;
     }
 }
