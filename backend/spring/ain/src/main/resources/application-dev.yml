@@ -25,3 +25,7 @@ spring:
     redis:
       host: ${EC2_ACCESS_IP}
       port: 6379
+
+logging:
+  level:
+    com.ssafy.ain: info

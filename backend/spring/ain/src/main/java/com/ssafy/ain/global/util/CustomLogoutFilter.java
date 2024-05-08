@@ -9,6 +9,7 @@ import com.ssafy.ain.global.exception.InvalidException;
 import com.ssafy.ain.global.exception.NoExistException;
 import com.ssafy.ain.member.service.AuthService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.filter.GenericFilterBean;
 
@@ -24,6 +25,7 @@ import static com.ssafy.ain.global.constant.JwtConstant.REFRESH_TOKEN;
 import static com.ssafy.ain.global.constant.SuccessCode.LOGOUT;
 
 @RequiredArgsConstructor
+@Slf4j
 public class CustomLogoutFilter extends GenericFilterBean {
 
 	private final JwtUtil jwtUtil;
@@ -41,6 +43,7 @@ public class CustomLogoutFilter extends GenericFilterBean {
 						  FilterChain filterChain) throws IOException, ServletException {
 
 		String requestUri = request.getRequestURI();
+		log.info("request[ requestURI(" + request.getRequestURI() + "), requestMethod(" + request.getMethod() + ")]");
 		if (!requestUri.matches("^/api/auth/logout$")) {
 
 			filterChain.doFilter(request, response);
@@ -55,6 +58,7 @@ public class CustomLogoutFilter extends GenericFilterBean {
 		}
 
 		String cookie = request.getHeader(HttpHeaders.SET_COOKIE);
+		log.info("refreshToken header(" + cookie + ")");
 		if (cookie == null || !cookie.startsWith(REFRESH_TOKEN + "=")) {
 
 			throw new NoExistException(NOT_EXISTS_REFRESH_TOKEN);
