@@ -1,7 +1,10 @@
 package com.ssafy.ain.global.util;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.ain.global.exception.InvalidException;
 import com.ssafy.ain.global.exception.NoExistException;
 import com.ssafy.ain.member.service.AuthService;
@@ -18,6 +21,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import static com.ssafy.ain.global.constant.ErrorCode.*;
 import static com.ssafy.ain.global.constant.JwtConstant.REFRESH_TOKEN;
+import static com.ssafy.ain.global.constant.SuccessCode.LOGOUT;
 
 @RequiredArgsConstructor
 public class CustomLogoutFilter extends GenericFilterBean {
@@ -75,6 +79,16 @@ public class CustomLogoutFilter extends GenericFilterBean {
 
 		refreshTokenRepository.deleteById(refreshToken);
 
+		Map<String, Object> responseBody = new HashMap<>();
+		responseBody.put("code", LOGOUT.getStatus().value());
+		responseBody.put("status", LOGOUT.getStatus());
+		responseBody.put("message", LOGOUT.getMessage());
+
+		ObjectMapper objectMapper = new ObjectMapper();
+		response.getWriter().write(objectMapper.writeValueAsString(responseBody));
+
+		response.setContentType("application/json");
+		response.setCharacterEncoding("UTF-8");
 		response.setHeader(HttpHeaders.SET_COOKIE, authService.createCookie(REFRESH_TOKEN, null, 0L));
 	}
 }
