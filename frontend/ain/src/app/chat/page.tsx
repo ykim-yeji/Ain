@@ -279,6 +279,8 @@ export default function Page() {
           <div className='text-xl text-white flex mt-2 mb-4 px-4'>치킨님의 아인</div>
           <div className='grid grid-cols-2 gap-8 mb-8 px-4'>
             {listData &&
+              listData.data &&
+              listData.data.idealPeople &&
               listData.data.idealPeople
                 .sort((a, b) => a.idealPersonRank - b.idealPersonRank)
                 .map((item, index) => (
