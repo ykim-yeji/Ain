@@ -81,7 +81,7 @@ public class AuthServiceImpl implements AuthService {
 		return ResponseCookie.from(name, value)
 			.maxAge(expiredMs.intValue())
 			.path("/")
-			//                .secure(true)
+			.secure(true)
 			.sameSite("None")
 			.httpOnly(true)
 			.build()
