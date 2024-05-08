@@ -1,6 +1,7 @@
 package com.ssafy.ain.global.util;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -44,7 +45,7 @@ public class CustomLogoutFilter extends GenericFilterBean {
 						  FilterChain filterChain) throws IOException, ServletException {
 
 		String requestUri = request.getRequestURI();
-		log.info("request[ requestURI(" + request.getRequestURI() + "), requestMethod(" + request.getMethod() + ")]");
+		log.info("requestURI(" + request.getRequestURI() + ")");
 		if (!requestUri.matches("^/auth/logout$")) {
 
 			filterChain.doFilter(request, response);
@@ -52,6 +53,7 @@ public class CustomLogoutFilter extends GenericFilterBean {
 		}
 
 		String requestMethod = request.getMethod();
+		log.info("requestMethod(" + request.getMethod() + ")");
 		if (!requestMethod.equals("POST")) {
 
 			filterChain.doFilter(request, response);
@@ -59,10 +61,6 @@ public class CustomLogoutFilter extends GenericFilterBean {
 		}
 
 		Cookie[] cookies = request.getCookies();
-		if (cookies == null) {
-
-			throw new NoExistException(INVALID_TOKEN);
-		}
 		String refreshToken = null;
 		for (Cookie cookie : cookies) {
 			if (REFRESH_TOKEN.equals(cookie.getName())) {
