@@ -6,6 +6,7 @@ import com.ssafy.ain.idealperson.entity.IdealPerson;
 import com.ssafy.ain.idealperson.repository.IdealPersonRepository;
 import com.ssafy.ain.idealperson.service.IdealPersonService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -18,9 +19,10 @@ public class IdealPersonServiceImpl implements IdealPersonService {
     private final IdealPersonRepository idealPersonRepository;
 
     @Override
-    public GetIdealPeopleResponse getIdealPeopleList(String memberId) {
+    public GetIdealPeopleResponse getAllIdealPerson(String memberId) {
         // 예외처리필요
-        List<IdealPerson> idealPeople = idealPersonRepository.findIdealPeopleByMemberId(Long.parseLong(memberId));
+        List<IdealPerson> idealPeople = idealPersonRepository.findIdealPeopleByMemberId(Long.parseLong(memberId),
+                Sort.by(Sort.Direction.ASC, "ranking"));
         List<GetIdealPersonResponse> idealPeopleResponse = new ArrayList<>();
 
         for (IdealPerson idealPerson : idealPeople) {

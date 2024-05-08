@@ -16,7 +16,8 @@ public enum SuccessCode {
     LOGIN(OK, "로그인을 하는데 성공했습니다!"),
 
     //이상형
-    GET_IDEAL_PEOPLE_LIST(OK, "이상형 목록 조회에 성공하였습니다!");
+    GET_IDEAL_PEOPLE(OK, "이상형 목록 조회에 성공하였습니다!"),
+    MODIFY_RANKING_OF_IDEAL_PEOPLE(OK, "이상형 선호 순위를 성공적으로 변경하였습니다!");
 
     private final HttpStatus status;
     private final String message;
