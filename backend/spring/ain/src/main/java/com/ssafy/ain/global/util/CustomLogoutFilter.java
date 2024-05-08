@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.ain.global.exception.InvalidException;
 import com.ssafy.ain.global.exception.NoExistException;
 import com.ssafy.ain.member.service.AuthService;
+import jakarta.servlet.http.Cookie;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -44,7 +45,7 @@ public class CustomLogoutFilter extends GenericFilterBean {
 
 		String requestUri = request.getRequestURI();
 		log.info("request[ requestURI(" + request.getRequestURI() + "), requestMethod(" + request.getMethod() + ")]");
-		if (!requestUri.matches("^/auth/logout$")) {
+		if (!requestUri.matches("^/api/auth/logout$")) {
 
 			filterChain.doFilter(request, response);
 			return;
@@ -57,14 +58,24 @@ public class CustomLogoutFilter extends GenericFilterBean {
 			return;
 		}
 
-		String cookie = request.getHeader("Cookie");
-		log.info("refreshToken header(" + cookie + ")");
-		if (cookie == null || !cookie.startsWith(REFRESH_TOKEN + "=")) {
+		Cookie[] cookies = request.getCookies();
+		if (cookies == null) {
+
+			throw new NoExistException(INVALID_TOKEN);
+		}
+		String refreshToken = null;
+		for (Cookie cookie : cookies) {
+			if (REFRESH_TOKEN.equals(cookie.getName())) {
+				refreshToken = cookie.getValue();
+				break;
+			}
+		}
+		if (refreshToken == null) {
 
 			throw new NoExistException(NOT_EXISTS_REFRESH_TOKEN);
 		}
+		log.info("refreshToken(" + refreshToken + ")");
 
-		String refreshToken = cookie.split("=")[1];
 		if (jwtUtil.isExpired(refreshToken)) {
 
 			throw new InvalidException(EXPIRES_REFRESH_TOKEN);
