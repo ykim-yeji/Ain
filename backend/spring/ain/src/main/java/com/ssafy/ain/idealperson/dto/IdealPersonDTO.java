@@ -1,5 +1,6 @@
 package com.ssafy.ain.idealperson.dto;
 
+import com.ssafy.ain.global.constant.Gender;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -27,5 +28,25 @@ public class IdealPersonDTO {
         private String idealPersonImageUrl;
         private int idealPersonRank;
         private String idealPersonThreadId;
+    }
+
+    @Getter
+    @Setter
+    public static class ModifyRankingOfIdealPeopleRequest {
+        private Long[] idealPersonRankings;
+    }
+
+    @Getter
+    @Setter
+    public static class GetNameOfIdealPersonRequest {
+        private Gender idealPersonGender;
+    }
+
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @Builder
+    public static class GetNameOfIdealPersonResponse {
+        private String idealPersonName;
     }
 }

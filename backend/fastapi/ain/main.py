@@ -34,7 +34,7 @@ app.add_middleware(
 
 class IPContent(BaseModel):
     idealPersonDescriptions: str
-    idealPersonGender: int
+    idealPersonGender: str
 
 
 @app.post("/assistants/ideal-people")
