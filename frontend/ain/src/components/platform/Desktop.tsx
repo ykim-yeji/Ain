@@ -4,6 +4,7 @@ import { savePicture } from '../desktop_camera/savePicture';
 import { useCamera } from '../desktop_camera/useCamera';
 import { usePhotoCapture } from '../desktop_camera/usePhotoCapture';
 import { CreateIdealPersonPage } from './CreateIdealPerson';
+import Carousel from './Carousel';
 
 export const DesktopPage = () => {
   const [idealPersons, setIdealPersons] = useState<IdealPerson[] | null>(null);
@@ -28,14 +29,14 @@ export const DesktopPage = () => {
   const handleSavePicture = () => {
     if (image) {
       savePicture(image);
-      setIsPictureTaken(false);
+      // setIsPictureTaken(false);
     }
   };
 
   useEffect(() => {
     const fetchIdealPersonsCount = async () => {
       try {
-        const response = await fetch('https://bad7e4c4-8676-4672-86a2-212cf9b3de90.mock.pstmn.io/api/ideal-people/count');
+        const response = await fetch(`${process.env.NEXT_PUBLIC_AIN_MOCK_SERVER}/ideal-people/count`);
         const data = await response.json();
         if (data.code === 200 && data.status === 'CREATED') {
           setIdealPersonCount(data.data.idealPersonCount);
@@ -62,7 +63,7 @@ export const DesktopPage = () => {
 
     const fetchIdealPersons = async () => {
       try {
-        const response = await fetch('https://bad7e4c4-8676-4672-86a2-212cf9b3de90.mock.pstmn.io/api/ideal-people');
+        const response = await fetch(`${process.env.NEXT_PUBLIC_AIN_MOCK_SERVER}/ideal-people`);
         const data = await response.json();
         if (data.code === 201 && data.status === 'CREATED') {
           setIdealPersons(data.data.idealPersons);
@@ -81,6 +82,12 @@ export const DesktopPage = () => {
   const handleStartCamera = () => {
     startCamera();
     setShowIntro(false);
+    setIsPictureTaken(false); // 촬영 전 상태로 초기화
+    setSelectedIdealPersonImage(idealPersons?.[0].idealPersonImage || ''); // 첫 번째 이상형 이미지 선택
+  };
+
+  const handleGoBack = () => {
+    handleStartCamera();
   };
 
   if (idealPersonCount === 0) {
@@ -110,28 +117,35 @@ export const DesktopPage = () => {
     idealPersonRank: number;
    }
 
-  const handleNextClick = () => {
-    // 다음 페이지로 이동
-    setCurrentPage((prevPage) => prevPage + 1);
-  };
+   const totalPages = Math.ceil((idealPersons?.length ?? 0) / itemsPerPage);
 
-  const handlePrevClick = () => {
-    // 이전 페이지로 이동
-    setCurrentPage((prevPage) => Math.max(prevPage - 1, 0));
-  };
+   const handleNextClick = () => {
+     // 다음 페이지로 이동, 마지막  페이지에서는 첫 번째 페이지로
+     setCurrentPage((prevPage) => (prevPage + 1) % totalPages);
+   };
+   
+   const handlePrevClick = () => {
+     // 이전 페이지로 이동, 첫 번째 페이지에서는 마지막 페이지로
+     setCurrentPage((prevPage) => (prevPage - 1 + totalPages) % totalPages);
+   };
 
-  // 현재 페이지에 해당하는 이상형 목록 계산
-  const currentPageIdealPersons = idealPersons?.slice(currentPage * itemsPerPage, (currentPage + 1) * itemsPerPage);
+  const currentPageIdealPersons = idealPersons?.slice(
+      currentPage * itemsPerPage,
+      (currentPage + 1) * itemsPerPage
+    ).map((idealPerson) => ({
+      idealPersonImage: idealPerson.idealPersonImage,
+      idealPersonNickname: idealPerson.idealPersonNickname,
+    }));
 
   const cameraImgStyle = {
     cursor: 'pointer',
-    width: isClicked ? '60px' : '64px', // 클릭 시 작아졌다 커지는 효과
-    height: isClicked ? '60px' : '64px',
+    width: isClicked ? '65px' : '70px', // 클릭 시 작아졌다 커지는 효과
+    height: isClicked ? '65px' : '70px',
     transition: 'all 0.2s ease', // 부드러운 전환 효과
   };
 
   return (
-    <div className="flex flex-col justify-center items-center" style={{ height: "calc(100vh)", overflowY: "auto" }}>
+    <div className="flex flex-col justify-center items-center space-y-1" style={{ height: "calc(100vh)", overflowY: "auto" }}>
       <div className="relative w-10/12">
         {image ? (
           <img src={image} className="w-full" alt="Captured" /> // 캡처된 이미지 표시
@@ -149,50 +163,59 @@ export const DesktopPage = () => {
           </div>
         )}
       </div>
-      <div className='flex flex-row justify-center items-center space-x-10'>
-        <button onClick={handlePrevClick}>
-              <img src="./icon/angle_left_white.png" alt="이전" className='w-6'/>
+
+      <div className='flex flex-row justify-center items-center space-x-5' style={{ width: 'calc(3 * 134px)', justifyContent: 'space-between' }}>
+          {/* 이전 버튼 */}
+          <button onClick={handlePrevClick}>
+            <img src="./icon/angle_left_white.png" alt="이전" className='w-6'/>
           </button>
-        {isCameraOn && (
-          <div className="mt-8 mb-8" style={{ height: "85px", overflowX: "auto", display: "flex", justifyContent: "space-between" }}>
-          <div style={{ display: "flex", alignItems: "center", paddingLeft: "5px" }}>
-            {currentPageIdealPersons &&
-              currentPageIdealPersons.map((idealPerson, index) => (
-                <img
-                  key={idealPerson.idealPersonId}
-                  src={idealPerson.idealPersonImage}
-                  className="w-auto h-auto cursor-pointer"
-                  onClick={() => selectIdealPersonImage(idealPerson.idealPersonImage)}
-                  alt={idealPerson.idealPersonNickname}
-                  style={{ marginRight: "5px", width: "80px", height: "80px", objectFit: "cover" }}
-                />
-              ))}
-          </div>
+
+          {/* 케러셀 컴포넌트 */}
+          {isCameraOn && (
+            <Carousel
+                items={currentPageIdealPersons?.map((p) => ({
+                  idealPersonImage: p.idealPersonImage,
+                  idealPersonNickname: p.idealPersonNickname
+                })) || []}
+                selectedImage={selectedIdealPersonImage}
+                onSelectImage={selectIdealPersonImage}
+              />
+          )}
+
+          {/* 다음 버튼 */}
+          <button onClick={handleNextClick}>
+            <img src="./icon/angle_left_white.png" alt="다음" className='w-6' style={{ transform: 'scaleX(-1)' }} />
+          </button>
         </div>
-        )}
-        <button onClick={handleNextClick}>
-              <img src="./icon/angle_left_white.png" alt="다음" className='w-6' style={{ transform: 'scaleX(-1)' }} />
-          </button>
-      </div>
-      <div className='flex flex-row justify-center items-center space-x-32'>
-        {isCameraOn ? (
-            isPictureTaken ? (
-                <button onClick={handleSavePicture}>사진 저장</button> // 사진 저장 버튼
-            ) : (
+
+        {isCameraOn && (
+          <div className='flex flex-row justify-center items-center space-x-5'>
+            {/* 저장하기 버튼 */}
+            <button onClick={handleSavePicture} disabled={!isPictureTaken}>저장하기</button>
+
+            {/* 촬영 버튼 */}
+            {!isPictureTaken ? (
               <img
-                  src={isHovering ? "./icon/camera_start2.png" : "./icon/camera_start.png"} // 마우스 오버 시 이미지 변경
-                  alt="사진 촬영"
-                  onClick={takePicture}
-                  onMouseEnter={() => setIsHovering(true)}
-                  onMouseLeave={() => setIsHovering(false)}
-                  style={cameraImgStyle}
-                />
-            )
-        ) : (
-            <button onClick={startCamera}></button> // 카메라 시작 버튼
+                src={isHovering ? "./icon/camera_start2.png" : "./icon/camera_start.png"}
+                alt="사진 촬영"
+                onClick={takePicture}
+                onMouseEnter={() => setIsHovering(true)}
+                onMouseLeave={() => setIsHovering(false)}
+                style={cameraImgStyle}
+              />
+            ) : (
+              <div style={cameraImgStyle}>촬영 완료</div> // 촬영이 완료된 상태를 표시
+            )}
+
+            {/* 돌아가기 버튼 */}
+            <button onClick={handleGoBack} disabled={!isPictureTaken}>돌아가기</button>
+          </div>
         )}
-    </div>
-      
+
+        {/* 카메라 시작 버튼 (카메라가 꺼져있을 때만 표시) */}
+        {!isCameraOn && (
+          <button onClick={startCamera}>카메라 시작</button>
+        )}
     </div>
   );
 };

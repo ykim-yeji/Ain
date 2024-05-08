@@ -6,13 +6,14 @@ export const useCamera = () => {
   const [isCameraOn, setIsCameraOn] = useState(false);
 
   const startCamera = async () => {
+    if (isCameraOn) return; // 이미 카메라가 켜져 있으면 아무것도 하지 않음
+  
     try {
-      // 데스크탑 환경을 위해 더 높은 해상도의 비디오 스트림 요청
       const constraints = {
         video: {
-          width: { ideal: 720 }, // 이상적인 너비
-          height: { ideal: 1280 }, // 이상적인 높이
-          facingMode: "user" // 사용자 카메라 사용 (전면 카메라)
+          width: { ideal: 720 },
+          height: { ideal: 1280 },
+          facingMode: "user"
         }
       };
       
@@ -30,9 +31,10 @@ export const useCamera = () => {
     if (videoRef.current && videoRef.current.srcObject) {
       const stream = videoRef.current.srcObject as MediaStream;
       const tracks = stream.getTracks();
-      tracks.forEach((track) => track.stop());
+      tracks.forEach(track => track.stop());
+      videoRef.current.srcObject = null; // 스트림 참조 해제
       setIsCameraOn(false);
-      videoRef.current.pause(); // 촬영 종료 후 영상 일시정지
+      videoRef.current.pause();
     }
   };
 
