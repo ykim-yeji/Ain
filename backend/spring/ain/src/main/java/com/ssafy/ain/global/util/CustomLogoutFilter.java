@@ -51,7 +51,7 @@ public class CustomLogoutFilter extends GenericFilterBean {
 		}
 
 		String cookie = request.getHeader(HttpHeaders.SET_COOKIE);
-		if (cookie == null || cookie.startsWith(REFRESH_TOKEN + "=")) {
+		if (cookie == null || !cookie.startsWith(REFRESH_TOKEN + "=")) {
 
 			throw new NoExistException(NOT_EXISTS_REFRESH_TOKEN);
 		}
@@ -65,12 +65,12 @@ public class CustomLogoutFilter extends GenericFilterBean {
 		String category = jwtUtil.getCategory(refreshToken);
 		if (!category.equals(REFRESH_TOKEN)) {
 
-			throw new InvalidException(INVALID_TOKEN);
+			throw new InvalidException(NOT_REFRESH_TOKEN);
 		}
 
 		if (!refreshTokenRepository.existsById(refreshToken)) {
 
-			throw new InvalidException(INVALID_TOKEN);
+			throw new NoExistException(NOT_LOGIN_MEMBER);
 		}
 
 		refreshTokenRepository.deleteById(refreshToken);

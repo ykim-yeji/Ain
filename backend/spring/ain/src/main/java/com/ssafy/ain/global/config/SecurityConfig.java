@@ -64,8 +64,8 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests(
                         (request) -> request
-                                .requestMatchers("/").permitAll()
-                                .requestMatchers("/api/auth/reissue").permitAll()
+                                .requestMatchers("/", "/auth/reissue", "/api/auth/logout").permitAll()
+                                .requestMatchers("/ideal-people/names").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .exceptionHandling(
