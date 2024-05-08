@@ -18,7 +18,7 @@ export default function LoadingPage() {
         };
   
         try {
-          const response = await fetch('https://myain/fastapi/api/ideal-people/images', {
+          const response = await fetch('https://myain.co.kr/fast/ideal-people/images', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -27,8 +27,8 @@ export default function LoadingPage() {
           });
   
           if (response.ok) {
-            const data = await response.json();
-            console.log('data:', data )
+            console.log(response)
+            console.log(response.headers.get('MBTI'))
             
           } else {
             // 서버로부터 오류 응답 받음
