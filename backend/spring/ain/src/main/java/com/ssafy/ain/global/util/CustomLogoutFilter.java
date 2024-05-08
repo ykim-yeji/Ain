@@ -1,18 +1,14 @@
 package com.ssafy.ain.global.util;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ssafy.ain.global.exception.InvalidException;
-import com.ssafy.ain.global.exception.NoExistException;
 import com.ssafy.ain.member.service.AuthService;
 import jakarta.servlet.http.Cookie;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpHeaders;
 import org.springframework.web.filter.GenericFilterBean;
 
 import jakarta.servlet.FilterChain;
@@ -23,6 +19,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import static com.ssafy.ain.global.constant.ErrorCode.*;
+import static com.ssafy.ain.global.constant.JwtConstant.EXCEPTION;
 import static com.ssafy.ain.global.constant.JwtConstant.REFRESH_TOKEN;
 import static com.ssafy.ain.global.constant.SuccessCode.LOGOUT;
 
@@ -61,6 +58,10 @@ public class CustomLogoutFilter extends GenericFilterBean {
 		}
 
 		Cookie[] cookies = request.getCookies();
+		if (cookies == null) {
+
+			request.setAttribute(EXCEPTION, NOT_EXISTS_COOKIE);
+		}
 		String refreshToken = null;
 		for (Cookie cookie : cookies) {
 			if (REFRESH_TOKEN.equals(cookie.getName())) {
@@ -70,24 +71,24 @@ public class CustomLogoutFilter extends GenericFilterBean {
 		}
 		if (refreshToken == null) {
 
-			throw new NoExistException(NOT_EXISTS_REFRESH_TOKEN);
+			request.setAttribute(EXCEPTION, NOT_EXISTS_REFRESH_TOKEN);
 		}
 		log.info("refreshToken(" + refreshToken + ")");
 
 		if (jwtUtil.isExpired(refreshToken)) {
 
-			throw new InvalidException(EXPIRES_REFRESH_TOKEN);
+			request.setAttribute(EXCEPTION, EXPIRES_REFRESH_TOKEN);
 		}
 
 		String category = jwtUtil.getCategory(refreshToken);
 		if (!category.equals(REFRESH_TOKEN)) {
 
-			throw new InvalidException(NOT_REFRESH_TOKEN);
+			request.setAttribute(EXCEPTION, NOT_REFRESH_TOKEN);
 		}
 
 		if (!refreshTokenRepository.existsById(refreshToken)) {
 
-			throw new NoExistException(NOT_LOGIN_MEMBER);
+			request.setAttribute(EXCEPTION, NOT_LOGIN_MEMBER);
 		}
 
 		refreshTokenRepository.deleteById(refreshToken);
@@ -102,6 +103,6 @@ public class CustomLogoutFilter extends GenericFilterBean {
 
 		response.setContentType("application/json");
 		response.setCharacterEncoding("UTF-8");
-		response.setHeader(HttpHeaders.SET_COOKIE, authService.createCookie(REFRESH_TOKEN, null, 0L));
+		response.addCookie(authService.createCookie(REFRESH_TOKEN, null, 0L));
 	}
 }

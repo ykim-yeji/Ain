@@ -3,9 +3,9 @@ package com.ssafy.ain.member.service.impl;
 import static com.ssafy.ain.global.constant.ErrorCode.*;
 import static com.ssafy.ain.global.constant.JwtConstant.*;
 
+import jakarta.servlet.http.Cookie;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Service;
 
 import com.ssafy.ain.global.entity.RefreshToken;
@@ -70,21 +70,19 @@ public class AuthServiceImpl implements AuthService {
 		);
 
 		response.setHeader("Authorization", "Bearer " + reissuedAccessToken);
-		response.setHeader(HttpHeaders.SET_COOKIE, createCookie(REFRESH_TOKEN, reissuedRefreshToken, refreshExpiredMs));
+		response.addCookie(createCookie(REFRESH_TOKEN, reissuedRefreshToken, refreshExpiredMs));
 
 		return null;
 	}
 
 	@Override
-	public String createCookie(String name, String value, Long expiredMs) {
+	public Cookie createCookie(String name, String value, Long expiredMs) {
+		Cookie cookie = new Cookie(name, value);
+		cookie.setMaxAge(expiredMs.intValue());
+		cookie.setPath("/");
+		cookie.setSecure(true);
+		cookie.setHttpOnly(true);
 
-		return ResponseCookie.from(name, value)
-			.maxAge(expiredMs.intValue())
-			.path("/")
-			.secure(true)
-			.sameSite("None")
-			.httpOnly(true)
-			.build()
-			.toString().split(";")[0];
+		return cookie;
 	}
 }

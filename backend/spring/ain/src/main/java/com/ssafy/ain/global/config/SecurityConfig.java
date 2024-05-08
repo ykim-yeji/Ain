@@ -31,6 +31,7 @@ public class SecurityConfig {
     private final RefreshTokenRepository refreshTokenRepository;
     private final AuthService authService;
     private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
+    private final CustomAccessDeniedHandler customAccessDeniedHandler;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -71,6 +72,7 @@ public class SecurityConfig {
                 .exceptionHandling(
                         (exceptionHandler) -> exceptionHandler
                                 .authenticationEntryPoint(customAuthenticationEntryPoint)
+                                .accessDeniedHandler(customAccessDeniedHandler)
                 )
                 .addFilterBefore(new JWTFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(new CustomLogoutFilter(jwtUtil, refreshTokenRepository, authService), LogoutFilter.class);
