@@ -14,7 +14,11 @@ import useUserStore from '@/store/userStore';
 
 import UserNicknameModifyModal from '@/components/modal/UserNicknameModify';
 
+import ReissueToken from '../oauth/ReissueToken';
+
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
+const accessToken = process.env.NEXT_PUBLIC_ACCESS_TOKEN;
+const refreshToken = process.env.NEXT_PUBLIC_REFRESH_TOKEN || '';
 
 export default function Header() {
   // const [isLogin, setIsLogin] = useState<boolean>(true);
@@ -22,7 +26,7 @@ export default function Header() {
   const pathName = usePathname();
   const router = useRouter();
 
-  const { accessToken } = useUserStore();
+  // const { accessToken } = useUserStore();
 
   const {
     headerDropDown,
@@ -95,21 +99,28 @@ export default function Header() {
   const oauthLogout = async () => {
     try {
       const res = await fetch(`${API_URL}/auth/logout`, {
+        method: 'POST',
+        credentials: 'include',
         headers: {
-          Authorization: accessToken,
+          Cookie: '',
         },
       });
 
       if (res.ok) {
+        alert('성공');
         const result = await res.json();
-
+        // console.log('>>>$#%#$@%@#%#@' + res);
+        // console.log('>>>>' + result);
+        console.log('치킨', result);
+        console.log('바보', result.message);
         if (result.code === 200) {
-          deleteAccessToken();
-          setHeaderDropDown();
+          // deleteAccessToken();
+          // setHeaderDropDown();
           console.log('로그아웃 성공');
           router.push('/');
         } else if (result.code === 401) {
-          alert('ERROR_UNAUTHORIZED');
+          console.log('바보', result);
+          // alert('ERROR_UNAUTHORIZED');
           return;
         } else if (result.code === 403) {
           alert('ERROR_FORBIDDEN');
@@ -122,15 +133,19 @@ export default function Header() {
           return;
         }
       } else {
+        alert('실패');
         console.log('로그아웃 실패');
+        console.log(res);
         console.log(res.status);
-        return;
+
+        // return;
       }
     } catch (error) {
+      alert('실패2');
       console.log('에러로 로그아웃 실패');
       console.log(error);
       // throw new Error();
-      return;
+      // return;
     }
   };
 
@@ -146,7 +161,7 @@ export default function Header() {
 
   return (
     pathName !== '/chat/chatroom' && (
-      <div>
+      <div className='z-50'>
         <div className='z-50 w-full text-sm'>
           <div className='flex justify-between'>
             <div>
@@ -220,7 +235,7 @@ export default function Header() {
                   </div>
                   {/* {dropDown ? ( */}
                   {headerDropDown ? (
-                    <div className='absolute top-10 right-4 z-40'>
+                    <div className='absolute top-10 right-4 z-100'>
                       <div>
                         <button
                           type='button'

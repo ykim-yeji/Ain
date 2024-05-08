@@ -46,7 +46,7 @@ export default function Page() {
         const res = await fetch(`${API_URL}/members`, {
           method: 'PATCH',
           headers: {
-            Authorization: accessToken,
+            Authorization: '',
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
