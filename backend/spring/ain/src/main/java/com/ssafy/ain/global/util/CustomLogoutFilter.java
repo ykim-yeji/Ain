@@ -13,6 +13,7 @@ import jakarta.servlet.http.Cookie;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.filter.GenericFilterBean;
 
 import jakarta.servlet.FilterChain;
@@ -23,6 +24,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import static com.ssafy.ain.global.constant.ErrorCode.*;
+import static com.ssafy.ain.global.constant.JwtConstant.EXCEPTION;
 import static com.ssafy.ain.global.constant.JwtConstant.REFRESH_TOKEN;
 import static com.ssafy.ain.global.constant.SuccessCode.LOGOUT;
 
@@ -60,34 +62,28 @@ public class CustomLogoutFilter extends GenericFilterBean {
 			return;
 		}
 
-		Cookie[] cookies = request.getCookies();
-		String refreshToken = null;
-		for (Cookie cookie : cookies) {
-			if (REFRESH_TOKEN.equals(cookie.getName())) {
-				refreshToken = cookie.getValue();
-				break;
-			}
-		}
-		if (refreshToken == null) {
+		String cookie = request.getHeader("Cookie");
+		if (cookie == null || cookie.startsWith(REFRESH_TOKEN + "=")) {
 
-			throw new NoExistException(NOT_EXISTS_REFRESH_TOKEN);
+			request.setAttribute(EXCEPTION, NOT_EXISTS_REFRESH_TOKEN);
 		}
+
+		String refreshToken = cookie.split("=")[1];
 		log.info("refreshToken(" + refreshToken + ")");
-
 		if (jwtUtil.isExpired(refreshToken)) {
 
-			throw new InvalidException(EXPIRES_REFRESH_TOKEN);
+			request.setAttribute(EXCEPTION, EXPIRES_REFRESH_TOKEN);
 		}
 
 		String category = jwtUtil.getCategory(refreshToken);
 		if (!category.equals(REFRESH_TOKEN)) {
 
-			throw new InvalidException(NOT_REFRESH_TOKEN);
+			request.setAttribute(EXCEPTION, NOT_REFRESH_TOKEN);
 		}
 
 		if (!refreshTokenRepository.existsById(refreshToken)) {
 
-			throw new NoExistException(NOT_LOGIN_MEMBER);
+			request.setAttribute(EXCEPTION, NOT_LOGIN_MEMBER);
 		}
 
 		refreshTokenRepository.deleteById(refreshToken);

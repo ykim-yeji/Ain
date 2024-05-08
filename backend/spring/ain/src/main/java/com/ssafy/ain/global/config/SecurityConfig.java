@@ -31,6 +31,7 @@ public class SecurityConfig {
     private final RefreshTokenRepository refreshTokenRepository;
     private final AuthService authService;
     private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
+    private final CustomAccessDeniedHandler customAccessDeniedHandler;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -42,7 +43,7 @@ public class SecurityConfig {
                     configuration.setAllowCredentials(true);
                     configuration.setAllowedHeaders(Collections.singletonList("*"));
                     configuration.setMaxAge(3600L);
-                    configuration.setExposedHeaders(Collections.singletonList(HttpHeaders.SET_COOKIE));
+                    configuration.setExposedHeaders(Collections.singletonList("Cookie"));
                     configuration.setExposedHeaders(Collections.singletonList("Authorization"));
 
                     return configuration;
@@ -71,6 +72,7 @@ public class SecurityConfig {
                 .exceptionHandling(
                         (exceptionHandler) -> exceptionHandler
                                 .authenticationEntryPoint(customAuthenticationEntryPoint)
+                                .accessDeniedHandler(customAccessDeniedHandler)
                 )
                 .addFilterBefore(new JWTFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(new CustomLogoutFilter(jwtUtil, refreshTokenRepository, authService), LogoutFilter.class);

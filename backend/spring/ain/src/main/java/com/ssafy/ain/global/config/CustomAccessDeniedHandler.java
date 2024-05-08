@@ -7,8 +7,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -17,19 +17,19 @@ import java.util.Map;
 
 @Component
 @RequiredArgsConstructor
-public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint {
+public class CustomAccessDeniedHandler implements AccessDeniedHandler {
 
     private final ObjectMapper objectMapper;
 
     @Override
-    public void commence(HttpServletRequest request, HttpServletResponse response,
-                         AuthenticationException authException) throws IOException, ServletException {
+    public void handle(HttpServletRequest request, HttpServletResponse response,
+                       AccessDeniedException accessDeniedException) throws IOException, ServletException {
         Object exception = request.getAttribute("exception");
         Map<String, Object> errorResponse = null;
         if (exception instanceof ErrorCode) {
             errorResponse = getErrorResponse((ErrorCode) exception);
         } else {
-            errorResponse = getErrorResponse(authException);
+            errorResponse = getErrorResponse(accessDeniedException);
         }
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
@@ -45,11 +45,11 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
         return errorResponse;
     }
 
-    private Map<String, Object> getErrorResponse(AuthenticationException authException) {
+    private Map<String, Object> getErrorResponse(AccessDeniedException accessDeniedException) {
         Map<String, Object> errorResponse = new HashMap<>();
-        errorResponse.put("code", HttpStatus.UNAUTHORIZED.value());
-        errorResponse.put("status", HttpStatus.UNAUTHORIZED);
-        errorResponse.put("message", authException.getMessage());
+        errorResponse.put("code", HttpStatus.FORBIDDEN.value());
+        errorResponse.put("status", HttpStatus.FORBIDDEN);
+        errorResponse.put("message", accessDeniedException.getMessage());
 
         return errorResponse;
     }
