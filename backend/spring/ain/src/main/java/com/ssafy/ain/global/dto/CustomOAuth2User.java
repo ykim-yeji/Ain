@@ -37,4 +37,9 @@ public class CustomOAuth2User implements OAuth2User {
 
         return oAuthUserDTO.getMemberId();
     }
+
+    public boolean getIsNewMember() {
+
+        return oAuthUserDTO.isNewMember();
+    }
 }

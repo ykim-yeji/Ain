@@ -1,11 +1,11 @@
 package com.ssafy.ain.global.config;
 
-import com.ssafy.ain.global.util.CustomOAuth2UserService;
-import com.ssafy.ain.global.util.JWTFilter;
-import com.ssafy.ain.global.util.JwtUtil;
+import com.ssafy.ain.global.util.*;
+import com.ssafy.ain.member.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
@@ -14,6 +14,7 @@ import org.springframework.security.config.annotation.web.configurers.HttpBasicC
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.web.cors.CorsConfiguration;
 
 import java.util.Collections;
@@ -27,6 +28,9 @@ public class SecurityConfig {
     private final CustomOAuth2UserService customOAuth2UserService;
     private final CustomSuccessHandler customSuccessHandler;
     private final JwtUtil jwtUtil;
+    private final RefreshTokenRepository refreshTokenRepository;
+    private final AuthService authService;
+    private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -38,7 +42,7 @@ public class SecurityConfig {
                     configuration.setAllowCredentials(true);
                     configuration.setAllowedHeaders(Collections.singletonList("*"));
                     configuration.setMaxAge(3600L);
-                    configuration.setExposedHeaders(Collections.singletonList("Cookie-Token"));
+                    configuration.setExposedHeaders(Collections.singletonList(HttpHeaders.SET_COOKIE));
                     configuration.setExposedHeaders(Collections.singletonList("Authorization"));
 
                     return configuration;
@@ -64,7 +68,12 @@ public class SecurityConfig {
                                 .requestMatchers("/api/auth/reissue").permitAll()
                                 .anyRequest().authenticated()
                 )
-                .addFilterBefore(new JWTFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
+                .exceptionHandling(
+                        (exceptionHandler) -> exceptionHandler
+                                .authenticationEntryPoint(customAuthenticationEntryPoint)
+                )
+                .addFilterBefore(new JWTFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new CustomLogoutFilter(jwtUtil, refreshTokenRepository, authService), LogoutFilter.class);
 
         return http.build();
     }

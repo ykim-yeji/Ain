@@ -1,9 +1,8 @@
 package com.ssafy.ain.member.entity;
 
-import com.ssafy.ain.global.constant.MemberRole;
 import com.ssafy.ain.global.entity.BaseEntity;
 import com.ssafy.ain.member.constant.MemberStatus;
-import com.ssafy.ain.global.constant.OAuthProvider;
+import com.ssafy.ain.global.constant.LoginProvider;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
@@ -26,21 +25,21 @@ public class Member extends BaseEntity {
     private Long id;
 
     @Column(name = "oauth_id", nullable = false)
-    private Long oauthId;
+    private Long memberLoginId;
 
     @Column(name = "oauth_type", nullable = false)
     @Enumerated(EnumType.STRING)
-    private OAuthProvider oauthProvider;
+    private LoginProvider loginProvider;
 
     @Column(name = "nickname", length = 20)
     @ColumnDefault("'사용자'")
     private String nickname;
 
-    @Column(name = "role", nullable = false)
-    @Enumerated(EnumType.STRING)
-    private MemberRole memberRole = MemberRole.USER;
-
     @Column(name = "status", nullable = false)
     @Enumerated(EnumType.STRING)
-    private MemberStatus status = MemberStatus.LOGIN;
+    private MemberStatus status;
+
+    public void updateStatus(MemberStatus memberStatus) {
+        this.status = memberStatus;
+    }
 }

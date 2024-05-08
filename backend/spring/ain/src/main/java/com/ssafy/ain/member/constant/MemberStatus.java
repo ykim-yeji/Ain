@@ -7,7 +7,7 @@ import lombok.Getter;
 @Getter
 public enum MemberStatus {
 
-    DELETE("회원 탈퇴"), LOGIN("로그인"), LOGOUT("로그아웃");
+    LOGIN("로그인"), LOGOUT("로그아웃"), DELETE("회원 탈퇴");
 
     private String name;
 }

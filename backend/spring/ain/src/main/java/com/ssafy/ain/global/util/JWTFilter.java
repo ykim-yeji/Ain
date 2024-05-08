@@ -1,9 +1,7 @@
 package com.ssafy.ain.global.util;
 
-import static com.ssafy.ain.global.constant.ErrorCode.*;
 import static com.ssafy.ain.global.constant.JwtConstant.*;
 
-import com.ssafy.ain.global.dto.ApiResponse;
 import com.ssafy.ain.global.dto.CustomOAuth2User;
 import com.ssafy.ain.global.dto.OAuthUserDTO;
 import jakarta.servlet.FilterChain;

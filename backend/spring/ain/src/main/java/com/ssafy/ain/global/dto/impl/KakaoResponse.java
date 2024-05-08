@@ -1,6 +1,6 @@
 package com.ssafy.ain.global.dto.impl;
 
-import com.ssafy.ain.global.constant.OAuthProvider;
+import com.ssafy.ain.global.constant.LoginProvider;
 import com.ssafy.ain.global.dto.OAuth2Response;
 import lombok.RequiredArgsConstructor;
 
@@ -18,8 +18,8 @@ public class KakaoResponse implements OAuth2Response {
     }
 
     @Override
-    public OAuthProvider getOAuthProvider() {
+    public LoginProvider getOAuthProvider() {
 
-        return OAuthProvider.KAKAO;
+        return LoginProvider.KAKAO;
     }
 }

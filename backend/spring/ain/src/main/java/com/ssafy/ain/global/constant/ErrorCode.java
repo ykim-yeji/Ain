@@ -12,9 +12,10 @@ public enum ErrorCode {
 
     //회원
     NOT_EXISTS_MEMBER(NOT_FOUND, "존재하지 않는 회원입니다!"),
-    NOT_EXISTS_REFRESH_TOKEN(BAD_REQUEST, "refresh token을 입력하지 않았습니다!"),
+    NOT_EXISTS_REFRESH_TOKEN(BAD_REQUEST, "refresh token을 존재하지 않습니다!"),
     EXPIRES_ACCESS_TOKEN(UNAUTHORIZED, "access token이 만료되었습니다!"),
     EXPIRES_REFRESH_TOKEN(UNAUTHORIZED, "refresh token이 만료되었습니다!"),
+    INVALID_OAUTH_PROVIDER(UNAUTHORIZED, "유효하지 않는 로그인 기관입니다!"),
     INVALID_TOKEN(UNAUTHORIZED, "유효하지 않는 토큰입니다!");
 
     private final HttpStatus status;
