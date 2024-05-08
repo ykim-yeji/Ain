@@ -49,4 +49,6 @@ public class IdealPerson extends BaseEntity {
 
     @Column(name = "ranking", nullable = false)
     private int ranking;
+
+    public void updateRanking(int ranking) { this.ranking = ranking; }
 }

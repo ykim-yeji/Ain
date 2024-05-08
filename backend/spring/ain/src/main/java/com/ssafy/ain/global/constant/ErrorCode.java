@@ -20,7 +20,10 @@ public enum ErrorCode {
     NOT_ACCESS_TOKEN(BAD_REQUEST, "토큰 유형이 access token이 아닙니다!"),
     NOT_EXISTS_COOKIE(BAD_REQUEST, "Cookie가 존재하지 않습니다!"),
     INVALID_TOKEN(UNAUTHORIZED, "유효하지 않는 토큰입니다!"),
-    NOT_LOGIN_MEMBER(FORBIDDEN, "해당 회원은 로그아웃한 상태입니다!");
+    NOT_LOGIN_MEMBER(FORBIDDEN, "해당 회원은 로그아웃한 상태입니다!"),
+
+    //이상형
+    NOT_EXISTS_IDEAL_PERSON(NOT_FOUND, "존재하지 않는 이상형입니다!");
 
     private final HttpStatus status;
     private final String message;
