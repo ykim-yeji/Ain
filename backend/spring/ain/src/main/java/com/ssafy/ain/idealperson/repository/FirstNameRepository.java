@@ -12,5 +12,5 @@ import java.util.List;
 @Repository
 public interface FirstNameRepository extends JpaRepository<FirstName, Long> {
     @Query(value = "select * from first_name f where (f.gender = :gender) order by RAND() limit 1", nativeQuery = true)
-    FirstName findRandomFirstName(@Param("gender") Gender gender);
+    FirstName findRandomFirstName(@Param("gender") String gender);
 }
