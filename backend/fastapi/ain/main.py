@@ -36,7 +36,7 @@ class IPContent(BaseModel):
     idealPersonDescriptions: str
     idealPersonGender: str
 
-
+# assistants 생성
 @app.post("/assistants/ideal-people")
 async def add_ideal_person_chatbot(
 ):

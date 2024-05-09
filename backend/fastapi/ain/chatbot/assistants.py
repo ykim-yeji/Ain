@@ -23,12 +23,13 @@ class IdealPersonAssistant:
     def add_assistant(self):
         # 검색 파일 생성
         vector_store = self.client.beta.vector_stores.create(name="MBTI Document")
-        file_paths = [PRESENT_DIR + "\\mbti\\INTJ_Document.txt", PRESENT_DIR + ".\\mbti\\INFJ_Document.txt", PRESENT_DIR + ".\\mbti\\INFP_Document.txt",
-                      PRESENT_DIR + ".\\mbti\\INTP_Document.txt", PRESENT_DIR + ".\\mbti\\ISFJ_Document.txt", PRESENT_DIR + ".\\mbti\\ISTJ_Document.txt",
-                      PRESENT_DIR + ".\\mbti\\ISTP_Document.txt", PRESENT_DIR + ".\\mbti\\ISFP_Document.txt", PRESENT_DIR + "\\mbti\\ENTJ_Document.txt",
-                      PRESENT_DIR + ".\\mbti\\ENFJ_Document.txt", PRESENT_DIR + ".\\mbti\\ENFP_Document.txt", PRESENT_DIR + ".\\mbti\\ENTP_Document.txt",
-                      PRESENT_DIR + ".\\mbti\\ESFJ_Document.txt", PRESENT_DIR + ".\\mbti\\ESTJ_Document.txt", PRESENT_DIR + ".\\mbti\\ESTP_Document.txt",
-                      PRESENT_DIR + ".\\mbti\\ESFP_Document.txt"]
+        # mbti 폴더 경로
+        mbti_folder_path = PRESENT_DIR + "\\mbti"
+        # mbti 폴더 내의 모든 파일을 가져옴
+        file_paths = []
+        for file_name in os.listdir(mbti_folder_path):
+            # 파일 경로를 생성하여 리스트에 추가
+            file_paths.append(os.path.join(mbti_folder_path, file_name))
         file_streams = [open(path, "rb") for path in file_paths]
         file_batch = self.client.beta.vector_stores.file_batches.upload_and_poll(
             vector_store_id=vector_store.id, files=file_streams
