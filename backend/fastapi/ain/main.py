@@ -3,12 +3,14 @@ import uvicorn
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 from chatbot.assistants import IdealPersonAssistant
+from total.dto.Response import Response
+from total.constant.SuccessCode import SuccessCode
 
 from pydantic import BaseModel
 from fastapi.responses import StreamingResponse
 import io
 import dalle_test
-
+from chatbot.threads import IdealPersonThread
 
 # FastAPI 호출
 app = FastAPI()
@@ -36,14 +38,25 @@ class IPContent(BaseModel):
     idealPersonDescriptions: str
     idealPersonGender: str
 
-# assistants 생성
+# assistant 생성
 @app.post("/assistants/ideal-people")
-async def add_ideal_person_chatbot(
+async def add_ideal_person_assistant(
 ):
     try:
         ideal_person_assistant_id = IdealPersonAssistant().add_assistant()
 
         return {"idealPersonAssistantId": ideal_person_assistant_id}
+    except Exception as e:
+        logging.error(e)
+
+# 이상형 챗봇 생성
+@app.post("/chatbots/ideal-people")
+async def add_ideal_person_chatbot(
+):
+    try:
+        ideal_person_thread_id = IdealPersonThread().add_thread()
+
+        return Response.success(SuccessCode.CREATE_IDEAL_PERSON_CHATBOT, data={"idealPersonThreadId": ideal_person_thread_id})
     except Exception as e:
         logging.error(e)
 
