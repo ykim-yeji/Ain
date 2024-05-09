@@ -2,6 +2,8 @@ package com.ssafy.ain.idealperson.service.impl;
 
 import com.ssafy.ain.global.constant.Gender;
 import com.ssafy.ain.global.exception.NoExistException;
+import com.ssafy.ain.global.util.S3Service;
+import com.ssafy.ain.idealperson.constant.Mbti;
 import com.ssafy.ain.idealperson.dto.IdealPersonDTO.*;
 import com.ssafy.ain.idealperson.entity.FirstName;
 import com.ssafy.ain.idealperson.entity.IdealPerson;
@@ -10,6 +12,7 @@ import com.ssafy.ain.idealperson.repository.FirstNameRepository;
 import com.ssafy.ain.idealperson.repository.IdealPersonRepository;
 import com.ssafy.ain.idealperson.repository.LastNameRepository;
 import com.ssafy.ain.idealperson.service.IdealPersonService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -26,24 +29,17 @@ public class IdealPersonServiceImpl implements IdealPersonService {
     private final IdealPersonRepository idealPersonRepository;
     private final FirstNameRepository firstNameRepository;
     private final LastNameRepository lastNameRepository;
+    private final S3Service s3Service;
 
     @Override
-    public GetIdealPeopleResponse getAllIdealPerson(String memberId) {
-        // 예외처리필요
-        List<IdealPerson> idealPeople = idealPersonRepository.findIdealPeopleByMemberId(Long.parseLong(memberId),
+    @Transactional
+    public GetIdealPeopleResponse getAllIdealPerson(Long memberId) {
+        List<IdealPerson> idealPeople = idealPersonRepository.findIdealPeopleByMemberId(memberId,
                 Sort.by(Sort.Direction.ASC, "ranking"));
         List<GetIdealPersonResponse> idealPeopleResponse = new ArrayList<>();
 
-        for (IdealPerson idealPerson : idealPeople) {
-            idealPeopleResponse.add(GetIdealPersonResponse.builder()
-                            .idealPersonId(idealPerson.getId())
-                            .idealPersonFullName(idealPerson.getFullName())
-                            .idealPersonNickname(idealPerson.getNickname())
-                            .idealPersonImageUrl(idealPerson.getIdealPersonImageUrl())
-                            .idealPersonRank(idealPerson.getRanking())
-                            .idealPersonThreadId(idealPerson.getThreadId())
-                            .build());
-        }
+        for (IdealPerson idealPerson : idealPeople)
+            idealPeopleResponse.add(idealPerson.toGetIdealPersonResponse());
 
         return GetIdealPeopleResponse.builder()
                 .idealPeople(idealPeopleResponse)
@@ -51,7 +47,8 @@ public class IdealPersonServiceImpl implements IdealPersonService {
     }
 
     @Override
-    public void modifyRankingOfIdealPeople(ModifyRankingOfIdealPeopleRequest modifyRankingOfIdealPeopleRequest) {
+    @Transactional
+    public void modifyRankingOfIdealPeople(Long memberId, ModifyRankingOfIdealPeopleRequest modifyRankingOfIdealPeopleRequest) {
         for (int i = 0; i < modifyRankingOfIdealPeopleRequest.getIdealPersonRankings().length; i++) {
             IdealPerson idealPerson =
                     idealPersonRepository.findById(modifyRankingOfIdealPeopleRequest.getIdealPersonRankings()[i])
@@ -61,14 +58,31 @@ public class IdealPersonServiceImpl implements IdealPersonService {
     }
 
     @Override
+    @Transactional
     public GetNameOfIdealPersonResponse getNameOfIdealPerson(GetNameOfIdealPersonRequest getNameOfIdealPersonRequest) {
         String lastName = lastNameRepository.findRandomLastName().getName();
 
-        FirstName firstName = firstNameRepository
-                .findRandomFirstName(getNameOfIdealPersonRequest.getIdealPersonGender());
+        String firstName = firstNameRepository
+                .findRandomFirstName(getNameOfIdealPersonRequest.getIdealPersonGender()).getName();
 
         return GetNameOfIdealPersonResponse.builder()
-                .idealPersonName(lastName + firstName.getName())
+                .idealPersonName(lastName + firstName)
                 .build();
+    }
+
+    @Override
+    @Transactional
+    public void addIdealPerson(Long memberId, AddIdealPersonRequest addIdealPersonRequest) {
+        // s3 호출 && url 받기  --> url
+        String idealPersonImageUrl = s3Service.upload(addIdealPersonRequest.getIdealPersonImage());
+        // /fast/chatbots/ideal-people 호출 후 threadId 받기 --> threadId
+
+        // 해당 memberId에 있는 이상형들 랭크+1 (10 넘어가면 에러)
+        List<IdealPerson> idealPeople = idealPersonRepository.findIdealPeopleByMemberId(memberId,
+                Sort.by(Sort.Direction.ASC, "ranking"));
+        for (IdealPerson idealPerson : idealPeople)
+            idealPerson.updateRanking(idealPerson.getRanking() + 1);
+
+        idealPersonRepository.save(addIdealPersonRequest.toEntity(memberId, idealPersonImageUrl, "threadId"));
     }
 }

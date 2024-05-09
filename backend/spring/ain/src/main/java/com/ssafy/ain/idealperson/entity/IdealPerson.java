@@ -3,8 +3,10 @@ package com.ssafy.ain.idealperson.entity;
 import com.ssafy.ain.global.entity.BaseEntity;
 import com.ssafy.ain.global.constant.Gender;
 import com.ssafy.ain.idealperson.constant.Mbti;
+import com.ssafy.ain.idealperson.dto.IdealPersonDTO.*;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicUpdate;
@@ -51,4 +53,28 @@ public class IdealPerson extends BaseEntity {
     private int ranking;
 
     public void updateRanking(int ranking) { this.ranking = ranking; }
+
+    @Builder
+    public IdealPerson(Long memberId, String fullName, String nickname, Mbti mbti, Gender gender, String idealPersonImageUrl, String assistantId, String threadId, int ranking) {
+        this.memberId = memberId;
+        this.fullName = fullName;
+        this.nickname = nickname;
+        this.mbti = mbti;
+        this.gender = gender;
+        this.idealPersonImageUrl = idealPersonImageUrl;
+        this.assistantId = assistantId;
+        this.threadId = threadId;
+        this.ranking = ranking;
+    }
+
+    public GetIdealPersonResponse toGetIdealPersonResponse() {
+        return GetIdealPersonResponse.builder()
+                .idealPersonId(id)
+                .idealPersonFullName(fullName)
+                .idealPersonNickname(nickname)
+                .idealPersonImageUrl(idealPersonImageUrl)
+                .idealPersonRank(ranking)
+                .idealPersonThreadId(threadId)
+                .build();
+    }
 }
