@@ -39,7 +39,7 @@ public class IdealPersonDTO {
     @Getter
     @Setter
     public static class GetNameOfIdealPersonRequest {
-        private Gender idealPersonGender;
+        private String idealPersonGender;
     }
 
     @Getter
