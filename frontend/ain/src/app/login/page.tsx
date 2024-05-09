@@ -6,16 +6,13 @@ import { useRouter } from 'next/navigation';
 const client_id = process.env.NEXT_PUBLIC_KAKAO_CLIENT_ID;
 const redirect_uri = process.env.NEXT_PUBLIC_KAKAO_REDIRECT_URI;
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
 export default function Page() {
   const router = useRouter();
 
   const kakaoLogin = () => {
-    // location.href = process.env.NEXT_PUBLIC_KAKAO_OAUTH_URL as string
-
-    // location.href =
-    //   `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${client_id}&redirect_uri=${redirect_uri}` as string;
-
-    window.location.href = 'https://myain.co.kr/api/oauth2/authorization/kakao';
+    window.location.href = `${API_URL}/oauth2/authorization/kakao`;
   };
 
   return (
