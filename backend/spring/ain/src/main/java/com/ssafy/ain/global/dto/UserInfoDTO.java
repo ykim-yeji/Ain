@@ -8,7 +8,7 @@ import lombok.Getter;
 @Getter
 @Builder
 @AllArgsConstructor
-public class MemberInfoDTO {
+public class UserInfoDTO {
 
     private Long memberId;
     private Long memberLoginId;

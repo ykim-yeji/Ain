@@ -35,7 +35,7 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
-        Long memberId = userPrincipal.getMemberInfoDTO().getMemberId();
+        Long memberId = userPrincipal.getUserInfoDTO().getMemberId();
 
         String accessToken = jwtUtil.createJwt(ACCESS_TOKEN, memberId, accessExpiredMs);
         String refreshToken = jwtUtil.createJwt(REFRESH_TOKEN, memberId, refreshExpiredMs);

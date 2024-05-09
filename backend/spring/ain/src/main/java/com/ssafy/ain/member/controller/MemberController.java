@@ -27,7 +27,7 @@ public class MemberController {
     @PatchMapping
     public ApiResponse<?> addMemberInfo(@AuthenticationPrincipal UserPrincipal userPrincipal,
                                         @RequestBody @Valid AddMemberInfoRequest addMemberInfoRequest) {
-        memberService.addMemberInfo(userPrincipal.getMemberInfoDTO().getMemberId(), addMemberInfoRequest);
+        memberService.addMemberInfo(userPrincipal.getUserInfoDTO().getMemberId(), addMemberInfoRequest);
 
         return ApiResponse.success(UPDATE_MEMBER_INFO);
     }

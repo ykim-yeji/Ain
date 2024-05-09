@@ -4,10 +4,8 @@ import static com.ssafy.ain.global.constant.ErrorCode.EXPIRES_ACCESS_TOKEN;
 import static com.ssafy.ain.global.constant.ErrorCode.NOT_ACCESS_TOKEN;
 import static com.ssafy.ain.global.constant.JwtConstant.*;
 
-import com.ssafy.ain.global.dto.MemberInfoDTO;
-import com.ssafy.ain.global.dto.OAuthUserDTO;
+import com.ssafy.ain.global.dto.UserInfoDTO;
 import com.ssafy.ain.global.dto.UserPrincipal;
-import com.ssafy.ain.member.entity.Member;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -53,8 +51,8 @@ public class JWTFilter extends OncePerRequestFilter {
         Long memberId = jwtUtil.getMemberId(accessToken);
 
         UserPrincipal userPrincipal = UserPrincipal.builder()
-                .memberInfoDTO(
-                        MemberInfoDTO.builder()
+                .userInfoDTO(
+                        UserInfoDTO.builder()
                                 .memberId(memberId)
                                 .build()
                 )

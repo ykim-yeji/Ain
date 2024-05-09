@@ -12,17 +12,17 @@ import java.util.Map;
 @Getter
 public class UserPrincipal implements OAuth2User {
 
-    private final MemberInfoDTO memberInfoDTO;
+    private final UserInfoDTO userInfoDTO;
     private final Collection<? extends GrantedAuthority> authorities;
     private final Map<String, Object> attributes;
     private final String name;
     private final OAuthUserDTO oAuthUserDTO;
 
     @Builder
-    public UserPrincipal(MemberInfoDTO memberInfoDTO, OAuthUserDTO oAuthUserDTO) {
-        this.memberInfoDTO = memberInfoDTO;
+    public UserPrincipal(UserInfoDTO userInfoDTO, OAuthUserDTO oAuthUserDTO) {
+        this.userInfoDTO = userInfoDTO;
         this.authorities = addAuthorities("USER");
-        this.name = String.valueOf(memberInfoDTO.getMemberLoginId()) + memberInfoDTO.getLoginProvider();
+        this.name = String.valueOf(userInfoDTO.getMemberLoginId()) + userInfoDTO.getLoginProvider();
         this.attributes = null;
         this.oAuthUserDTO = oAuthUserDTO;
     }

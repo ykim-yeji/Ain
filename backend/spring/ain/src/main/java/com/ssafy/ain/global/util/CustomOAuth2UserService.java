@@ -1,7 +1,7 @@
 package com.ssafy.ain.global.util;
 
 import com.ssafy.ain.global.constant.LoginProvider;
-import com.ssafy.ain.global.dto.MemberInfoDTO;
+import com.ssafy.ain.global.dto.UserInfoDTO;
 import com.ssafy.ain.global.dto.OAuth2Response;
 import com.ssafy.ain.global.dto.OAuthUserDTO;
 import com.ssafy.ain.global.dto.UserPrincipal;
@@ -49,8 +49,8 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         }
 
         return UserPrincipal.builder()
-                .memberInfoDTO(
-                        MemberInfoDTO.builder()
+                .userInfoDTO(
+                        UserInfoDTO.builder()
                                 .memberId(member.getId())
                                 .memberLoginId(member.getMemberLoginId())
                                 .loginProvider(member.getLoginProvider())
