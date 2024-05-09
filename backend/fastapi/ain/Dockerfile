@@ -1,4 +1,4 @@
-FROM python:3.9
+FROM python:3.8.10
 EXPOSE 8000
 # 필요한 패키지 설치
 RUN apt-get update && \
@@ -9,7 +9,5 @@ WORKDIR /app
 
 # requirements.txt 설치
 RUN pip install --use-deprecated=legacy-resolver -r requirements.txt
-RUN pip install uvicorn
-RUN pip install fastapi
 
 ENTRYPOINT ["uvicorn", "main:app", "--reload", "--host", "0.0.0.0"]

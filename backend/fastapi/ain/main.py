@@ -83,3 +83,8 @@ async def generate_image(
         # 에러 발생 시 적절한 에러 메시지와 에러 코드 반환
         print(e)
         return e
+
+
+@app.post("/test")
+async def test():
+    return {"test": "test"}
