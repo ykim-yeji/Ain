@@ -1,13 +1,11 @@
 // useCamera.ts
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 
 export const useCamera = () => {
-  const videoRef = useRef<HTMLVideoElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null!); // null!로 초기화
   const [isCameraOn, setIsCameraOn] = useState(false);
 
   const startCamera = async () => {
-    if (isCameraOn) return; // 이미 카메라가 켜져 있으면 아무것도 하지 않음
-  
     try {
       const constraints = {
         video: {
@@ -16,7 +14,7 @@ export const useCamera = () => {
           facingMode: "user"
         }
       };
-      
+
       const stream = await navigator.mediaDevices.getUserMedia(constraints);
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
@@ -37,6 +35,13 @@ export const useCamera = () => {
       videoRef.current.pause();
     }
   };
+
+  useEffect(() => {
+    // 컴포넌트가 언마운트될 때 카메라 스트림 중지
+    return () => {
+      stopCamera();
+    };
+  }, []);
 
   return { videoRef, isCameraOn, startCamera, stopCamera };
 };

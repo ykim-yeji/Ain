@@ -5,12 +5,13 @@ import { useCamera } from '../desktop_camera/useCamera';
 import { usePhotoCapture } from '../desktop_camera/usePhotoCapture';
 import { CreateIdealPersonPage } from './CreateIdealPerson';
 import Carousel from './Carousel';
+import './success-icon.scss';
 
 export const DesktopPage = () => {
   const [idealPersons, setIdealPersons] = useState<IdealPerson[] | null>(null);
   const [selectedIdealPersonImage, setSelectedIdealPersonImage] = useState('');
   const { videoRef, isCameraOn, startCamera, stopCamera } = useCamera();
-  const { image, takePicture } = usePhotoCapture(videoRef, selectedIdealPersonImage);
+  const { image, setImage, takePicture } = usePhotoCapture(videoRef, selectedIdealPersonImage);
   const [isPictureTaken, setIsPictureTaken] = useState(false);
   const [idealPersonCount, setIdealPersonCount] = useState<number | null>(null);
   const [showIntro, setShowIntro] = useState(true);
@@ -36,10 +37,10 @@ export const DesktopPage = () => {
   useEffect(() => {
     const fetchIdealPersonsCount = async () => {
       try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_AIN_MOCK_SERVER}/ideal-people/count`);
+        const response = await fetch(`${process.env.NEXT_PUBLIC_AIN_SPRING_API_URL}/ideal-people/count`);
         const data = await response.json();
-        if (data.code === 200 && data.status === 'CREATED') {
-          setIdealPersonCount(data.data.idealPersonCount);
+        if (data.code === 200 && data.status === 'OK') {
+          setIdealPersons(data.data.idealPeople);
         }
       } catch (error) {
         console.error('이상형 개수 정보 가져오기 실패:', error);
@@ -49,10 +50,8 @@ export const DesktopPage = () => {
   }, []);
 
   useEffect(() => {
-    // idealPersons 상태가 설정되고, 배열이 비어있지 않은 경우
     if (idealPersons && idealPersons.length > 0) {
-      // 첫 번째 이상형의 이미지를 선택
-      setSelectedIdealPersonImage(idealPersons[0].idealPersonImage);
+      setSelectedIdealPersonImage(idealPersons[0].idealPersonImageUrl);
     }
   }, [idealPersons]);
 
@@ -63,17 +62,25 @@ export const DesktopPage = () => {
 
     const fetchIdealPersons = async () => {
       try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_AIN_MOCK_SERVER}/ideal-people`);
+    
+        const response = await fetch(`${process.env.NEXT_PUBLIC_AIN_SPRING_API_URL}/ideal-people`, {
+          headers: {
+            'Authorization': `Bearer eyJhbGciOiJIUzI1NiJ9.eyJjYXRlZ29yeSI6ImFjY2Vzc1Rva2VuIiwibWVtYmVySWQiOjUsImlhdCI6MTcxNTI0MTk1NSwiZXhwIjoxNzE1MjQ1NTU1fQ.VEJbuX7UbiH1POPiW3icHu03IjdPE9TUhRQVmI6NbWc` // 헤더에 액세스 토큰 추가
+          }
+        });
+    
         const data = await response.json();
-        if (data.code === 201 && data.status === 'CREATED') {
-          setIdealPersons(data.data.idealPersons);
+    
+        if (data.code === 200 && data.status === 'OK') {
+          setIdealPersons(data.data.idealPeople);
         }
       } catch (error) {
         console.error('이상형 정보 가져오기 실패:', error);
       }
     };
+    
     fetchIdealPersons();
-  }, [idealPersonCount]);
+    }, [idealPersonCount]);
 
   const selectIdealPersonImage = (idealPersonImage: string) => {
     setSelectedIdealPersonImage(idealPersonImage);
@@ -82,12 +89,15 @@ export const DesktopPage = () => {
   const handleStartCamera = () => {
     startCamera();
     setShowIntro(false);
-    setIsPictureTaken(false); // 촬영 전 상태로 초기화
-    setSelectedIdealPersonImage(idealPersons?.[0].idealPersonImage || ''); // 첫 번째 이상형 이미지 선택
+    setIsPictureTaken(false);
+    setSelectedIdealPersonImage(idealPersons?.[0].idealPersonImageUrl || '');
   };
 
   const handleGoBack = () => {
     handleStartCamera();
+    setIsPictureTaken(false);
+    setImage(null);
+    setSelectedIdealPersonImage(idealPersons?.[0].idealPersonImageUrl || '');
   };
 
   if (idealPersonCount === 0) {
@@ -112,10 +122,12 @@ export const DesktopPage = () => {
 
   interface IdealPerson {
     idealPersonId: number;
+    idealPersonFullName: string;
     idealPersonNickname: string;
-    idealPersonImage: string;
+    idealPersonImageUrl: string; // 이전에는 idealPersonImage였습니다.
     idealPersonRank: number;
-   }
+    idealPersonThreadId: string;
+  }
 
    const totalPages = Math.ceil((idealPersons?.length ?? 0) / itemsPerPage);
 
@@ -133,7 +145,7 @@ export const DesktopPage = () => {
       currentPage * itemsPerPage,
       (currentPage + 1) * itemsPerPage
     ).map((idealPerson) => ({
-      idealPersonImage: idealPerson.idealPersonImage,
+      idealPersonImageUrl: idealPerson.idealPersonImageUrl,
       idealPersonNickname: idealPerson.idealPersonNickname,
     }));
 
@@ -145,7 +157,7 @@ export const DesktopPage = () => {
   };
 
   return (
-    <div className="flex flex-col justify-center items-center space-y-1" style={{ height: "calc(100vh)", overflowY: "auto" }}>
+    <div className="flex flex-col justify-center items-center space-y-9" style={{ height: "calc(100vh)", overflowY: "auto" }}>
       <div className="relative w-10/12">
         {image ? (
           <img src={image} className="w-full" alt="Captured" /> // 캡처된 이미지 표시
@@ -174,7 +186,7 @@ export const DesktopPage = () => {
           {isCameraOn && (
             <Carousel
                 items={currentPageIdealPersons?.map((p) => ({
-                  idealPersonImage: p.idealPersonImage,
+                  idealPersonImageUrl: p.idealPersonImageUrl, // 이전에는 idealPersonImage였습니다.
                   idealPersonNickname: p.idealPersonNickname
                 })) || []}
                 selectedImage={selectedIdealPersonImage}
@@ -189,29 +201,55 @@ export const DesktopPage = () => {
         </div>
 
         {isCameraOn && (
-          <div className='flex flex-row justify-center items-center space-x-5'>
-            {/* 저장하기 버튼 */}
-            <button onClick={handleSavePicture} disabled={!isPictureTaken}>저장하기</button>
-
+          <div className='flex flex-row justify-center items-center space-x-12'>
+            {/* 돌아가기 버튼 */}
+            <button
+              onClick={handleGoBack}
+              disabled={!isPictureTaken}
+              className={`px-2 py-2 rounded-lg transition-colors duration-300 flex items-center space-x-2 ${
+                isPictureTaken ? 'bg-[#AB42CF] text-white' : 'bg-gray-400 text-gray-600'
+              }`}
+            >
+              <img
+                  src={isPictureTaken ? './icon/camera_back_white.png' : './icon/camera_back_gray.png'}
+                  alt="돌아가기"
+                  className="w-5 h-5"
+                />
+                <span>다시찍기</span>
+            </button>
             {/* 촬영 버튼 */}
             {!isPictureTaken ? (
               <img
-                src={isHovering ? "./icon/camera_start2.png" : "./icon/camera_start.png"}
-                alt="사진 촬영"
+                src={isHovering ? './icon/camera_start2.png' : './icon/camera_start.png'}
+                alt='사진 촬영'
                 onClick={takePicture}
                 onMouseEnter={() => setIsHovering(true)}
                 onMouseLeave={() => setIsHovering(false)}
                 style={cameraImgStyle}
               />
             ) : (
-              <div style={cameraImgStyle}>촬영 완료</div> // 촬영이 완료된 상태를 표시
+              <div className="success-icon">
+                <div className="success-icon__tip"></div>
+                <div className="success-icon__long"></div>
+              </div>        
             )}
-
-            {/* 돌아가기 버튼 */}
-            <button onClick={handleGoBack} disabled={!isPictureTaken}>돌아가기</button>
+            {/* 저장하기 버튼 */}
+              <button
+                onClick={handleSavePicture}
+                disabled={!isPictureTaken}
+                className={`px-2 py-2 rounded-lg transition-colors duration-300 flex items-center space-x-2 ${
+                  isPictureTaken ? 'bg-[#AB42CF] text-white' : 'bg-gray-400 text-gray-600'
+                }`}
+              >
+                <img
+                  src={isPictureTaken ? './icon/camera_save_white.png' : './icon/camera_save_gray.png'}
+                  alt="저장하기"
+                  className="w-5 h-5"
+                />
+                <span>저장하기</span>
+              </button>
           </div>
-        )}
-
+          )}
         {/* 카메라 시작 버튼 (카메라가 꺼져있을 때만 표시) */}
         {!isCameraOn && (
           <button onClick={startCamera}>카메라 시작</button>
