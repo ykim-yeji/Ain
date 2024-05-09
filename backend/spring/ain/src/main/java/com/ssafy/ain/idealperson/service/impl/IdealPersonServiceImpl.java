@@ -72,7 +72,7 @@ public class IdealPersonServiceImpl implements IdealPersonService {
 
     @Override
     @Transactional
-    public void addIdealPerson(Long memberId, AddIdealPersonRequest addIdealPersonRequest) {
+    public void addIdealPerson(Long memberId, String threadId, AddIdealPersonRequest addIdealPersonRequest) {
         // s3 호출 && url 받기  --> url
         String idealPersonImageUrl = s3Service.upload(addIdealPersonRequest.getIdealPersonImage());
         // /fast/chatbots/ideal-people 호출 후 threadId 받기 --> threadId
@@ -83,6 +83,6 @@ public class IdealPersonServiceImpl implements IdealPersonService {
         for (IdealPerson idealPerson : idealPeople)
             idealPerson.updateRanking(idealPerson.getRanking() + 1);
 
-        idealPersonRepository.save(addIdealPersonRequest.toEntity(memberId, idealPersonImageUrl, "threadId"));
+        idealPersonRepository.save(addIdealPersonRequest.toEntity(memberId, idealPersonImageUrl, threadId));
     }
 }

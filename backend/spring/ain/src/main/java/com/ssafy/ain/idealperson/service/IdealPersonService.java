@@ -9,5 +9,5 @@ public interface IdealPersonService {
 
     GetNameOfIdealPersonResponse getNameOfIdealPerson(GetNameOfIdealPersonRequest getNameOfIdealPersonRequest);
 
-    void addIdealPerson(Long memberId, AddIdealPersonRequest addIdealPersonRequest);
+    void addIdealPerson(Long memberId, String threadId, AddIdealPersonRequest addIdealPersonRequest);
 }

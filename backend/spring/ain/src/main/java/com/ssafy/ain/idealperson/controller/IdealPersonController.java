@@ -9,6 +9,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import com.ssafy.ain.global.constant.SuccessCode;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.client.RestTemplate;
 
 @RestController
 @RequiredArgsConstructor
@@ -42,8 +43,16 @@ public class IdealPersonController {
     @PostMapping("")
     public ApiResponse<?> addIdealPerson(@AuthenticationPrincipal UserPrincipal userPrincipal,
                                          @RequestBody AddIdealPersonRequest addIdealPersonRequest) {
+        RestTemplate restTemplate = new RestTemplate();
+        String url = "https://myain.co.kr/fast/chatbots/ideal-people";
+        GetIdealPersonThreadIdResponse responseBody = restTemplate.postForObject(
+                url, null, GetIdealPersonThreadIdResponse.class);
 
-        idealPersonService.addIdealPerson(userPrincipal.getUserInfoDTO().getMemberId(), addIdealPersonRequest);
+        // responseBody nullException 처리 필요
+        idealPersonService.addIdealPerson(
+                userPrincipal.getUserInfoDTO().getMemberId(),
+                responseBody.getIdealPersonThreadId(),
+                addIdealPersonRequest);
         return ApiResponse.success(SuccessCode.ADD_IDEAL_PERSON);
     }
 }

@@ -75,4 +75,10 @@ public class IdealPersonDTO {
                     .build();
         }
     }
+
+    @Getter
+    @Setter
+    public static class GetIdealPersonThreadIdResponse {
+        private String idealPersonThreadId;
+    }
 }
