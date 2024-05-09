@@ -1,5 +1,6 @@
 package com.ssafy.ain.idealperson.service.impl;
 
+import com.ssafy.ain.global.constant.Gender;
 import com.ssafy.ain.global.exception.NoExistException;
 import com.ssafy.ain.idealperson.dto.IdealPersonDTO.*;
 import com.ssafy.ain.idealperson.entity.FirstName;
@@ -62,12 +63,12 @@ public class IdealPersonServiceImpl implements IdealPersonService {
     @Override
     public GetNameOfIdealPersonResponse getNameOfIdealPerson(GetNameOfIdealPersonRequest getNameOfIdealPersonRequest) {
         String lastName = lastNameRepository.findRandomLastName().getName();
-        String firstName = firstNameRepository
-                .findRandomFirstName(getNameOfIdealPersonRequest.getIdealPersonGender())
-                .getName();
+
+        FirstName firstName = firstNameRepository
+                .findRandomFirstName(getNameOfIdealPersonRequest.getIdealPersonGender());
 
         return GetNameOfIdealPersonResponse.builder()
-                .idealPersonName(lastName + firstName)
+                .idealPersonName(lastName + firstName.getName())
                 .build();
     }
 }
