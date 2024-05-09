@@ -1,7 +1,7 @@
 // Carousel.tsx
 
 interface CarouselProps {
-  items: { idealPersonImage: string; idealPersonNickname: string }[]; // Array of objects with image and nickname
+  items: { idealPersonImageUrl: string; idealPersonNickname: string }[]; // Array of objects with image and nickname
   selectedImage: string; // Currently selected image URL (optional)
   onSelectImage: (imageUrl: string) => void; // Function to handle image selection
 }
@@ -9,6 +9,9 @@ interface CarouselProps {
 // Carousel.tsx
 
 const Carousel: React.FC<CarouselProps> = ({ items, selectedImage, onSelectImage }) => {
+
+  console.log(items)
+
   return (
     <div className="" style={{ height: "110px", overflowX: "auto", display: "flex", justifyContent: "space-between" }}>
       <div className="space-x-4" style={{ display: "flex", alignItems: "center" }}>
@@ -17,14 +20,14 @@ const Carousel: React.FC<CarouselProps> = ({ items, selectedImage, onSelectImage
             <div
               className="rounded-t-lg" 
               style={{ 
-                backgroundColor: item.idealPersonImage === selectedImage ? '#FDCEDF' : '#F9F5F6', // 선택된 이미지일 경우 배경색을 #D6E4FF로 변경
+                backgroundColor: item.idealPersonImageUrl === selectedImage ? '#FDCEDF' : '#F9F5F6', // 선택된 이미지일 경우 배경색을 #D6E4FF로 변경
                 padding: '5px',
               }}
             >
               <img
-                src={item.idealPersonImage}
+                src={item.idealPersonImageUrl}
                 className="w-auto h-auto cursor-pointer"
-                onClick={() => onSelectImage(item.idealPersonImage)}
+                onClick={() => onSelectImage(item.idealPersonImageUrl)}
                 alt={`Ideal Person ${index + 1}`}
                 style={{ width: "75px", height: "75px", objectFit: "cover" }}
               />
@@ -34,7 +37,7 @@ const Carousel: React.FC<CarouselProps> = ({ items, selectedImage, onSelectImage
               style={{ 
                 marginTop: '0',
                 width: '85px',
-                backgroundColor: item.idealPersonImage === selectedImage ? '#F2BED1' : '#F8E8EE',
+                backgroundColor: item.idealPersonImageUrl === selectedImage ? '#F2BED1' : '#F8E8EE',
                 padding: '2px 5px',
                 display: 'flex',
                 justifyContent: 'center',

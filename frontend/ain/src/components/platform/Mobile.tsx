@@ -10,7 +10,7 @@ export const MobilePage = () => {
   const [idealPersons, setIdealPersons] = useState<IdealPerson[] | null>(null);
   const [selectedIdealPersonImage, setSelectedIdealPersonImage] = useState('');
   const { videoRef, isCameraOn, startCamera, stopCamera } = useCamera();
-  const { image, takePicture } = usePhotoCapture(videoRef, selectedIdealPersonImage);
+  const { image, setImage, takePicture } = usePhotoCapture(videoRef, selectedIdealPersonImage);
   const [carouselIndex, setCarouselIndex] = useState(0);
   const [isPictureTaken, setIsPictureTaken] = useState(false);
   const [idealPersonCount, setIdealPersonCount] = useState<number | null>(null);
@@ -36,7 +36,7 @@ export const MobilePage = () => {
   useEffect(() => {
     const fetchIdealPersonsCount = async () => {
       try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_AIN_MOCK_SERVER}/ideal-people/count`);
+        const response = await fetch(`${process.env.NEXT_PUBLIC_AIN_SPRING_API_URL}/ideal-people/count`);
         const data = await response.json();
         if (data.code === 200 && data.status === 'CREATED') {
           setIdealPersonCount(data.data.idealPersonCount);
@@ -55,24 +55,31 @@ export const MobilePage = () => {
 
     const fetchIdealPersons = async () => {
       try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_AIN_MOCK_SERVER}/ideal-people`);
+    
+        const response = await fetch(`${process.env.NEXT_PUBLIC_AIN_SPRING_API_URL}/ideal-people`, {
+          headers: {
+            'Authorization': `Bearer eyJhbGciOiJIUzI1NiJ9.eyJjYXRlZ29yeSI6ImFjY2Vzc1Rva2VuIiwibWVtYmVySWQiOjUsImlhdCI6MTcxNTI0MTk1NSwiZXhwIjoxNzE1MjQ1NTU1fQ.VEJbuX7UbiH1POPiW3icHu03IjdPE9TUhRQVmI6NbWc` // 헤더에 액세스 토큰 추가
+          }
+        });
+    
         const data = await response.json();
-        if (data.code === 201 && data.status === 'CREATED') {
-          setIdealPersons(data.data.idealPersons);
+    
+        if (data.code === 200 && data.status === 'OK') {
+          setIdealPersons(data.data.idealPeople);
         }
       } catch (error) {
         console.error('이상형 정보 가져오기 실패:', error);
       }
     };
+    
     fetchIdealPersons();
-  }, [idealPersonCount]);
+    }, [idealPersonCount]);
 
-  useEffect(() => {
-    if (idealPersons && idealPersons.length > 0) {
-      // 첫 번째 이상형의 이미지를 선택
-      setSelectedIdealPersonImage(idealPersons[0].idealPersonImage);
-    }
-  }, [idealPersons]);
+    useEffect(() => {
+      if (idealPersons && idealPersons.length > 0) {
+        setSelectedIdealPersonImage(idealPersons[0].idealPersonImageUrl);
+      }
+    }, [idealPersons]);
 
   const totalPages = Math.ceil((idealPersons?.length ?? 0) / itemsPerPage);
 
@@ -95,7 +102,16 @@ export const MobilePage = () => {
 
   const handleStartCamera = () => {
     startCamera();
-    setShowIntro(false); // 카메라 시작 시 소개글 숨기기
+    setShowIntro(false);
+    setIsPictureTaken(false);
+    setSelectedIdealPersonImage(idealPersons?.[0].idealPersonImageUrl || '');
+  };
+
+  const handleGoBack = () => {
+    handleStartCamera();
+    setIsPictureTaken(false);
+    setImage(null);
+    setSelectedIdealPersonImage(idealPersons?.[0].idealPersonImageUrl || '');
   };
 
   if (idealPersonCount === 0) {
@@ -127,7 +143,7 @@ export const MobilePage = () => {
   };
 
   return (
-    <div className="flex flex-col justify-center items-center" style={{ height: "calc(100vh)", overflowY: "auto" }}>
+    <div className="flex flex-col justify-center items-center space-y-1" style={{ height: "calc(100vh)", overflowY: "auto" }}>
       <div className="relative w-[80%]">
         {image ? (
           <img src={image} className="w-full" alt="Captured" /> // 캡처된 이미지 표시
@@ -154,13 +170,13 @@ export const MobilePage = () => {
           {/* 케러셀 컴포넌트 */}
           {isCameraOn && (
             <Carousel
-                items={currentPageIdealPersons?.map((p) => ({
-                  idealPersonImage: p.idealPersonImage,
-                  idealPersonNickname: p.idealPersonNickname
-                })) || []}
-                selectedImage={selectedIdealPersonImage}
-                onSelectImage={selectIdealPersonImage}
-              />
+              items={currentPageIdealPersons?.map((p) => ({
+                idealPersonImageUrl: p.idealPersonImageUrl,
+                idealPersonNickname: p.idealPersonNickname
+              })) || []}
+              selectedImage={selectedIdealPersonImage}
+              onSelectImage={selectIdealPersonImage}
+            />
           )}
 
           {/* 다음 버튼 */}
@@ -169,22 +185,60 @@ export const MobilePage = () => {
           </button>
       </div>
       <div className='flex flex-row justify-center items-center'>
-          {isCameraOn ? (
-              isPictureTaken ? (
-                  <button onClick={handleSavePicture}>사진 저장</button> // 사진 저장 버튼
-              ) : (
+      {isCameraOn && (
+            <div className='flex flex-row justify-center items-center space-x-5'>
+              {/* 돌아가기 버튼 */}
+                <button
+                  onClick={handleGoBack}
+                  disabled={!isPictureTaken}
+                  className={`px-2 py-2 rounded-lg transition-colors duration-300 flex items-center space-x-2 ${
+                    isPictureTaken ? 'bg-[#AB42CF] text-white' : 'bg-gray-400 text-gray-600'
+                  }`}
+                >
+                  <img
+                      src={isPictureTaken ? './icon/camera_back_white.png' : './icon/camera_back_gray.png'}
+                      alt="돌아가기"
+                      className="w-5 h-5"
+                    />
+                    <span>다시찍기</span>
+                </button>
+              {/* 촬영 버튼 */}
+              {!isPictureTaken ? (
                 <img
-                  src={isHovering ? "./icon/camera_start2.png" : "./icon/camera_start.png"} // 마우스 오버 시 이미지 변경
+                  src={isHovering ? "./icon/camera_start2.png" : "./icon/camera_start.png"}
                   alt="사진 촬영"
                   onClick={takePicture}
                   onMouseEnter={() => setIsHovering(true)}
                   onMouseLeave={() => setIsHovering(false)}
                   style={cameraImgStyle}
-                  className='mt-3 mb-3'
                 />
-              )
-          ) : (
-              <button onClick={startCamera}><img src="./icon/camera_start.png" alt="카메라 시작" className="w-12 h-12"/></button> // 카메라 시작 버튼에 아이콘 추가
+              ) : (
+                <div className="success-icon" style={{ width: '40px', height: '40px', fontSize: '4.5px', fontWeight:'bold' }}>
+                  <div className="success-icon__tip"></div>
+                  <div className="success-icon__long"></div>
+                </div>
+              )}
+              {/* 저장하기 버튼 */}
+              <button
+                onClick={handleSavePicture}
+                disabled={!isPictureTaken}
+                className={`px-2 py-2 rounded-lg transition-colors duration-300 flex items-center space-x-2 ${
+                  isPictureTaken ? 'bg-[#AB42CF] text-white' : 'bg-gray-400 text-gray-600'
+                }`}
+              >
+                <img
+                  src={isPictureTaken ? './icon/camera_save_white.png' : './icon/camera_save_gray.png'}
+                  alt="저장하기"
+                  className="w-5 h-5"
+                />
+                <span>저장하기</span>
+              </button>
+            </div>
+          )}
+
+          {/* 카메라 시작 버튼 (카메라가 꺼져있을 때만 표시) */}
+          {!isCameraOn && (
+            <button onClick={startCamera}>카메라 시작</button>
           )}
       </div>
     </div>
@@ -192,8 +246,10 @@ export const MobilePage = () => {
 }  
 
 interface IdealPerson {
- idealPersonId: number;
- idealPersonNickname: string;
- idealPersonImage: string;
- idealPersonRank: number;
+  idealPersonId: number;
+  idealPersonFullName: string;
+  idealPersonNickname: string;
+  idealPersonImageUrl: string;
+  idealPersonRank: number;
+  idealPersonThreadId: string;
 }

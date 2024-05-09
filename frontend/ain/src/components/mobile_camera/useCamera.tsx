@@ -1,8 +1,8 @@
 // useCamera.ts
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 
 export const useCamera = () => {
-  const videoRef = useRef<HTMLVideoElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null!);
   const [isCameraOn, setIsCameraOn] = useState(false);
 
   const startCamera = async () => {
@@ -26,6 +26,13 @@ export const useCamera = () => {
       videoRef.current.pause(); // 촬영 종료 후 영상 일시정지
     }
   };
+
+  useEffect(() => {
+    // 컴포넌트가 언마운트될 때 카메라 스트림 중지
+    return () => {
+      stopCamera();
+    };
+  }, []);
 
   return { videoRef, isCameraOn, startCamera, stopCamera };
 };

@@ -39,5 +39,5 @@ export const usePhotoCapture = (videoRef: React.RefObject<HTMLVideoElement>, sel
       }
     }
   };
-  return { image, takePicture };
+  return { image, setImage, takePicture };
 };
