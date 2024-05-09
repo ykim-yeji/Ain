@@ -29,8 +29,8 @@ public class JWTFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String authorization = request.getHeader("Authorization");
         if (authorization == null || !authorization.startsWith("Bearer ")) {
-            filterChain.doFilter(request, response);
 
+            filterChain.doFilter(request, response);
             return;
         }
 
@@ -38,12 +38,16 @@ public class JWTFilter extends OncePerRequestFilter {
         if (jwtUtil.isExpired(accessToken)) {
 
             request.setAttribute(EXCEPTION, EXPIRES_ACCESS_TOKEN);
+            filterChain.doFilter(request, response);
+            return;
         }
 
         String category = jwtUtil.getCategory(accessToken);
         if (!category.equals(ACCESS_TOKEN)) {
 
             request.setAttribute(EXCEPTION, NOT_ACCESS_TOKEN);
+            filterChain.doFilter(request, response);
+            return;
         }
 
         Long memberId = jwtUtil.getMemberId(accessToken);

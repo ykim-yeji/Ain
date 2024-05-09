@@ -5,7 +5,6 @@ import com.ssafy.ain.global.dto.UserPrincipal;
 import com.ssafy.ain.member.entity.Member;
 import com.ssafy.ain.member.repository.MemberRepository;
 import com.ssafy.ain.member.service.MemberService;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

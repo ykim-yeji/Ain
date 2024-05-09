@@ -53,6 +53,7 @@ public class CustomLogoutFilter extends GenericFilterBean {
 		if (!requestMethod.equals("POST")) {
 
 			filterChain.doFilter(request, response);
+			request.setAttribute(EXCEPTION, NOT_HTTP_METHOD_POST);
 			return;
 		}
 
@@ -60,6 +61,8 @@ public class CustomLogoutFilter extends GenericFilterBean {
 		if (cookies == null) {
 
 			request.setAttribute(EXCEPTION, NOT_EXISTS_COOKIE);
+			filterChain.doFilter(request, response);
+			return;
 		}
 		String refreshToken = null;
 		for (Cookie cookie : cookies) {
@@ -71,6 +74,7 @@ public class CustomLogoutFilter extends GenericFilterBean {
 		if (refreshToken == null) {
 
 			request.setAttribute(EXCEPTION, NOT_EXISTS_REFRESH_TOKEN);
+			filterChain.doFilter(request, response);
 			return;
 		}
 		log.info("refreshToken(" + refreshToken + ")");
@@ -78,6 +82,7 @@ public class CustomLogoutFilter extends GenericFilterBean {
 		if (jwtUtil.isExpired(refreshToken)) {
 
 			request.setAttribute(EXCEPTION, EXPIRES_REFRESH_TOKEN);
+			filterChain.doFilter(request, response);
 			return;
 		}
 
@@ -85,14 +90,14 @@ public class CustomLogoutFilter extends GenericFilterBean {
 		if (!category.equals(REFRESH_TOKEN)) {
 
 			request.setAttribute(EXCEPTION, NOT_REFRESH_TOKEN);
+			filterChain.doFilter(request, response);
 			return;
 		}
-
-		log.info("ox : " + refreshTokenRepository.existsById(refreshToken));
 
 		if (!refreshTokenRepository.existsById(refreshToken)) {
 
 			request.setAttribute(EXCEPTION, NOT_LOGIN_MEMBER);
+			filterChain.doFilter(request, response);
 			return;
 		}
 
