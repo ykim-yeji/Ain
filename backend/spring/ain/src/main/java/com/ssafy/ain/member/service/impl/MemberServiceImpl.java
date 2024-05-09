@@ -1,6 +1,7 @@
 package com.ssafy.ain.member.service.impl;
 
 import com.ssafy.ain.global.constant.LoginProvider;
+import com.ssafy.ain.global.dto.UserPrincipal;
 import com.ssafy.ain.member.entity.Member;
 import com.ssafy.ain.member.repository.MemberRepository;
 import com.ssafy.ain.member.service.MemberService;
@@ -28,5 +29,9 @@ public class MemberServiceImpl implements MemberService {
                         .loginProvider(loginProvider)
                         .build()
         );
+    }
+
+    @Override
+    public void addMemberInfo(UserPrincipal userPrincipal, String memberNickname) {
     }
 }

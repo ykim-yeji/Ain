@@ -7,8 +7,5 @@ import lombok.*;
 @AllArgsConstructor
 public class OAuthUserDTO {
 
-    private String memberRole;
-    private String name;
-    private Long memberId;
     private boolean isNewMember;
 }

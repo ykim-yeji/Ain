@@ -2,7 +2,7 @@ package com.ssafy.ain.global.config;
 
 import static com.ssafy.ain.global.constant.JwtConstant.*;
 
-import com.ssafy.ain.global.dto.CustomOAuth2User;
+import com.ssafy.ain.global.dto.UserPrincipal;
 import com.ssafy.ain.global.entity.RefreshToken;
 import com.ssafy.ain.global.util.JwtUtil;
 import com.ssafy.ain.global.util.RefreshTokenRepository;
@@ -34,8 +34,8 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-        CustomOAuth2User customOAuth2User = (CustomOAuth2User) authentication.getPrincipal();
-        Long memberId = customOAuth2User.getMemberId();
+        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
+        Long memberId = userPrincipal.getMemberInfoDTO().getMemberId();
 
         String accessToken = jwtUtil.createJwt(ACCESS_TOKEN, memberId, accessExpiredMs);
         String refreshToken = jwtUtil.createJwt(REFRESH_TOKEN, memberId, refreshExpiredMs);
@@ -50,7 +50,7 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         response.setHeader("Authorization", "Bearer " + accessToken);
         response.addCookie(authService.createCookie(REFRESH_TOKEN, refreshToken, refreshExpiredMs));
 
-        if (customOAuth2User.getIsNewMember()) {
+        if (userPrincipal.getOAuthUserDTO().isNewMember()) {
             response.sendRedirect("http://localhost:3000/nickname");
         } else {
             response.sendRedirect("http://localhost:3000");

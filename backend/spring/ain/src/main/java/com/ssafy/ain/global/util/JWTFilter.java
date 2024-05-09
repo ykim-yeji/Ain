@@ -4,15 +4,15 @@ import static com.ssafy.ain.global.constant.ErrorCode.EXPIRES_ACCESS_TOKEN;
 import static com.ssafy.ain.global.constant.ErrorCode.NOT_ACCESS_TOKEN;
 import static com.ssafy.ain.global.constant.JwtConstant.*;
 
-import com.ssafy.ain.global.dto.CustomOAuth2User;
+import com.ssafy.ain.global.dto.MemberInfoDTO;
 import com.ssafy.ain.global.dto.OAuthUserDTO;
-import com.ssafy.ain.global.exception.InvalidException;
+import com.ssafy.ain.global.dto.UserPrincipal;
+import com.ssafy.ain.member.entity.Member;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -48,13 +48,15 @@ public class JWTFilter extends OncePerRequestFilter {
 
         Long memberId = jwtUtil.getMemberId(accessToken);
 
-        CustomOAuth2User customOAuth2User = new CustomOAuth2User(
-                OAuthUserDTO.builder()
-                        .memberId(memberId)
-                        .build()
-        );
+        UserPrincipal userPrincipal = UserPrincipal.builder()
+                .memberInfoDTO(
+                        MemberInfoDTO.builder()
+                                .memberId(memberId)
+                                .build()
+                )
+                .build();
 
-        Authentication authToken = new UsernamePasswordAuthenticationToken(customOAuth2User, null, customOAuth2User.getAuthorities());
+        Authentication authToken = new UsernamePasswordAuthenticationToken(userPrincipal, null, userPrincipal.getAuthorities());
 
         SecurityContextHolder.getContext().setAuthentication(authToken);
 

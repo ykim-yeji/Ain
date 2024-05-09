@@ -1,9 +1,10 @@
 package com.ssafy.ain.global.util;
 
 import com.ssafy.ain.global.constant.LoginProvider;
-import com.ssafy.ain.global.dto.CustomOAuth2User;
+import com.ssafy.ain.global.dto.MemberInfoDTO;
 import com.ssafy.ain.global.dto.OAuth2Response;
 import com.ssafy.ain.global.dto.OAuthUserDTO;
+import com.ssafy.ain.global.dto.UserPrincipal;
 import com.ssafy.ain.global.dto.impl.KakaoResponse;
 import com.ssafy.ain.member.constant.MemberStatus;
 import com.ssafy.ain.member.entity.Member;
@@ -47,13 +48,19 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             isNewmember = true;
         }
 
-        return new CustomOAuth2User(
-                OAuthUserDTO.builder()
-                        .memberId(member.getId())
-                        .name(String.valueOf(member.getMemberLoginId()) + member.getLoginProvider())
-                        .memberRole("유저")
-                        .isNewMember(isNewmember)
-                        .build()
-        );
+        return UserPrincipal.builder()
+                .memberInfoDTO(
+                        MemberInfoDTO.builder()
+                                .memberId(member.getId())
+                                .memberLoginId(member.getMemberLoginId())
+                                .loginProvider(member.getLoginProvider())
+                                .build()
+                )
+                .oAuthUserDTO(
+                        OAuthUserDTO.builder()
+                                .isNewMember(isNewmember)
+                                .build()
+                )
+                .build();
     }
 }

@@ -40,7 +40,6 @@ public class CustomLogoutFilter extends GenericFilterBean {
 
 	private void doFilter(HttpServletRequest request, HttpServletResponse response,
 						  FilterChain filterChain) throws IOException, ServletException {
-
 		String requestUri = request.getRequestURI();
 		log.info("requestURI(" + request.getRequestURI() + ")");
 		if (!requestUri.matches("^/auth/logout$")) {
@@ -72,23 +71,29 @@ public class CustomLogoutFilter extends GenericFilterBean {
 		if (refreshToken == null) {
 
 			request.setAttribute(EXCEPTION, NOT_EXISTS_REFRESH_TOKEN);
+			return;
 		}
 		log.info("refreshToken(" + refreshToken + ")");
 
 		if (jwtUtil.isExpired(refreshToken)) {
 
 			request.setAttribute(EXCEPTION, EXPIRES_REFRESH_TOKEN);
+			return;
 		}
 
 		String category = jwtUtil.getCategory(refreshToken);
 		if (!category.equals(REFRESH_TOKEN)) {
 
 			request.setAttribute(EXCEPTION, NOT_REFRESH_TOKEN);
+			return;
 		}
+
+		log.info("ox : " + refreshTokenRepository.existsById(refreshToken));
 
 		if (!refreshTokenRepository.existsById(refreshToken)) {
 
 			request.setAttribute(EXCEPTION, NOT_LOGIN_MEMBER);
+			return;
 		}
 
 		refreshTokenRepository.deleteById(refreshToken);
