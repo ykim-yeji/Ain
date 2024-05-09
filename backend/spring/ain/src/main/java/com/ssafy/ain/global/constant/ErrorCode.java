@@ -23,7 +23,13 @@ public enum ErrorCode {
     NOT_LOGIN_MEMBER(FORBIDDEN, "해당 회원은 로그아웃한 상태입니다!"),
 
     //이상형
-    NOT_EXISTS_IDEAL_PERSON(NOT_FOUND, "존재하지 않는 이상형입니다!");
+    NOT_EXISTS_IDEAL_PERSON(NOT_FOUND, "존재하지 않는 이상형입니다!"),
+
+    //s3
+    NOT_EXISTS_FILE(NOT_FOUND, "file이 존재하지 않습니다!"),
+    NOT_EXISTS_FILE_TO_UPLOAD(BAD_REQUEST, "업로드할 파일이 존재하지 않습니다!"),
+    NOT_UPLOADS_FILE(INTERNAL_SERVER_ERROR, "이미지 업로드에 실패하였습니다!"),
+    INVALID_URL_FORMAT(BAD_REQUEST, "요청한 URL 형식이 올바르지 않습니다!");
 
     private final HttpStatus status;
     private final String message;

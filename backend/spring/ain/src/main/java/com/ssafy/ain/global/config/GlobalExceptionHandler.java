@@ -4,6 +4,7 @@ import com.ssafy.ain.global.dto.ApiResponse;
 import com.ssafy.ain.global.exception.ExistException;
 import com.ssafy.ain.global.exception.InvalidException;
 import com.ssafy.ain.global.exception.NoExistException;
+import com.ssafy.ain.global.exception.ServerException;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.method.ParameterValidationResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -65,6 +66,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler
     public ApiResponse<?> handleInvalidException(InvalidException e) {
 
+        return ApiResponse.error(e.getCode());
+    }
+
+    @ExceptionHandler
+    public ApiResponse<?> handleServerException(ServerException e) {
         return ApiResponse.error(e.getCode());
     }
 }
