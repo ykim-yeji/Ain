@@ -24,6 +24,7 @@ public enum ErrorCode {
 
     //회원
     NOT_EXISTS_MEMBER(NOT_FOUND, "존재하지 않는 회원입니다!"),
+    NOT_EXISTS_MEMBER_ID(BAD_REQUEST, "존재하지 않는 회원 id입니다!"),
 
     //이상형
     NOT_EXISTS_IDEAL_PERSON(NOT_FOUND, "존재하지 않는 이상형입니다!");

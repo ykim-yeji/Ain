@@ -39,7 +39,11 @@ public class Member extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private MemberStatus status;
 
-    public void updateStatus(MemberStatus memberStatus) {
-        this.status = memberStatus;
+    public void updateNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public void updateStatus(MemberStatus status) {
+        this.status = status;
     }
 }
