@@ -4,3 +4,4 @@ spring:
       - classpath:/application-dev.yml
       - classpath:/application-s3.yml
       - classpath:/application-oauth.yml
+      - classpath:/application-openai.yml

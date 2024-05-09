@@ -30,6 +30,7 @@ dependencies {
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
+	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
 
 	// Login
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
@@ -45,6 +46,16 @@ dependencies {
 
 	// AWS bucket
 	implementation 'io.awspring.cloud:spring-cloud-starter-aws:2.4.4'
+}
+
+ext {
+	set('springCloudVersion', "2023.0.1")
+}
+
+dependencyManagement {
+	imports {
+		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+	}
 }
 
 tasks.named('test') {
