@@ -7,6 +7,6 @@ import com.ssafy.ain.member.entity.Member;
 public interface MemberService {
 
     Member signup(Long oauthId, LoginProvider oauthProvider);
-
     void addMemberInfo(Long memberId, AddMemberInfoRequest addMemberInfoRequest);
+    GetMemberInfoResponse getMemberInfo(Long memberId);
 }

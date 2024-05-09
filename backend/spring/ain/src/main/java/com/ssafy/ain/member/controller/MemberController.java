@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import static com.ssafy.ain.global.constant.SuccessCode.GET_MEMBER_INFO;
 import static com.ssafy.ain.global.constant.SuccessCode.UPDATE_MEMBER_INFO;
 
 @RestController
@@ -30,5 +31,17 @@ public class MemberController {
         memberService.addMemberInfo(userPrincipal.getUserInfoDTO().getMemberId(), addMemberInfoRequest);
 
         return ApiResponse.success(UPDATE_MEMBER_INFO);
+    }
+
+    /**
+     * 회원 정보 조회
+     * @param userPrincipal 회원 정보
+     * @return
+     */
+    @GetMapping
+    public ApiResponse<?> getMemberInfo(@AuthenticationPrincipal UserPrincipal userPrincipal) {
+        GetMemberInfoResponse getMemberInfoResponse = memberService.getMemberInfo(userPrincipal.getUserInfoDTO().getMemberId());
+
+        return ApiResponse.success(GET_MEMBER_INFO, getMemberInfoResponse);
     }
 }

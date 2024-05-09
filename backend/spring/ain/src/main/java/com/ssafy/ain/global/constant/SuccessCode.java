@@ -18,6 +18,7 @@ public enum SuccessCode {
 
     //회원
     UPDATE_MEMBER_INFO(OK, "회원 정보를 입력하는데 성공했습니다!"),
+    GET_MEMBER_INFO(OK, "회원 정보를 조회하는데 성공했습니다!"),
 
     //이상형
     GET_IDEAL_PEOPLE(OK, "이상형 목록 조회에 성공하였습니다!"),

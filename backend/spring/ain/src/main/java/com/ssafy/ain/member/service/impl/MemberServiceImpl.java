@@ -36,7 +36,7 @@ public class MemberServiceImpl implements MemberService {
 
     /**
      * 회원 정보 입력
-     * @param memberId 회원 정보 입력할 회원의 id
+     * @param memberId 회원 정보 입력할 회원의 DB id
      * @param addMemberInfoRequest 입력할 회원 정보
      */
     @Override
@@ -45,5 +45,20 @@ public class MemberServiceImpl implements MemberService {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new NoExistException(NOT_EXISTS_MEMBER_ID));
         member.updateNickname(addMemberInfoRequest.getMemberNickname());
+    }
+
+    /**
+     * 회원 정보 조회
+     * @param memberId 회원 정보 조회할 회원의 DB id
+     * @return
+     */
+    @Override
+    public GetMemberInfoResponse getMemberInfo(Long memberId) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new NoExistException(NOT_EXISTS_MEMBER_ID));
+
+        return GetMemberInfoResponse.builder()
+                .memberNickname(member.getNickname())
+                .build();
     }
 }
