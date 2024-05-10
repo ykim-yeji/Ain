@@ -1,15 +1,15 @@
 'use client';
 
-import { StaticImageData } from 'next/image';
 import { DragDropContext, Draggable, Droppable, DropResult } from 'react-beautiful-dnd';
-
-import Image from 'next/navigation';
 
 import useModalStore from '@/store/modalStore';
 
 import { useState, useEffect } from 'react';
 
 import IdealDetailModal from '@/components/modal/IdealDetailModal';
+
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 
 interface IdealPeople {
   idealPersonId: number;
@@ -21,64 +21,16 @@ interface IdealPeople {
 }
 
 interface ListData {
-  code: number;
-  status: string;
-  message: string;
-  data: {
-    idealPeople: IdealPeople[];
-  };
+  idealPeople: IdealPeople[];
 }
 
-interface IdealPerson {
-  idealPersonId: number;
-  idealPersonFullName: string;
-  idealPersonNickname: string;
-  idealPersonImage: string;
-  idealPersonRank: number;
-}
-
-interface Data {
-  idealPersons: IdealPerson[];
-}
-
-interface DummyData {
-  code: number;
-  status: string;
-  message: string;
-  data: Data;
-}
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export default function Page() {
   const [listData, setListData] = useState<ListData>();
-  const [arrayOrder, setArrayOrder] = useState([]);
-  const [enabled, setEnabled] = useState(false);
-  // 이걸 스토어로 옮기자
-  // const [modalTest, setModalTest] = useState(false);
-  const [nowOpenModal, setNowOpenModal] = useState(false);
-  // 이것도 스토어로
-  // const [hideList, setHideList] = useState(false);
-
-  useEffect(() => {
-    const getData = async () => {
-      try {
-        const res = await fetch('https://myain.co.kr/api/ideal-people');
-
-        if (res.ok) {
-          console.log(res.status);
-          const data = await res.json();
-          setListData(data);
-          console.log(data);
-          console.log(listData);
-        } else {
-          console.log('fetch실패');
-          console.log(res.status);
-        }
-      } catch (error) {
-        console.log('>>>>', error);
-      }
-    };
-    getData();
-  }, []);
+  const [enabled, setEnabled] = useState<boolean>(false);
+  const [isNewFetch, setIsNewFetch] = useState<number>(0);
+  const [isArrayUpdated, setIsArrayUpdated] = useState<number>(0);
 
   const {
     idealDropDown,
@@ -93,19 +45,18 @@ export default function Page() {
 
   const [tempNickname, setTempNickname] = useState<string>('');
   const [tempFullName, setTempFullName] = useState<string>('');
+  const [idealIdArray, setIdealIdArray] = useState<number[]>([]);
+  const [tempTestArray, setTempTestArray] = useState<IdealPeople[]>([]);
 
-  // const { tempImageUrl, setTempImageUrl } = useState('');
+  // const idealPersonRankings = [12, 11, 10, 9, 8, 7, 6, 5, 4];
 
   const handleModalTest = (nickname: string, fullname: string, url: string) => {
-    // setModalTest(!modalTest);
-
     if (idealDetailModalOpen === true) {
       setIdealDetailModalFalse();
     } else {
       setIdealDetailModalTrue();
     }
 
-    // setHideList(!hideList);
     if (hideIdealList === true) {
       setHideIdealListFalse();
     } else {
@@ -113,94 +64,157 @@ export default function Page() {
     }
 
     setIdealDropDownFalse();
-    // setTempNickname(nickname);
     setTempNickname(nickname);
     setTempFullName(fullname);
-    // setTempFullName()
-    // setTempImageUrl();
+  };
+
+  const onDragStart = () => {
+    // console.log('DRAG START');
+  };
+
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const res = await fetch(`${API_URL}/ideal-people`, {
+          headers: {
+            authorization: `
+            Bearer eyJhbGciOiJIUzI1NiJ9.eyJjYXRlZ29yeSI6ImFjY2Vzc1Rva2VuIiwibWVtYmVySWQiOjIsImlhdCI6MTcxNTMzNzExOCwiZXhwIjoxNzE1MzQwNzE4fQ.9mp7ZKhoDbHG3K834XnRggPN8gUt_mjPMwhOXPP6HmU`,
+          },
+        });
+
+        if (res.ok) {
+          // console.log(res.status);
+          const result = await res.json();
+          // console.log('결과', result);
+          setListData(result.data);
+        } else {
+          console.log('fetch실패');
+          console.log(res.status);
+        }
+      } catch (error) {
+        console.log('>>>>', error);
+      }
+    };
+    getData();
+  }, [isNewFetch]);
+
+  const changeIdealList = async () => {
+    // isArrayUpdatedCount();
+
+    try {
+      setIsArrayUpdated(isArrayUpdated + 1);
+      const res = await fetch(`${API_URL}/ideal-people/ranks`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          authorization: `
+          Bearer eyJhbGciOiJIUzI1NiJ9.eyJjYXRlZ29yeSI6ImFjY2Vzc1Rva2VuIiwibWVtYmVySWQiOjIsImlhdCI6MTcxNTMzNzExOCwiZXhwIjoxNzE1MzQwNzE4fQ.9mp7ZKhoDbHG3K834XnRggPN8gUt_mjPMwhOXPP6HmU`,
+        },
+        body: JSON.stringify({
+          idealPersonRankings: idealIdArray,
+        }),
+      });
+
+      if (res.ok) {
+        // console.log('fetchIdeal', idealIdArray);
+        console.log('이상형 순서 변경 성공');
+        setIsNewFetch(isNewFetch + 1);
+      } else {
+        console.log('이상형 순서 변경 실패');
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const onDragEnd = ({ source, destination }: DropResult) => {
-    console.log('>>> source', source);
-    console.log(' >>>>> destination', destination);
+    if (!destination) {
+      return;
+    }
+
+    // console.log('!!!!!!!!!!!!', listData);
+
+    const sourceIndex = source.index;
+    console.log('SOURCE', sourceIndex + 1);
+    const destinationIndex = destination.index;
+    console.log('DESTI', destinationIndex + 1);
+
+    // const draggedItem = listData?.idealPeople[sourceIndex];
+    // const destinationItem = listData?.idealPeople[destinationIndex];
+
+    // console.log('드래그드', draggedItem?.idealPersonFullName);
+    // console.log('데스티네이션', destinationItem?.idealPersonFullName);
+    console.log('기존 어레이!!');
+    console.log(idealIdArray);
+    if (listData && listData.idealPeople) {
+      const tempPeople = listData.idealPeople[sourceIndex];
+      listData.idealPeople[sourceIndex] = listData.idealPeople[destinationIndex];
+      listData.idealPeople[destinationIndex] = tempPeople;
+
+      for (let i = 0; i < listData.idealPeople.length; i++) {
+        idealIdArray[i] = listData.idealPeople[i].idealPersonId;
+      }
+
+      console.log('변경된 어레이!!');
+      console.log(idealIdArray);
+      changeIdealList();
+
+      // const testtest = () => {
+      //   const tempItem = [];
+
+      //   for (let i = 0; i < listData.idealPeople.length; i++) {
+      //     if (i !== sourceIndex && i !== destinationIndex) {
+      //       tempItem[i] = listData.idealPeople[i];
+      //     } else if (i === sourceIndex) {
+      //       tempItem[sourceIndex] = listData.idealPeople[destinationIndex];
+      //       // console.log('출발', sourceIndex);
+      //       // console.log('도착', destinationIndex);
+      //     } else if (i === destinationIndex) {
+      //       tempItem[destinationIndex] = listData.idealPeople[sourceIndex];
+      //       // console.log('출발2', destinationIndex);
+      //       // console.log('도착2', sourceIndex);
+      //     }
+      //   }
+
+      //   // 잘 바뀜
+      //   console.log('임시배열', tempItem);
+
+      //   // const updatedListData: ListData = {
+      //   //   idealPeople: tempItem,
+      //   // };
+
+      //   const updatedListData: ListData = {
+      //     idealPeople: tempItem,
+      //   };
+
+      //   setTempTestArray(tempItem);
+
+      //   // 잘 바뀜
+      //   console.log('업데이트배열', updatedListData);
+
+      //   console.log('기존배열', listData);
+      //   return updatedListData;
+      // };
+      // const tempIdArray = tempTestArray.map((person) => person.idealPersonId);
+      // setIdealIdArray(tempIdArray);
+      // // setListData(testtest);
+
+      // setIsArrayUpdated(isArrayUpdated + 1);
+      // changeIdealList();
+    }
+
+    // setIsArrayUpdated(isArrayUpdated + 1);
+    // changeIdealList();
   };
 
-  const dummyData: DummyData = {
-    code: 201,
-    status: 'CREATED',
-    message: '닉네임 정보 입력에 성공하였습니다!',
-    data: {
-      idealPersons: [
-        {
-          idealPersonId: 1,
-          idealPersonNickname: '김싸피',
-          idealPersonFullName: '본명',
-          idealPersonImage: 'https://ih1.redbubble.net/image.319291377.1118/st,small,507x507-pad,600x600,f8f8f8.u2.jpg',
-          idealPersonRank: 1,
-        },
-        {
-          idealPersonId: 2,
-          idealPersonNickname: '이자바',
-          idealPersonFullName: '본명',
-          idealPersonImage: 'https://ih1.redbubble.net/image.319291377.1118/st,small,507x507-pad,600x600,f8f8f8.u2.jpg',
-          idealPersonRank: 2,
-        },
-        {
-          idealPersonId: 3,
-          idealPersonNickname: '리액트',
-          idealPersonFullName: '본명',
-          idealPersonImage: 'https://ih1.redbubble.net/image.319291377.1118/st,small,507x507-pad,600x600,f8f8f8.u2.jpg',
-          idealPersonRank: 3,
-        },
-        {
-          idealPersonId: 4,
-          idealPersonNickname: '김치킨',
-          idealPersonFullName: '본명',
-          idealPersonImage: 'https://ih1.redbubble.net/image.319291377.1118/st,small,507x507-pad,600x600,f8f8f8.u2.jpg',
-          idealPersonRank: 4,
-        },
-        {
-          idealPersonId: 5,
-          idealPersonNickname: '이재용',
-          idealPersonFullName: '본명',
-          idealPersonImage: 'https://ih1.redbubble.net/image.319291377.1118/st,small,507x507-pad,600x600,f8f8f8.u2.jpg',
-          idealPersonRank: 5,
-        },
-        {
-          idealPersonId: 6,
-          idealPersonNickname: '넥스트',
-          idealPersonFullName: '본명',
-          idealPersonImage: 'https://ih1.redbubble.net/image.319291377.1118/st,small,507x507-pad,600x600,f8f8f8.u2.jpg',
-          idealPersonRank: 6,
-        },
-        {
-          idealPersonId: 7,
-          idealPersonNickname: '스프링',
-          idealPersonFullName: '본명',
-          idealPersonImage: 'https://ih1.redbubble.net/image.319291377.1118/st,small,507x507-pad,600x600,f8f8f8.u2.jpg',
-          idealPersonRank: 7,
-        },
-        {
-          idealPersonId: 8,
-          idealPersonNickname: '비동기',
-          idealPersonFullName: '본명',
-          idealPersonImage: 'https://ih1.redbubble.net/image.319291377.1118/st,small,507x507-pad,600x600,f8f8f8.u2.jpg',
-          idealPersonRank: 8,
-        },
-        {
-          idealPersonId: 9,
-          idealPersonNickname: '하하하',
-          idealPersonFullName: '본명',
-          idealPersonImage: 'https://ih1.redbubble.net/image.319291377.1118/st,small,507x507-pad,600x600,f8f8f8.u2.jpg',
-          idealPersonRank: 9,
-        },
-      ],
-    },
-  };
+  // useEffect(() => {
+  //   if (tempTestArray !== null) {
+  //     const tempIdArray = tempTestArray.map((person) => person.idealPersonId);
+  //     setIdealIdArray(tempIdArray);
+  //   }
 
-  // const openModal = () => {
-  //   setNowOpenModal(!nowOpenModal);
-  // };
+  //   console.log('idealIdArray!!!!', idealIdArray);
+  // }, [isArrayUpdated, listData, tempTestArray]);
 
   useEffect(() => {
     const animation = requestAnimationFrame(() => setEnabled(true));
@@ -215,117 +229,72 @@ export default function Page() {
     return null;
   }
 
-  // useEffect(() => {
-  //   const tempListOrder = () => {
-  //     const { idealPersons } = dummyData.data;
-  //     const tempList = idealPersons.reverse().map((item) => item.idealPersonRank);
-  //     return tempList;
-  //   };
-
-  //   console.log(tempListOrder());
-  // }, []);
-
   return (
     <div className='overflow-auto mt-[65px] mb-[68px]'>
-      {/* {!hideList && ( */}
+      <div className='text-xl text-white flex mt-2 mb-4 px-4'>치킨님의 아인</div>
 
-      {/* 더미데이터로 만든거  */}
-      {/* {!hideIdealList && (
-        <DragDropContext onDragEnd={onDragEnd}>
-          <div className=''>
-            <div className='text-xl text-white flex mt-2 mb-4 px-4'>치킨님의 아인</div>
-
-            <Droppable droppableId='droppable'>
-              {(provided) => (
-                <div ref={provided.innerRef} {...provided.droppableProps} className='grid grid-cols-2 gap-8 mb-8 px-4'>
-                  {dummyData.data.idealPersons.reverse().map((item, index) => (
-                    <Draggable key={item.idealPersonRank} draggableId={item.idealPersonNickname} index={index}>
-                      {(provided) => (
-                        <div
-                          onClick={() =>
-                            handleModalTest(item.idealPersonNickname, item.idealPersonFullName, item.idealPersonImage)
-                          }
-                          className='flex flex-col text-center rounded-2xl h-38 w-38 cursor-pointer '
-                          // className='flex flex-col text-center rounded-2xl h-38 cursor-pointer shadow-[3px_3px_10px_3px_rgba(0,0,0,0.3)] '
-                          key={item.idealPersonRank}
-                        >
-                          <img
-                            className='rounded-t-2xl '
-                            src={item.idealPersonImage}
-                            alt='카카포'
-                            height={170}
-                            width={170}
-                          />
-
+      <DragDropContext onDragStart={onDragStart} onDragEnd={onDragEnd}>
+        {listData &&
+          listData.idealPeople &&
+          Array.from({ length: Math.ceil(listData.idealPeople.length / 2) }, (_, rowIndex) => (
+            <div key={rowIndex} className='grid grid-cols-2 gap-8 mb-8 mt-8'>
+              {listData.idealPeople.slice(rowIndex * 2, rowIndex * 2 + 2).map((item, colIndex) => (
+                <Droppable key={`${rowIndex}-${colIndex}`} droppableId={`${rowIndex}-${colIndex}`}>
+                  {(provided) => (
+                    <div ref={provided.innerRef} {...provided.droppableProps}>
+                      <Draggable
+                        key={item?.idealPersonFullName}
+                        draggableId={`${rowIndex}-${colIndex}`}
+                        index={item?.idealPersonRank}
+                      >
+                        {(provided) => (
                           <div
-                            className=' pt-2.5 pb-1.5 text-xl text-white rounded-b-2xl shadow-[0px_3px_5px_0px_rgba(0,0,0,0.3)]'
-                            style={{ backgroundColor: '#BE44E9' }}
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                            {...provided.dragHandleProps}
+                            onClick={() =>
+                              handleModalTest(
+                                item?.idealPersonNickname,
+                                item?.idealPersonFullName,
+                                item?.idealPersonImageUrl
+                              )
+                            }
+                            className='flex flex-col text-center rounded-2xl h-38 w-38 cursor-pointer'
+                            //   key={item.idealPersonRank}
+                            //   key={index}
                           >
-                            {item.idealPersonNickname}
+                            <img
+                              className='rounded-t-2xl'
+                              src={item?.idealPersonImageUrl}
+                              alt='이미지'
+                              height={170}
+                              width={170}
+                            />
+                            <div
+                              className='pt-2.5 pb-1.5 text-xl text-white rounded-b-2xl shadow-[0px_3px_5px_0px_rgba(0,0,0,0.3)]'
+                              style={{ backgroundColor: '#BE44E9' }}
+                            >
+                              {item?.idealPersonNickname}
+                            </div>
                           </div>
-                        </div>
-                      )}
-                    </Draggable>
-                  ))}
-                </div>
-              )}
-            </Droppable>
-          </div>
-        </DragDropContext>
-      )} */}
-
-      {!hideIdealList && (
-        <div>
-          <div className='text-xl text-white flex mt-2 mb-4 px-4'>치킨님의 아인</div>
-          <div className='grid grid-cols-2 gap-8 mb-8 px-4'>
-            {listData &&
-              listData.data &&
-              listData.data.idealPeople &&
-              listData.data.idealPeople
-                .sort((a, b) => a.idealPersonRank - b.idealPersonRank)
-                .map((item, index) => (
-                  <div
-                    onClick={() =>
-                      handleModalTest(item.idealPersonNickname, item.idealPersonFullName, item.idealPersonImageUrl)
-                    }
-                    className='flex flex-col text-center rounded-2xl h-38 w-38 cursor-pointer '
-                    // className='flex flex-col text-center rounded-2xl h-38 cursor-pointer shadow-[3px_3px_10px_3px_rgba(0,0,0,0.3)] '
-                    key={index}
-                  >
-                    <img
-                      className='rounded-t-2xl '
-                      src='https://ih1.redbubble.net/image.319291377.1118/st,small,507x507-pad,600x600,f8f8f8.u2.jpg'
-                      alt='카카포'
-                      height={170}
-                      width={170}
-                    />
-                    {/* <div>{item.idealPersonId}</div> */}
-                    {/* <div>{item.idealPersonFullName}</div> */}
-                    <div
-                      className=' pt-2.5 pb-1.5 text-xl text-white rounded-b-2xl shadow-[0px_3px_5px_0px_rgba(0,0,0,0.3)]'
-                      style={{ backgroundColor: '#BE44E9' }}
-                    >
-                      {item.idealPersonNickname}
+                        )}
+                      </Draggable>
+                      {provided.placeholder}
                     </div>
-                    {/* <div>{item.idealPersonRank}</div> */}
-                    {/* <div>{item.idealPersonThreadId}</div> */}
-                  </div>
-                ))}
+                  )}
+                </Droppable>
+              ))}
+              {/* <button onClick={changeIdealList}>순서변경TEST</button> */}
+            </div>
+          ))}
+      </DragDropContext>
+      <div>
+        {idealDetailModalOpen && (
+          <div className=''>
+            <IdealDetailModal tempNickname={tempNickname} tempFullName={tempFullName} closeModal={handleModalTest} />
           </div>
-        </div>
-      )}
-
-      {/* {!modalTest && <button onClick={handleModalTest}>모달 켜기</button>} */}
-      {/* {modalTest && (
-        <div className='mt-[65px]'>
-          <IdealDetailModal tempNickname={tempNickname} closeModal={handleModalTest} />
-        </div>
-      )} */}
-      {idealDetailModalOpen && (
-        <div className=''>
-          <IdealDetailModal tempNickname={tempNickname} tempFullName={tempFullName} closeModal={handleModalTest} />
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 }

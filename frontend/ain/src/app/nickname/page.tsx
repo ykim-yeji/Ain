@@ -24,20 +24,6 @@ export default function Page() {
     setInputValue(e.target.value);
   };
 
-  const setIdealNickname = () => {
-    if (koreanRegex.test(inputValue) && inputValue !== '' && inputValue !== null) {
-      // fetch post
-
-      console.log(`${API_URL}/members`);
-      console.log(inputValue);
-      // alert('내 닉네임 설정이 완료되었습니다.');
-
-      // router.push('/');
-    } else {
-      alert('닉네임은 한글 1~5자 사이로 해주세요.');
-    }
-  };
-
   const postMyNickname = async () => {
     if (koreanRegex.test(inputValue) && inputValue !== '' && inputValue !== null) {
       // fetch post
@@ -46,7 +32,7 @@ export default function Page() {
         const res = await fetch(`${API_URL}/members`, {
           method: 'PATCH',
           headers: {
-            Authorization: '',
+            Authorization: `Bearer eyJhbGciOiJIUzI1NiJ9.eyJjYXRlZ29yeSI6ImFjY2Vzc1Rva2VuIiwibWVtYmVySWQiOjIsImlhdCI6MTcxNTMxODkxMCwiZXhwIjoxNzE1MzIyNTEwfQ.wnC4lAwOMVvqDN1U4o8dnFf-zPeNd_FC4v7uhqRVy-A`,
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
@@ -103,7 +89,7 @@ export default function Page() {
         className='mt-4 mx-10 w-40 x-2 py-2 rounded-md text-center text-lg text-white outline-0'
         value={inputValue}
         style={{ backgroundColor: '#F4DBFD' }}
-        placeholder='치킨'
+        placeholder='사용자'
         maxLength={5}
         onChange={(e) => handleInputChange(e)}
       />

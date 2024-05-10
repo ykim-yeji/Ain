@@ -74,8 +74,6 @@ export default function IdealNicknameModify({ closeModal, tempNickname, tempFull
             onChange={(e) => handleInputChange(e)}
           />
           <button
-            // onClick={modifyNickname}
-            // onClick={modifyMyNickname}
             className='mt-2 border-solid rounded-full  px-2 py-2 mx-10 text-lg text-white shadow-md'
             style={{ backgroundColor: '#BE44E9' }}
           >

@@ -40,7 +40,7 @@ export default function UserNicknameModifyModal({ closeModal }: Props) {
       try {
         const res = await fetch(`${API_URL}/members`, {
           headers: {
-            Authorization: accessToken,
+            Authorization: `Bearer eyJhbGciOiJIUzI1NiJ9.eyJjYXRlZ29yeSI6ImFjY2Vzc1Rva2VuIiwibWVtYmVySWQiOjIsImlhdCI6MTcxNTMxODkxMCwiZXhwIjoxNzE1MzIyNTEwfQ.wnC4lAwOMVvqDN1U4o8dnFf-zPeNd_FC4v7uhqRVy-A`,
           },
         });
 
@@ -81,12 +81,13 @@ export default function UserNicknameModifyModal({ closeModal }: Props) {
   const modifyMyNickname = async () => {
     if (koreanRegex.test(inputValue) && inputValue !== '' && inputValue !== null) {
       // fetch post
+      alert(inputValue);
       try {
         const res = await fetch(`${API_URL}/members`, {
           method: 'PATCH',
           headers: {
-            Authorization: accessToken,
-            'Content=Type': 'application/json',
+            'Content-Type': 'application/json',
+            Authorization: `Bearer eyJhbGciOiJIUzI1NiJ9.eyJjYXRlZ29yeSI6ImFjY2Vzc1Rva2VuIiwibWVtYmVySWQiOjIsImlhdCI6MTcxNTMxODkxMCwiZXhwIjoxNzE1MzIyNTEwfQ.wnC4lAwOMVvqDN1U4o8dnFf-zPeNd_FC4v7uhqRVy-A`,
           },
           body: JSON.stringify({
             memberNickname: inputValue,
@@ -113,6 +114,7 @@ export default function UserNicknameModifyModal({ closeModal }: Props) {
             return;
           } else {
             alert('400, 401, 403, 404 제외 에러 발생');
+            console.log(result);
             return;
           }
         } else {
@@ -123,7 +125,7 @@ export default function UserNicknameModifyModal({ closeModal }: Props) {
       } catch (error) {
         alert('에러 발생으로 닉네임 수정 실패');
         console.log(error);
-        throw new Error();
+        // throw new Error();
       }
     } else {
       alert('닉네임은 한글 1~5자 사이로 해주세요.');
@@ -156,7 +158,7 @@ export default function UserNicknameModifyModal({ closeModal }: Props) {
             type='text'
             value={inputValue}
             style={{ backgroundColor: '#C37CDB' }}
-            placeholder='치킨'
+            placeholder={originNickname}
             maxLength={5}
             onChange={(e) => handleInputChange(e)}
           />

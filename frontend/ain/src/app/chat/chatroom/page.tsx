@@ -1,17 +1,17 @@
 'use client';
 
 import Link from 'next/link';
+import React from 'react';
 import { useState, KeyboardEvent, useRef, useEffect } from 'react';
 
 export default function ChatRoomPage() {
+  const [isResetModalOpen, setIsResetModalOpen] = useState<boolean>(false);
+  const [isDetailModalOpen, setIsDetailModalOpen] = useState<boolean>(false);
 
-  const [isResetModalOpen, setIsResetModalOpen] = useState<boolean>(false)
-  const [isDetailModalOpen, setIsDetailModalOpen] = useState<boolean>(false)
+  const [sendMessage, setSendMessage] = useState<string>('');
+  const [receiveMessage, setReceiveMessage] = useState<string>('');
 
-  const [sendMessage, setSendMessage] = useState<string>('')
-  const [receiveMessage, setReceiveMessage] = useState<string>('')
-
-  const [messages, setMessages] = useState<{id: String|null, sender: String, message: string, time: string}[]>([]);
+  const [messages, setMessages] = useState<{ id: String | null; sender: String; message: string; time: string }[]>([]);
 
   const sendAndReceiveMessage = async () => {
     if (!sendMessage.trim()) return; // 메세지가 비어있는 경우 전송하지 않음
@@ -22,8 +22,7 @@ export default function ChatRoomPage() {
     const formattedTime = `${hours}:${minutes}`; // 시간과 분을 합쳐서 형식에 맞게 변환
     console.log(`Message: ${sendMessage}, Created at: ${formattedTime}`); // 콘솔에 메세지와 작성 시간 출력
 
-    setMessages([...messages, {id: null, sender: 'user', message: sendMessage, time: formattedTime }]);
-
+    setMessages([...messages, { id: null, sender: 'user', message: sendMessage, time: formattedTime }]);
 
     // 여기에서 백엔드 API로 메세지를 전송하는 fetch 요청을 구현하세요.
     // try {
@@ -56,8 +55,8 @@ export default function ChatRoomPage() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
 
   useEffect(() => {
     scrollToBottom();
