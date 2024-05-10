@@ -28,6 +28,7 @@ public enum ErrorCode {
 
     //이상형
     NOT_EXISTS_IDEAL_PERSON(NOT_FOUND, "존재하지 않는 이상형입니다!"),
+    NOT_EXISTS_IDEAL_PERSON_ID(BAD_REQUEST, "존재하지 않는 이상형 id입니다!"),
 
     //s3
     NOT_EXISTS_FILE(NOT_FOUND, "file이 존재하지 않습니다!"),

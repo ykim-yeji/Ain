@@ -20,8 +20,8 @@ class IdealPersonThread:
         project=os.environ["OPENAI_PROJECT_ID"]
     )
 
+    # 스레드 생성
     def add_thread(self):
-        # 스레드 생성
         thread = self.client.beta.threads.create()
 
         return thread.id

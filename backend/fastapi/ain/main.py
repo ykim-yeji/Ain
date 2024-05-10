@@ -1,10 +1,13 @@
 import logging
+
 import uvicorn
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 from chatbot.assistants import IdealPersonAssistant
 from total.dto.Response import Response
 from total.constant.SuccessCode import SuccessCode
+from chatbot.dto.ChatDTO import AddIdealPersonChatRequest, AddIdealPersonChatResponse
+from chatbot.messages import IdealPersonMessage
 
 from pydantic import BaseModel
 from fastapi.responses import StreamingResponse
@@ -60,6 +63,24 @@ async def add_ideal_person_chatbot(
     except Exception as e:
         logging.error(e)
 
+# 이상형과의 채팅 전송
+@app.post("/chats/ideal-people")
+async def add_ideal_person_chat(
+    addIdealPersonChatRequest: AddIdealPersonChatRequest
+):
+    try:
+        IdealPersonMessage().send_message(addIdealPersonChatRequest.idealPersonThreadId, addIdealPersonChatRequest.memberChatMessage)
+        reply_chat_message = IdealPersonMessage().get_message(addIdealPersonChatRequest)
+
+        response_data = AddIdealPersonChatResponse(
+            idealPersonChatMessageId=reply_chat_message.id,
+            idealPersonChatMessage=reply_chat_message.content,
+            idealPersonChatTime=reply_chat_message.time
+        )
+
+        return Response.success(SuccessCode.CREATE_IDEAL_PERSON_CHAT, data=response_data.dict())
+    except Exception as e:
+        logging.error(e)
 
 @app.post("/ideal-people/images")
 async def generate_image(
