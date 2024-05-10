@@ -5,7 +5,7 @@ import com.ssafy.ain.global.dto.OpenFeignResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 
-@FeignClient(name = "chatBotOpenFeign", url = "http://localhost:8000/chatbots")
+@FeignClient(name = "chatBotOpenFeign", url = "https://myain.co.kr/fast/chatbots")
 public interface ChatBotOpenFeign {
 
     @PostMapping("/ideal-people")
