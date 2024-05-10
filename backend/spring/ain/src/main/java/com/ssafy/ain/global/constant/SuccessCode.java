@@ -20,6 +20,9 @@ public enum SuccessCode {
     UPDATE_MEMBER_INFO(OK, "회원 정보를 입력하는데 성공했습니다!"),
     GET_MEMBER_INFO(OK, "회원 정보를 조회하는데 성공했습니다!"),
 
+    //채팅
+    CREATE_IDEAL_PERSON_CHAT(CREATED, "이상형에게 채팅 메시지를 전송하는데 성공했습니다!"),
+
     //이상형
     GET_IDEAL_PEOPLE(OK, "이상형 목록 조회에 성공하였습니다!"),
     MODIFY_RANKING_OF_IDEAL_PEOPLE(OK, "이상형 선호 순위를 성공적으로 변경하였습니다!"),
