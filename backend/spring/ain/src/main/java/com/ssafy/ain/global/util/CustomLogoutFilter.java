@@ -9,6 +9,7 @@ import com.ssafy.ain.member.service.AuthService;
 import jakarta.servlet.http.Cookie;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.web.filter.GenericFilterBean;
 
 import jakarta.servlet.FilterChain;
@@ -113,6 +114,6 @@ public class CustomLogoutFilter extends GenericFilterBean {
 
 		response.setContentType("application/json");
 		response.setCharacterEncoding("UTF-8");
-		response.addCookie(authService.createCookie(REFRESH_TOKEN, null, 0L));
+		response.setHeader(HttpHeaders.SET_COOKIE, authService.createCookie(REFRESH_TOKEN, null, 0L));
 	}
 }

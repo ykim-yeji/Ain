@@ -13,6 +13,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
@@ -47,13 +48,7 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
                 .build()
         );
 
-        response.setHeader("Authorization", "Bearer " + accessToken);
-        response.addCookie(authService.createCookie(REFRESH_TOKEN, refreshToken, refreshExpiredMs));
-
-        if (userPrincipal.getOAuthUserDTO().isNewMember()) {
-            response.sendRedirect("http://localhost:3000/nickname");
-        } else {
-            response.sendRedirect("http://localhost:3000");
-        }
+        response.setHeader(HttpHeaders.SET_COOKIE, authService.createCookie(REFRESH_TOKEN, refreshToken, refreshExpiredMs));
+        response.sendRedirect("http://localhost:3000/login/kakao?authorization=" + accessToken + "&new=" + userPrincipal.getOAuthUserDTO().isNewMember());
     }
 }
