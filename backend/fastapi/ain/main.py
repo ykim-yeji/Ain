@@ -1,10 +1,14 @@
 import logging
+from datetime import datetime, timedelta, timezone
+
 import uvicorn
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 from chatbot.assistants import IdealPersonAssistant
 from total.dto.Response import Response
 from total.constant.SuccessCode import SuccessCode
+from chatbot.dto.ChatDTO import AddIdealPersonChatRequest, AddIdealPersonChatResponse
+from chatbot.messages import IdealPersonMessage
 
 from pydantic import BaseModel
 from fastapi.responses import StreamingResponse
@@ -60,6 +64,29 @@ async def add_ideal_person_chatbot(
     except Exception as e:
         logging.error(e)
 
+# 이상형과의 채팅 전송
+@app.post("/chats/ideal-people")
+async def add_ideal_person_chat(
+    addIdealPersonChatRequest: AddIdealPersonChatRequest
+):
+    try:
+        IdealPersonMessage().send_message(addIdealPersonChatRequest.idealPersonThreadId, addIdealPersonChatRequest.memberChatMessage)
+        chat_message = IdealPersonMessage().get_message(addIdealPersonChatRequest)
+
+        chat_utc_time = datetime.utcfromtimestamp(chat_message.created_at)
+        korea_timezone = timezone(timedelta(hours=9))
+        chat_korea_time = chat_utc_time.replace(tzinfo=timezone.utc).astimezone(korea_timezone)
+        chat_time = chat_korea_time.strftime('%Y-%m-%d %H:%M')
+
+        response_data = AddIdealPersonChatResponse(
+            idealPersonChatMessageId=chat_message.id,
+            idealPersonChatMessage=chat_message.content[0].text.value,
+            idealPersonChatTime=chat_time
+        )
+
+        return Response.success(SuccessCode.CREATE_IDEAL_PERSON_CHAT, data=response_data.dict())
+    except Exception as e:
+        logging.error(e)
 
 @app.post("/ideal-people/images")
 async def generate_image(

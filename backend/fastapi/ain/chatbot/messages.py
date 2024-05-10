@@ -1,0 +1,77 @@
+import os
+import logging
+import time
+
+from openai import OpenAI
+from dotenv import load_dotenv
+from chatbot.dto.ChatDTO import AddIdealPersonChatRequest, AddIdealPersonChatResponse
+
+# 로깅 설정
+logging.basicConfig(level=logging.INFO)
+
+# 환경변수 설정
+PRESENT_DIR = os.path.dirname(os.path.abspath(__file__))
+PREVIOUS_DIR = os.path.dirname(PRESENT_DIR)
+load_dotenv(os.path.join(PREVIOUS_DIR, ".env"))
+
+
+class IdealPersonMessage:
+    # ID로 OpenAI 클라이언트 생성
+    client = OpenAI(
+        organization=os.environ["OPENAI_ORGANIZATION_ID"],
+        project=os.environ["OPENAI_PROJECT_ID"]
+    )
+
+    # 메시지 생성, 스레드에 저장
+    def send_message(self, thread_id: str, chat_message_content: str):
+        message = self.client.beta.threads.messages.create(
+            thread_id=thread_id,
+            role="user",
+            content=chat_message_content
+        )
+
+    # 답장 받기
+    def get_message(self, chat_info: AddIdealPersonChatRequest):
+        run = self.add_run(chat_info)
+        # 런이 완료될 때까지 대기
+        self.poll_run(run, chat_info.idealPersonThreadId)
+
+        return self.list_messages(chat_info.idealPersonThreadId)
+
+    # 런 생성
+    def add_run(self, chat_info):
+        member_nickname_instruction = ""
+        if len(chat_info.memberNickname) == 1:
+            member_nickname_instruction = "사용자는 성은 가지고 있지 않고 사용자의 이름은 " + chat_info.memberNickname[0] +"야."
+        else:
+            member_nickname_instruction = "사용자의 성은 " + chat_info.memberNickname[0] + "이고 이름은 " + chat_info.memberNickname[1:] +"야."
+
+        run = self.client.beta.threads.runs.create(
+            assistant_id=chat_info.idealPersonAssistantId,
+            thread_id=chat_info.idealPersonThreadId,
+            additional_instructions="네 성은 " + chat_info.idealPersonFullName[0] + "이고 이름은 " + chat_info.idealPersonFullName[1:] + "이야. "
+                                    "네 성별은 " + chat_info.idealPersonGender.value + "이야. "
+                                    "" + member_nickname_instruction + " "
+                                    "네 별명은 " + chat_info.idealPersonNickname + "이고 친한 사이에서만 네 별명을 부를 수 있어. "
+                                    "사용자를 부를 때 사용자의 성은 빼고 사용자의 이름만 불러. "
+                                    "네 MBTI는 " + chat_info.idealPersonMbti.value + "야. "
+                                    "" + chat_info.idealPersonMbti.value + "_Document.txt 내용을 바탕으로 네 성격을 만들어. "
+                                    "사용자가 대화를 요청하면 네 성격을 바탕으로 실제 사람처럼 대답해."
+        )
+
+        return run
+
+    # 이상형 답장 메시지 추출
+    def list_messages(self, thread_id: str):
+        messages = self.client.beta.threads.messages.list(thread_id=thread_id, limit=1)
+
+        return messages.data[0]
+
+    # 런이 완료되었는지 확인하는 함수
+    def poll_run(self, run, thread_id):
+        while run.status != "completed":
+            run = self.client.beta.threads.runs.retrieve(
+                thread_id=thread_id,
+                run_id=run.id
+            )
+            time.sleep(0.5)
