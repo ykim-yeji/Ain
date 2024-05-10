@@ -69,7 +69,7 @@ public class IdealPersonDTO {
                     .mbti(Mbti.valueOf(idealPersonMBTI))
                     .gender(Gender.valueOf(idealPersonGender))
                     .idealPersonImageUrl(idealPersonImageUrl)
-                    .assistantId("assistantId")
+                    .assistantId(System.getenv("IDEAL-PERSON-ASSISTANT_ID"))
                     .threadId(threadId)
                     .ranking(0)
                     .build();

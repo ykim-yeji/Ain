@@ -1,5 +1,7 @@
 package com.ssafy.ain.idealperson.service.impl;
 
+import com.ssafy.ain.chat.dto.ChatBotOpenFeignDTO.*;
+import com.ssafy.ain.chat.service.ChatBotService;
 import com.ssafy.ain.global.constant.Gender;
 import com.ssafy.ain.global.exception.NoExistException;
 import com.ssafy.ain.global.util.S3Service;
@@ -30,6 +32,7 @@ public class IdealPersonServiceImpl implements IdealPersonService {
     private final FirstNameRepository firstNameRepository;
     private final LastNameRepository lastNameRepository;
     private final S3Service s3Service;
+    private final ChatBotService chatBotService;
 
     @Override
     @Transactional
@@ -72,12 +75,14 @@ public class IdealPersonServiceImpl implements IdealPersonService {
 
     @Override
     @Transactional
-    public void addIdealPerson(Long memberId, String threadId, AddIdealPersonRequest addIdealPersonRequest) {
+    public void addIdealPerson(Long memberId, AddIdealPersonRequest addIdealPersonRequest) {
         // s3 호출 && url 받기  --> url
         String idealPersonImageUrl = s3Service.upload(addIdealPersonRequest.getIdealPersonImage());
-        // /fast/chatbots/ideal-people 호출 후 threadId 받기 --> threadId
 
-        // 해당 memberId에 있는 이상형들 랭크+1 (10 넘어가면 에러)
+        // /fast/chatbots/ideal-people 호출 후 threadId 받기 --> threadId
+        String threadId = chatBotService.addIdealPersonChatBot().getIdealPersonThreadId();
+
+        // 해당 memberId에 있는 이상형들 랭크+1
         List<IdealPerson> idealPeople = idealPersonRepository.findIdealPeopleByMemberId(memberId,
                 Sort.by(Sort.Direction.ASC, "ranking"));
         for (IdealPerson idealPerson : idealPeople)

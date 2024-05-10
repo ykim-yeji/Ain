@@ -42,16 +42,9 @@ public class IdealPersonController {
 
     @PostMapping("")
     public ApiResponse<?> addIdealPerson(@AuthenticationPrincipal UserPrincipal userPrincipal,
-                                         @RequestBody AddIdealPersonRequest addIdealPersonRequest) {
-        RestTemplate restTemplate = new RestTemplate();
-        String url = "https://myain.co.kr/fast/chatbots/ideal-people";
-        GetIdealPersonThreadIdResponse responseBody = restTemplate.postForObject(
-                url, null, GetIdealPersonThreadIdResponse.class);
-
-        // responseBody nullException 처리 필요
+                                         @ModelAttribute AddIdealPersonRequest addIdealPersonRequest) {
         idealPersonService.addIdealPerson(
                 userPrincipal.getUserInfoDTO().getMemberId(),
-                responseBody.getIdealPersonThreadId(),
                 addIdealPersonRequest);
         return ApiResponse.success(SuccessCode.ADD_IDEAL_PERSON);
     }
