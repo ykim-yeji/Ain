@@ -101,9 +101,10 @@ export default function Header() {
       const res = await fetch(`${API_URL}/auth/logout`, {
         method: 'POST',
         credentials: 'include',
-        headers: {
-          Cookie: '',
-        },
+        // headers: {
+        //   Cookie:
+        //     'refreshToken=eyJhbGciOiJIUzI1NiJ9.eyJjYXRlZ29yeSI6InJlZnJlc2hUb2tlbiIsIm1lbWJlcklkIjoyLCJpYXQiOjE3MTUzMTg0NjYsImV4cCI6MTcxNjUyODA2Nn0.uRNoUPzWAjp0ye-5iKFSbzN1QBokm-DjlZ20TO8a55w',
+        // },
       });
 
       if (res.ok) {
