@@ -10,6 +10,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import static com.ssafy.ain.global.constant.SuccessCode.CREATE_IDEAL_PERSON_CHAT;
+import static com.ssafy.ain.global.constant.SuccessCode.GET_RECENT_DIALOGS;
 
 @RestController
 @RequiredArgsConstructor
@@ -33,5 +34,14 @@ public class ChatController {
         AddIdealPersonChatResponse addIdealPersonChatResponse = chatService.addIdealPersonChat(memberId, idealPersonId, addIdealPersonChatRequest);
 
         return ApiResponse.success(CREATE_IDEAL_PERSON_CHAT, addIdealPersonChatResponse);
+    }
+
+    @PostMapping("/dialogs/{idealPersonId}")
+    public ApiResponse<?> getRecentDialogs(@AuthenticationPrincipal UserPrincipal userPrincipal,
+                                            @PathVariable Long idealPersonId,
+                                            @RequestBody GetRecentDialogsRequest getRecentDialogsRequest) {
+        return ApiResponse.success(GET_RECENT_DIALOGS, chatService.getRecentDialogs(
+                        userPrincipal.getUserInfoDTO().getMemberId(),
+                        idealPersonId, getRecentDialogsRequest));
     }
 }

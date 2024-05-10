@@ -1,15 +1,10 @@
 package com.ssafy.ain.idealperson.service.impl;
 
-import com.ssafy.ain.chat.dto.ChatBotOpenFeignDTO.*;
 import com.ssafy.ain.chat.service.ChatBotService;
-import com.ssafy.ain.global.constant.Gender;
 import com.ssafy.ain.global.exception.NoExistException;
 import com.ssafy.ain.global.util.S3Service;
-import com.ssafy.ain.idealperson.constant.Mbti;
 import com.ssafy.ain.idealperson.dto.IdealPersonDTO.*;
-import com.ssafy.ain.idealperson.entity.FirstName;
 import com.ssafy.ain.idealperson.entity.IdealPerson;
-import com.ssafy.ain.idealperson.entity.LastName;
 import com.ssafy.ain.idealperson.repository.FirstNameRepository;
 import com.ssafy.ain.idealperson.repository.IdealPersonRepository;
 import com.ssafy.ain.idealperson.repository.LastNameRepository;
@@ -41,8 +36,7 @@ public class IdealPersonServiceImpl implements IdealPersonService {
     @Override
     @Transactional
     public GetIdealPeopleResponse getAllIdealPerson(Long memberId) {
-        List<IdealPerson> idealPeople = idealPersonRepository.findIdealPeopleByMemberId(memberId,
-                Sort.by(Sort.Direction.ASC, "ranking"));
+        List<IdealPerson> idealPeople = idealPersonRepository.findIdealPeopleByMemberIdOrderByRanking(memberId);
         List<GetIdealPersonResponse> idealPeopleResponse = new ArrayList<>();
 
         for (IdealPerson idealPerson : idealPeople)
@@ -87,8 +81,7 @@ public class IdealPersonServiceImpl implements IdealPersonService {
         String idealPersonThreadId = chatBotService.addIdealPersonChatBot().getIdealPersonThreadId();
 
         // 해당 memberId에 있는 이상형들 랭크+1
-        List<IdealPerson> idealPeople = idealPersonRepository.findIdealPeopleByMemberId(memberId,
-                Sort.by(Sort.Direction.ASC, "ranking"));
+        List<IdealPerson> idealPeople = idealPersonRepository.findIdealPeopleByMemberIdOrderByRanking(memberId);
         for (IdealPerson idealPerson : idealPeople)
             idealPerson.updateRanking(idealPerson.getRanking() + 1);
 
@@ -99,8 +92,8 @@ public class IdealPersonServiceImpl implements IdealPersonService {
     @Override
     @Transactional
     public void removeIdealPerson(Long memberId, Long idealPersonId) {
-        List<IdealPerson> idealPeople = idealPersonRepository.findIdealPeopleByMemberId(memberId,
-                Sort.by(Sort.Direction.ASC, "ranking"));
+        // memberId, idealPersonId 존재 여부 검사 필요
+        List<IdealPerson> idealPeople = idealPersonRepository.findIdealPeopleByMemberIdOrderByRanking(memberId);
 
         boolean rankDownChecker = false;
         for (IdealPerson idealPerson : idealPeople) {
@@ -110,6 +103,7 @@ public class IdealPersonServiceImpl implements IdealPersonService {
                 rankDownChecker = true;
                 continue;
             }
+
             if (rankDownChecker)
                 idealPerson.updateRanking(idealPerson.getRanking() - 1);
         }
