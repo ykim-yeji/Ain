@@ -10,4 +10,6 @@ public interface IdealPersonService {
     GetNameOfIdealPersonResponse getNameOfIdealPerson(GetNameOfIdealPersonRequest getNameOfIdealPersonRequest);
 
     void addIdealPerson(Long memberId, AddIdealPersonRequest addIdealPersonRequest);
+
+    void removeIdealPerson(Long memberId, Long idealPersonId);
 }

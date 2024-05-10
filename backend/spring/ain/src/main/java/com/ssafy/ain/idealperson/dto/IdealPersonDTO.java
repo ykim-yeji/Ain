@@ -58,7 +58,7 @@ public class IdealPersonDTO {
         private String idealPersonGender;
         private MultipartFile idealPersonImage;
 
-        public IdealPerson toEntity(Long memberId, String idealPersonImageUrl, String threadId) {
+        public IdealPerson toEntity(Long memberId, String idealPersonImageUrl, String assistantId, String threadId) {
             return IdealPerson.builder()
                     .memberId(memberId)
                     .fullName(idealPersonFullName)
@@ -66,7 +66,7 @@ public class IdealPersonDTO {
                     .mbti(Mbti.valueOf(idealPersonMBTI))
                     .gender(Gender.valueOf(idealPersonGender))
                     .idealPersonImageUrl(idealPersonImageUrl)
-                    .assistantId(System.getenv("IDEAL_PERSON_ASSISTANT_ID"))
+                    .assistantId(assistantId)
                     .threadId(threadId)
                     .ranking(0)
                     .build();

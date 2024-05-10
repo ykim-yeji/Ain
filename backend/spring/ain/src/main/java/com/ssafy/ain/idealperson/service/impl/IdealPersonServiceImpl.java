@@ -16,6 +16,7 @@ import com.ssafy.ain.idealperson.repository.LastNameRepository;
 import com.ssafy.ain.idealperson.service.IdealPersonService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -33,6 +34,9 @@ public class IdealPersonServiceImpl implements IdealPersonService {
     private final LastNameRepository lastNameRepository;
     private final S3Service s3Service;
     private final ChatBotService chatBotService;
+
+    @Value("${openai.chatgpt.ideal-person.assistant-id}")
+    private String idealPersonAssistantId;
 
     @Override
     @Transactional
@@ -80,7 +84,7 @@ public class IdealPersonServiceImpl implements IdealPersonService {
         String idealPersonImageUrl = s3Service.upload(addIdealPersonRequest.getIdealPersonImage());
 
         // /fast/chatbots/ideal-people 호출 후 threadId 받기 --> threadId
-        String threadId = chatBotService.addIdealPersonChatBot().getIdealPersonThreadId();
+        String idealPersonThreadId = chatBotService.addIdealPersonChatBot().getIdealPersonThreadId();
 
         // 해당 memberId에 있는 이상형들 랭크+1
         List<IdealPerson> idealPeople = idealPersonRepository.findIdealPeopleByMemberId(memberId,
@@ -88,6 +92,27 @@ public class IdealPersonServiceImpl implements IdealPersonService {
         for (IdealPerson idealPerson : idealPeople)
             idealPerson.updateRanking(idealPerson.getRanking() + 1);
 
-        idealPersonRepository.save(addIdealPersonRequest.toEntity(memberId, idealPersonImageUrl, threadId));
+        idealPersonRepository.save(addIdealPersonRequest
+                .toEntity(memberId, idealPersonImageUrl, idealPersonAssistantId, idealPersonThreadId));
+    }
+
+    @Override
+    @Transactional
+    public void removeIdealPerson(Long memberId, Long idealPersonId) {
+        List<IdealPerson> idealPeople = idealPersonRepository.findIdealPeopleByMemberId(memberId,
+                Sort.by(Sort.Direction.ASC, "ranking"));
+
+        boolean rankDownChecker = false;
+        for (IdealPerson idealPerson : idealPeople) {
+            if (idealPerson.getId().equals(idealPersonId)) {
+                s3Service.delete(idealPerson.getIdealPersonImageUrl());
+                idealPersonRepository.deleteById(idealPersonId);
+                rankDownChecker = true;
+                continue;
+            }
+            if (rankDownChecker)
+                idealPerson.updateRanking(idealPerson.getRanking() - 1);
+        }
+
     }
 }

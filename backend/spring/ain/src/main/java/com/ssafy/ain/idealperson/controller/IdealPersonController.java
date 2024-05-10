@@ -8,8 +8,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import com.ssafy.ain.global.constant.SuccessCode;
-import org.springframework.security.core.Authentication;
-import org.springframework.web.client.RestTemplate;
 
 @RestController
 @RequiredArgsConstructor
@@ -47,5 +45,12 @@ public class IdealPersonController {
                 userPrincipal.getUserInfoDTO().getMemberId(),
                 addIdealPersonRequest);
         return ApiResponse.success(SuccessCode.ADD_IDEAL_PERSON);
+    }
+
+    @DeleteMapping("/{idealPersonId}")
+    public ApiResponse<?> removeIdealPerson(@AuthenticationPrincipal UserPrincipal userPrincipal,
+                                            @PathVariable Long idealPersonId) {
+        idealPersonService.removeIdealPerson(userPrincipal.getUserInfoDTO().getMemberId(), idealPersonId);
+        return ApiResponse.success(SuccessCode.REMOVE_IDEAL_PERSON);
     }
 }
