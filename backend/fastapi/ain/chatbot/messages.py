@@ -1,10 +1,11 @@
 import os
 import logging
 import time
+from datetime import datetime, timedelta, timezone
 
 from openai import OpenAI
 from dotenv import load_dotenv
-from chatbot.dto.ChatDTO import AddIdealPersonChatRequest, AddIdealPersonChatResponse
+from chatbot.dto.ChatDTO import AddIdealPersonChatRequest, IdealPersonReplyChatResponse
 
 # 로깅 설정
 logging.basicConfig(level=logging.INFO)
@@ -35,8 +36,13 @@ class IdealPersonMessage:
         run = self.add_run(chat_info)
         # 런이 완료될 때까지 대기
         self.poll_run(run, chat_info.idealPersonThreadId)
+        reply_chat_message = self.get_reply_message(chat_info.idealPersonThreadId)
 
-        return self.list_messages(chat_info.idealPersonThreadId)
+        return IdealPersonReplyChatResponse(
+            id=reply_chat_message.id,
+            content=reply_chat_message.content[0].text.value,
+            time=self.convert_time(reply_chat_message.created_at)
+        )
 
     # 런 생성
     def add_run(self, chat_info):
@@ -62,7 +68,7 @@ class IdealPersonMessage:
         return run
 
     # 이상형 답장 메시지 추출
-    def list_messages(self, thread_id: str):
+    def get_reply_message(self, thread_id: str):
         messages = self.client.beta.threads.messages.list(thread_id=thread_id, limit=1)
 
         return messages.data[0]
@@ -75,3 +81,11 @@ class IdealPersonMessage:
                 run_id=run.id
             )
             time.sleep(0.5)
+
+    # 시간 변환
+    def convert_time(self, chat_time):
+        chat_utc_time = datetime.utcfromtimestamp(chat_time)
+        korea_timezone = timezone(timedelta(hours=9))
+        chat_korea_time = chat_utc_time.replace(tzinfo=timezone.utc).astimezone(korea_timezone)
+
+        return chat_korea_time.strftime('%Y-%m-%d %H:%M')

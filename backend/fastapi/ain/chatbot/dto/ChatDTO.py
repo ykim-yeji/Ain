@@ -17,3 +17,8 @@ class AddIdealPersonChatResponse(BaseModel):
     idealPersonChatMessageId: str
     idealPersonChatMessage: str
     idealPersonChatTime: str
+
+class IdealPersonReplyChatResponse(BaseModel):
+    id: str
+    content: str
+    time: str

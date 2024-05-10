@@ -1,5 +1,4 @@
 import logging
-from datetime import datetime, timedelta, timezone
 
 import uvicorn
 from fastapi import FastAPI
@@ -71,17 +70,12 @@ async def add_ideal_person_chat(
 ):
     try:
         IdealPersonMessage().send_message(addIdealPersonChatRequest.idealPersonThreadId, addIdealPersonChatRequest.memberChatMessage)
-        chat_message = IdealPersonMessage().get_message(addIdealPersonChatRequest)
-
-        chat_utc_time = datetime.utcfromtimestamp(chat_message.created_at)
-        korea_timezone = timezone(timedelta(hours=9))
-        chat_korea_time = chat_utc_time.replace(tzinfo=timezone.utc).astimezone(korea_timezone)
-        chat_time = chat_korea_time.strftime('%Y-%m-%d %H:%M')
+        reply_chat_message = IdealPersonMessage().get_message(addIdealPersonChatRequest)
 
         response_data = AddIdealPersonChatResponse(
-            idealPersonChatMessageId=chat_message.id,
-            idealPersonChatMessage=chat_message.content[0].text.value,
-            idealPersonChatTime=chat_time
+            idealPersonChatMessageId=reply_chat_message.id,
+            idealPersonChatMessage=reply_chat_message.content,
+            idealPersonChatTime=reply_chat_message.time
         )
 
         return Response.success(SuccessCode.CREATE_IDEAL_PERSON_CHAT, data=response_data.dict())
