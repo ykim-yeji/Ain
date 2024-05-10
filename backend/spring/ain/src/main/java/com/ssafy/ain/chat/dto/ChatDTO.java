@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 public class ChatDTO {
 
     @Getter
@@ -23,5 +25,29 @@ public class ChatDTO {
         private String idealPersonChatMessageId;
         private String idealPersonChatMessage;
         private String idealPersonChatTime;
+    }
+
+    @Getter
+    @Setter
+    public static class GetRecentDialogsRequest {
+        private String idealPersonThreadId;
+        private String lastChatMessageId;
+    }
+
+    @AllArgsConstructor
+    @Builder
+    public static class GetRecentDialogsResponse {
+        List<GetRecentDialogResponse> dialogs;
+    }
+
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @Builder
+    public static class GetRecentDialogResponse {
+        private String chatMessageId;
+        private String chatMessage;
+        private String chatSender;
+        private String chatTime;
     }
 }

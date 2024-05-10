@@ -10,5 +10,5 @@ import java.util.List;
 
 @Repository
 public interface IdealPersonRepository extends JpaRepository<IdealPerson, Long> {
-    List<IdealPerson> findIdealPeopleByMemberId(Long memberId, Sort sort);
+    List<IdealPerson> findIdealPeopleByMemberIdOrderByRanking(Long memberId);
 }

@@ -61,4 +61,9 @@ public class ChatServiceImpl implements ChatService {
                 .idealPersonChatTime(chatDTO.getData().getIdealPersonChatTime())
                 .build();
     }
+
+    @Override
+    public GetRecentDialogsResponse getRecentDialogs(Long memberId, Long idealPersonId, GetRecentDialogsRequest getRecentDialogsRequest) {
+        return null;
+    }
 }
