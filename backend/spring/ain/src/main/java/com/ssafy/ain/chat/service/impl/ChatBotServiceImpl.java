@@ -19,7 +19,7 @@ public class ChatBotServiceImpl implements ChatBotService {
      * 이상형 챗봇 생성
      * @return 이상형 챗봇의 thread_id
      */
-    private AddIdealPersonChatBotResponse addIdealPersonChatBot() {
+    public AddIdealPersonChatBotResponse addIdealPersonChatBot() {
         OpenFeignResponse<AddIdealPersonChatBotResponse> chatBotDTO = chatBotOpenFeign.addIdealPersonChatBot();
         log.info("code: " + chatBotDTO.getCode());
         log.info("status: " + chatBotDTO.getStatus());
