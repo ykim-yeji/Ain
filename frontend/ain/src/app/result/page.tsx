@@ -7,7 +7,7 @@ import { useState, useEffect } from "react";
 export default function ResultPage() {
 
     const router = useRouter()
-    const { mergeInput, genderInput, mbti, imageUrl, characterName } = useCreateStore();
+    const { genderInput, mbti, imageUrl, characterName, imageFile } = useCreateStore();
 
     const reCreate = () => {    
 
@@ -16,16 +16,42 @@ export default function ResultPage() {
 
     }
 
-    const save = () => {
-        
-        router.push('/chat')
+    const save = async () => {
+
+        const formData = new FormData();
+
+        // null 체크 후 추가
+        if (characterName) {
+          formData.append('idealPersonFullName', characterName);
+        }
+        if (mbti) {
+          formData.append('idealPersonMBTI', mbti);
+        }
+        if (genderInput) {
+          formData.append('idealPersonGender', genderInput);
+        }
+        if (imageFile) {
+          formData.append('idealPersonImage', imageFile, 'image.png'); // 파일 이름 추가
+        }
+
+        try {
+            const response = await fetch('https://myain.co.kr/api/ideal-people', {
+            method: 'POST',
+            headers: {
+                'Authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJjYXRlZ29yeSI6ImFjY2Vzc1Rva2VuIiwibWVtYmVySWQiOjUsImlhdCI6MTcxNTMxNjg5NiwiZXhwIjoxNzE1MzIwNDk2fQ.pwagze372u5tJQn_WzT71W5sUx-r7-aKJj8VB_e-zWo'
+            },
+            body: formData
+            });
+
+            const data = await response.json();
+            console.log(data);
+
+            router.push('/chat');
+            
+        } catch (error) {
+            console.error('API request failed: ', error);
+        }
     }
-
-    // useEffect(() => {
-    //   console.log('1', mergeInput, '2', genderInput, '3', mbti, '4', imageUrl, '5', characterName)
-    // }, [ mergeInput, genderInput, mbti, imageUrl, characterName ])
-    
-
 
 
     return <div className="relative mt-[65px] mb-[68px] w-full h-full flex flex-col justify-evenly items-center">
@@ -38,7 +64,7 @@ export default function ResultPage() {
               <p className="absolute top-[50px] left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10 text-[15px]">
                  제 이름은 <span className="text-[#FF7FCE] text-xl">{characterName}</span> 입니다. <br />만나서 반가워요!</p>  
             </div>
-                          
+                       
             {/* 이상형 결과 */}
             <div className="relative w-full flex flex-col items-center justify-center">
                 <div className="relative w-[250px] h-[250px]">
@@ -46,9 +72,9 @@ export default function ResultPage() {
                     <div className="absolute w-[220px] h-[220px] bg-[#faedff] rounded-full shadow-lg top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10"></div>
                 </div>       
                 <img src={imageUrl} className="absolute w-[150px] top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20" />
-            </div>
-              
+            </div>       
         </div>
+
         {/* 저장하기 */}
         <div className="w-[300px] h-[25%] flex justify-around items-start">
             <button onClick={reCreate}
