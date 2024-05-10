@@ -32,13 +32,13 @@ export default function LoadingPage() {
 
         // 응답 헤더에서 'Mbti' 값을 추출
         const newMbti: string = response.headers.get('mbti');
-        setMbtiValue(newMbti) 
+        useCreateStore.setState(state => ({ mbti: newMbti }))
         return response.blob();
 
       }) .then(blob => {
         // 받은 파일(blob)을 처리하는 로직을 작성합니다.
         const newUrl: string = URL.createObjectURL(blob); // blob 객체를 가리키는 URL을 생성
-        useCreateStore.setState(state => ({ mbti: mbtiValue, imageUrl: newUrl }))
+        useCreateStore.setState(state => ({ imageUrl: newUrl, imageFile: blob }))
         // const image = document.createElement('img'); //새로운 <img> HTML 요소를 생성
         // image.src = url; //생성된 이미지 요소(image)의 소스(src) 속성에, 2단계에서 생성된 blob URL을 할당
         // document.body.appendChild(image);//이미지 요소를 문서의 body에 추가
@@ -55,8 +55,8 @@ export default function LoadingPage() {
     };
 
     try {
-      // await fetch('https://myain.co.kr/api/ideal-people/names', {
-        const response = await fetch('https://bad7e4c4-8676-4672-86a2-212cf9b3de90.mock.pstmn.io/api/ideal-people/names', {
+      const response = await fetch('https://myain.co.kr/api/ideal-people/names', {
+        // const response = await fetch('https://bad7e4c4-8676-4672-86a2-212cf9b3de90.mock.pstmn.io/api/ideal-people/names', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -76,12 +76,17 @@ export default function LoadingPage() {
     } 
   }
 
-    useEffect(() => {
 
-      fetchCharacterImage();
-      fetchCharacterName()
-      router.push('/result')
-    }, [])
+    useEffect(() => {
+      const fetchData = async () => {
+        await Promise.all([fetchCharacterImage(), fetchCharacterName()]);
+        router.push('/result');
+      };
+  
+      fetchData();
+    }, []);
+
+    
   
 
     return <div className="relative mt-[65px] mb-[68px] w-full h-full flex flex-col justify-center items-center">
