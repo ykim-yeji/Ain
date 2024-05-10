@@ -1,38 +1,37 @@
-// useCamera.ts
-import { useRef, useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 
 export const useCamera = () => {
-  const videoRef = useRef<HTMLVideoElement>(null!);
   const [isCameraOn, setIsCameraOn] = useState(false);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
 
-  const startCamera = async () => {
+  const startCamera = useCallback(async () => {
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+      const mediaStream = await navigator.mediaDevices.getUserMedia({ video: true });
       if (videoRef.current) {
-        videoRef.current.srcObject = stream;
+        videoRef.current.srcObject = mediaStream;
         setIsCameraOn(true);
       }
     } catch (error) {
-      console.error("카메라 접근에 실패했습니다.", error);
+      console.error('Error accessing the camera:', error);
     }
-  };
+  }, []);
 
-  const stopCamera = () => {
+  const stopCamera = useCallback(() => {
     if (videoRef.current && videoRef.current.srcObject) {
-      const stream = videoRef.current.srcObject as MediaStream;
-      const tracks = stream.getTracks();
-      tracks.forEach((track) => track.stop());
-      setIsCameraOn(false);
-      videoRef.current.pause(); // 촬영 종료 후 영상 일시정지
+      const mediaStream = videoRef.current.srcObject;
+      if (mediaStream instanceof MediaStream) {
+        mediaStream.getTracks().forEach((track: MediaStreamTrack) => track.stop());
+        videoRef.current.srcObject = null;
+        setIsCameraOn(false);
+      }
     }
-  };
+  }, []);
 
   useEffect(() => {
-    // 컴포넌트가 언마운트될 때 카메라 스트림 중지
     return () => {
       stopCamera();
     };
-  }, []);
+  }, [stopCamera]);
 
   return { videoRef, isCameraOn, startCamera, stopCamera };
 };

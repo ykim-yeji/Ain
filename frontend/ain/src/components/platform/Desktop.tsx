@@ -65,7 +65,7 @@ export const DesktopPage = () => {
     
         const response = await fetch(`${process.env.NEXT_PUBLIC_AIN_SPRING_API_URL}/ideal-people`, {
           headers: {
-            'Authorization': `Bearer eyJhbGciOiJIUzI1NiJ9.eyJjYXRlZ29yeSI6ImFjY2Vzc1Rva2VuIiwibWVtYmVySWQiOjUsImlhdCI6MTcxNTI0MTk1NSwiZXhwIjoxNzE1MjQ1NTU1fQ.VEJbuX7UbiH1POPiW3icHu03IjdPE9TUhRQVmI6NbWc` // 헤더에 액세스 토큰 추가
+            'Authorization': `Bearer eyJhbGciOiJIUzI1NiJ9.eyJjYXRlZ29yeSI6ImFjY2Vzc1Rva2VuIiwibWVtYmVySWQiOjUsImlhdCI6MTcxNTMwOTQ2MywiZXhwIjoxNzE1MzEzMDYzfQ.u1gSw2NT9aM8deXJgc-29rXlwOvGl7mkjJ7p3jbZdW8` // 헤더에 액세스 토큰 추가
           }
         });
     
