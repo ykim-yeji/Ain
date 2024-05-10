@@ -63,48 +63,66 @@ export default function ChatRoomPage() {
     scrollToBottom();
   }, [messages]); // 메시지 목록이 업데이트될 때마다 실행
 
-  return <div className="relative w-full h-full "  onClick={() => setIsResetModalOpen(false)}>
+  useEffect(() => {
+    const handleResize = () => {
+      const { innerHeight: windowHeight } = window;
+      const { offsetHeight } = document.documentElement;
+      const isKeyboardOpen = windowHeight < offsetHeight;
+
+      // 키보드가 열렸을 때 body 스타일을 조정
+      document.body.style.paddingBottom = isKeyboardOpen
+        ? `${offsetHeight - windowHeight}px`
+        : '0';
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  return <div className="relative w-full h-full flex flex-col justify-between"  onClick={() => setIsResetModalOpen(false)}>
     {isDetailModalOpen &&
     <div className='absolute z-20 w-full h-full bg-[rgba(0,0,0,0.6)] flex justify-center items-center' onClick={() => setIsDetailModalOpen(false)}>
       <div className='relative w-[300px] h-[300px] rounded-full bg-white' onClick={(e) => {e.stopPropagation()}} >
         <img src="../image/taebin.png" className='absolute top-0 left-0 w-[300px] h-[300px] rounded-full'/>
       </div>
       </div>}
-    <div className="relative top-0 w-full h-[70px] bg-inherit flex justify-between items-center shadow-md">
+    <div className="fixed top-0 w-full max-w-md h-[70px] bg-inherit flex justify-between items-center shadow-md">
       <Link href='/chat'><img src="../icon/go_back.png" className="w-[40px] ml-2"/></Link>
       <h2 className="text-2xl text-white tracking-widest">한태빈</h2>
       <button onClick={(e) => {e.stopPropagation(); setIsResetModalOpen(!isResetModalOpen)}}><img src="../icon/menu.png" className="w-[40px] mr-2"/></button>
       {isResetModalOpen &&
       <button onClick={(e) => e.stopPropagation()} className='absolute z-10 top-[55px] right-2 w-[140px] h-[40px] bg-white text-black '>채팅 내역 초기화</button>}
     </div>
-    <div className="messages overflow-y-auto max-h-[80%]">
-      {messages.map((msg, index) => (
-        <div key={index} >
-           {msg.sender === "assistant" ? (
-          <div className='flex justify-end m-4'>
-            <div className='relative max-w-[250px] bg-[#F0D5FA] text-sm rounded-md p-2'>{msg.message}
-              <small className='absolute bottom-0 left-[-35px] text-[10px] text-gray-200'>{msg.time}</small>
+    <div className='w-full h-[70px]'></div>
+    <div className='flex flex-col flex-grow overflow-y-auto'>
+        {messages.map((msg, index) => (
+          <div key={index} >
+            {msg.sender === "assistant" ? (
+            <div className='flex justify-end m-4'>
+              <div className='relative max-w-[250px] bg-[#F0D5FA] text-sm rounded-md p-2'>{msg.message}
+                <small className='absolute bottom-0 left-[-35px] text-[10px] text-gray-200'>{msg.time}</small>
+              </div>
             </div>
+            ) : (
+            <div className='flex justify-start items-start m-4'>
+              <button onClick={() => setIsDetailModalOpen(true)}
+              className='relative w-[30px] h-[30px] rounded-full bg-white mr-2'>
+                <img src="../image/taebin.png" className='absolute top-0 left-0 w-[30px] h-[30px] rounded-full' />
+              </button>
+              <div className='flex flex-col '>
+                <p className='text-xs '>한태빈</p>
+                <div className='relative max-w-[250px] bg-[rgba(95,15,122,0.7)] text-sm text-white rounded-md p-2'>{msg.message}
+                <small className='absolute bottom-0 right-[-35px] text-[10px] text-gray-200'>{msg.time}</small>
+              </div>
+              </div>
+            </div>
+            )}
           </div>
-          ) : (
-          <div className='flex justify-start items-start m-4'>
-            <button onClick={() => setIsDetailModalOpen(true)}
-            className='relative w-[30px] h-[30px] rounded-full bg-white mr-2'>
-              <img src="../image/taebin.png" className='absolute top-0 left-0 w-[30px] h-[30px] rounded-full' />
-            </button>
-            <div className='flex flex-col '>
-              <p className='text-xs '>한태빈</p>
-              <div className='relative max-w-[250px] bg-[rgba(95,15,122,0.7)] text-sm text-white rounded-md p-2'>{msg.message}
-              <small className='absolute bottom-0 right-[-35px] text-[10px] text-gray-200'>{msg.time}</small>
-            </div>
-            </div>
-          </div>
-          )}
-        </div>
-      ))}
-       <div ref={messagesEndRef} />
+        ))}
+        <div ref={messagesEndRef} />
     </div>
-    <div className="absolute bottom-0 w-full h-[70px] bg-[#5F0F7A] flex justify-center items-center px-4">
+    <div className='w-full h-[70px]'></div>
+    <div className="fixed bottom-0 w-full max-w-md h-[70px] bg-[#5F0F7A] flex justify-center items-center px-4">
       <input type="text" placeholder="아인과 대화를 나눠보세요" className="w-[80%] h-[45px] bg-[#F0D5FA] rounded-full px-4 placeholder:text-[#CCB7D3] outline-none"
       value={sendMessage}
       onChange={(e) => setSendMessage(e.target.value)}

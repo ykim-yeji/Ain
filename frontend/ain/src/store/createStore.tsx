@@ -5,7 +5,8 @@ interface StoreState {
      genderInput: string|null,
      mbti: string,
      imageUrl: string,
-     characterName: string
+     characterName: string,
+     imageFile: Blob|null
   }
   
 const useCreateStore = create<StoreState>(set => ({
@@ -13,7 +14,8 @@ const useCreateStore = create<StoreState>(set => ({
     genderInput: null,
     mbti: '',
     imageUrl: '',
-    characterName: ''
+    characterName: '',
+    imageFile: null
 }))
   
 export default useCreateStore;
