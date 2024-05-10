@@ -18,6 +18,7 @@ export const MobilePage = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const [isHovering, setIsHovering] = useState(false);
   const [isClicked, setIsClicked] = useState(false);
+  
   const itemsPerPage = 3;
 
   useEffect(() => {
@@ -58,7 +59,7 @@ export const MobilePage = () => {
     
         const response = await fetch(`${process.env.NEXT_PUBLIC_AIN_SPRING_API_URL}/ideal-people`, {
           headers: {
-            'Authorization': `Bearer eyJhbGciOiJIUzI1NiJ9.eyJjYXRlZ29yeSI6ImFjY2Vzc1Rva2VuIiwibWVtYmVySWQiOjUsImlhdCI6MTcxNTI0MTk1NSwiZXhwIjoxNzE1MjQ1NTU1fQ.VEJbuX7UbiH1POPiW3icHu03IjdPE9TUhRQVmI6NbWc` // 헤더에 액세스 토큰 추가
+            'Authorization': `Bearer eyJhbGciOiJIUzI1NiJ9.eyJjYXRlZ29yeSI6ImFjY2Vzc1Rva2VuIiwibWVtYmVySWQiOjUsImlhdCI6MTcxNTMwOTQ2MywiZXhwIjoxNzE1MzEzMDYzfQ.u1gSw2NT9aM8deXJgc-29rXlwOvGl7mkjJ7p3jbZdW8` // 헤더에 액세스 토큰 추가
           }
         });
     
@@ -126,7 +127,7 @@ export const MobilePage = () => {
         <div className="flex justify-center items-center mb-7">
             <img src="./gif/camera_start.gif" className="w-[70%]" />
         </div>
-        <p className="text-gray-300 text-xl mb-7">아인과 멋진 사진을 남기고 싶다면, <br/>카메라 권한을 허용해 주세요!</p>
+        <p className="text-gray-300 text-xl mb-4">아인과 멋진 사진을 남기고 싶다면, <br/>카메라 권한을 허용해 주세요!</p>
         <button onClick={handleStartCamera} 
           className='w-[200px] h-12 mb-2 bg-[#AB42CF] rounded-full text-center text-white text-xl shadow-md'>
             카메라 시작
@@ -143,12 +144,12 @@ export const MobilePage = () => {
   };
 
   return (
-    <div className="flex flex-col justify-center items-center space-y-1" style={{ height: "calc(100vh)", overflowY: "auto" }}>
-      <div className="relative w-[80%]">
+    <div className="flex flex-col justify-center items-center" style={{ height: "calc(100vh-65px-68px)", overflowY: "auto" }}>
+      <div className="relative w-[75%]">
         {image ? (
           <img src={image} className="w-full" alt="Captured" /> // 캡처된 이미지 표시
         ) : (
-          <video ref={videoRef} autoPlay muted /> // 비디오 스트림 표시
+          <video ref={videoRef} autoPlay playsInline muted className="w-full h-auto"/> // 비디오 스트림 표시
         )}
         {isCameraOn && selectedIdealPersonImage && (
           <div style={{ position: "absolute", right: "0", bottom: "0" }}>
@@ -184,7 +185,7 @@ export const MobilePage = () => {
             <img src="./icon/angle_left_white.png" alt="다음" className='w-6' style={{ transform: 'scaleX(-1)' }} />
           </button>
       </div>
-      <div className='flex flex-row justify-center items-center'>
+      <div className='flex flex-row justify-center items-center mb-5'>
       {isCameraOn && (
             <div className='flex flex-row justify-center items-center space-x-5'>
               {/* 돌아가기 버튼 */}

@@ -24,7 +24,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='en'>
-      <body className='flex justify-center items-center h-screen'>
+      <body className='flex justify-center items-center h-svh'>
         <div className='flex flex-col justify-center h-full w-full max-w-md bg-gradient-to-b from-[#C776E3] via-[#9772CA] to-[#6B6EB2] overflow-auto'>
           <div className='fixed top-0 w-full max-w-md'>
             <Header />
