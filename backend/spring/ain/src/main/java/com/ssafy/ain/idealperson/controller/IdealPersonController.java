@@ -11,7 +11,6 @@ import com.ssafy.ain.global.constant.SuccessCode;
 
 @RestController
 @RequiredArgsConstructor
-@CrossOrigin(origins = {"http://localhost:3000", "https://myain.co.kr"})
 @RequestMapping("/ideal-people")
 public class IdealPersonController {
 
