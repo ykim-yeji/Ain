@@ -38,19 +38,23 @@ export const MobilePage = () => {
 
   useEffect(() => {
     const fetchIdealPersonsCount = async () => {
-      try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/ideal-people/count`, {
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ` + accessToken,
-          },
-        });
-        const data = await response.json();
-        if (data.code === 200 && data.status === 'CREATED') {
-          setIdealPersonCount(data.data.idealPersonCount);
+      if (accessToken !== null) { // accessToken이 null이 아닐 때만 아래 코드 실행
+        try {
+          const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/ideal-people/count`, {
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ` + accessToken,
+            },
+          });
+          const data = await response.json();
+          if (data.code === 200 && data.status === 'OK') {
+            setIdealPersons(data.data.idealPeople);
+          }
+        } catch (error) {
+          console.error('이상형 개수 정보 가져오기 실패:', error);
         }
-      } catch (error) {
-        console.error('이상형 개수 정보 가져오기 실패:', error);
+      } else {
+        console.log('accessToken이 null입니다. API 요청을 보내지 않습니다.');
       }
     };
     fetchIdealPersonsCount();
@@ -62,22 +66,25 @@ export const MobilePage = () => {
     }
 
     const fetchIdealPersons = async () => {
-      try {
+      if (accessToken !== null) { // accessToken이 null이 아닐 때만 아래 코드 실행
+        try {
+          const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/ideal-people`, {
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ` + accessToken,
+            },
+          });
     
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/ideal-people`, {
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ` + accessToken,
-          },
-        });
+          const data = await response.json();
     
-        const data = await response.json();
-    
-        if (data.code === 200 && data.status === 'OK') {
-          setIdealPersons(data.data.idealPeople);
+          if (data.code === 200 && data.status === 'OK') {
+            setIdealPersons(data.data.idealPeople);
+          }
+        } catch (error) {
+          console.error('이상형 정보 가져오기 실패:', error);
         }
-      } catch (error) {
-        console.error('이상형 정보 가져오기 실패:', error);
+      } else {
+        console.log('accessToken이 null입니다. API 요청을 보내지 않습니다.');
       }
     };
     
