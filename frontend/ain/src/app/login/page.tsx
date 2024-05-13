@@ -6,8 +6,6 @@ import { useRouter } from 'next/navigation';
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export default function Page() {
-  const router = useRouter();
-
   const kakaoLogin = () => {
     window.location.href = `${API_URL}/oauth2/authorization/kakao`;
   };
@@ -25,13 +23,9 @@ export default function Page() {
         <button type='button' onClick={kakaoLogin} className='mt-10 flex justify-center'>
           <img src='/logo/kakao.png' width='50%' height='100%' />
         </button>
-        {/* <button onClick={confirm}>확인하기</button> */}
       </div>
-      {/* <img src="./background/login_top.png" className='absolute top-[40%] left-0 w-[45%]' /> */}
       <img src='./background/login_left.png' className='absolute bottom-0 left-0 w-[40%]' />
       <img src='./background/login_right.png' className='absolute bottom-0 right-0 w-[40%]' />
-      {/* <img src="./background/login_center.png" className='absolute bottom-[5%] right-0 w-[35%]' /> */}
-      {/* <img src="./background/login_bottom.png" className='absolute bottom-0 left-[20%] w-[40%]' /> */}
     </div>
   );
 }
