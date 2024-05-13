@@ -86,7 +86,7 @@ async def add_ideal_person_chat(
 # 이상형 챗봇 삭제
 @app.delete("/chatbots/ideal-people")
 async def delete_ideal_person_chatbot(
-        delete_ideal_person_request: DeleteIdealPersonReqeust
+        delete_ideal_person_request: DeleteIdealPersonChatBotReqeust
 ):
     try:
         IdealPersonThread().delete_thread(delete_ideal_person_request.idealPersonThreadId)

@@ -30,6 +30,10 @@ class DeleteIdealPersonReqeust(BaseModel):
     idealPersonThreadId: str
 
 
+class DeleteIdealPersonChatBotReqeust(BaseModel):
+    idealPersonThreadId: str
+
+
 class GetIdealPersonChatRequest(BaseModel):
     idealPersonThreadId: str
     lastChatMessageId: str

@@ -17,7 +17,7 @@ public class ChatBotServiceImpl implements ChatBotService {
 
     /**
      * 이상형 챗봇 생성
-     * @return 이상형 챗봇의 thread_id
+     * @return 생성될 이상형 챗봇의 thread id
      */
     public AddIdealPersonChatBotResponse addIdealPersonChatBot() {
         OpenFeignResponse<AddIdealPersonChatBotResponse> chatBotDTO = chatBotOpenFeign.addIdealPersonChatBot();
@@ -27,5 +27,21 @@ public class ChatBotServiceImpl implements ChatBotService {
         log.info("data: " + chatBotDTO.getData().toString());
 
         return chatBotDTO.getData();
+    }
+
+    /**
+     * 이상형 챗봇 삭제
+     * @param idealPersonThreadId 삭제될 이상형 챗봇의 thread id
+     */
+    @Override
+    public void deleteIdealPersonChatBot(String idealPersonThreadId) {
+        OpenFeignResponse<?> chatBotDTO = chatBotOpenFeign.deletePersonChatBot(
+                DeleteIdealPersonChatBotRequest.builder()
+                        .idealPersonThreadId(idealPersonThreadId)
+                        .build()
+        );
+        log.info("code: " + chatBotDTO.getCode());
+        log.info("status: " + chatBotDTO.getStatus());
+        log.info("message: " + chatBotDTO.getMessage());
     }
 }

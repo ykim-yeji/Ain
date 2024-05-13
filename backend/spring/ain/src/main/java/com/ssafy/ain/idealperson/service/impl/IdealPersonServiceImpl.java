@@ -122,4 +122,12 @@ public class IdealPersonServiceImpl implements IdealPersonService {
 
         idealPerson.modifyIdealPersonNickname(idealPersonNickname);
     }
+
+    @Override
+    public GetIdealPersonCountResponse getIdealPersonCount(Long memberId) {;
+        return GetIdealPersonCountResponse.builder()
+                .idealPersonCount(idealPersonRepository.findIdealPeopleByMemberIdOrderByRanking(memberId)
+                        .size())
+                .build();
+    }
 }

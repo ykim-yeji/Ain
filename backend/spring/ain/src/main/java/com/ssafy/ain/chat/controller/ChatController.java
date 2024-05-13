@@ -9,8 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import static com.ssafy.ain.global.constant.SuccessCode.CREATE_IDEAL_PERSON_CHAT;
-import static com.ssafy.ain.global.constant.SuccessCode.GET_RECENT_DIALOGS;
+import static com.ssafy.ain.global.constant.SuccessCode.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -43,5 +42,20 @@ public class ChatController {
         return ApiResponse.success(GET_RECENT_DIALOGS, chatService.getRecentDialogs(
                         userPrincipal.getUserInfoDTO().getMemberId(),
                         idealPersonId, getRecentDialogsRequest));
+    }
+
+    /**
+     * 이상형과의 채팅 초기화
+     * @param userPrincipal 회원 정보
+     * @param idealPersonId 채팅 초기화될 이상형 id
+     * @return
+     */
+    @DeleteMapping("/ideal-people/{idealPersonId}")
+    public ApiResponse<?> deleteIdealPersonChat(@AuthenticationPrincipal UserPrincipal userPrincipal,
+                                                @PathVariable Long idealPersonId) {
+        Long memberId = userPrincipal.getUserInfoDTO().getMemberId();
+        chatService.deleteIdealPersonChat(memberId, idealPersonId);
+
+        return ApiResponse.success(DELETE_IDEAL_PERSON_CHAT);
     }
 }
