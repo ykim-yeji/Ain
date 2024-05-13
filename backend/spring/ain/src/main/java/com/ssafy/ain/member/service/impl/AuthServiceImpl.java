@@ -19,6 +19,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 
+import java.util.Arrays;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -35,6 +37,7 @@ public class AuthServiceImpl implements AuthService {
 	@Override
 	public String getReissuedToken(HttpServletRequest request, HttpServletResponse response) {
 		Cookie[] cookies = request.getCookies();
+		log.error("토큰 재발급 - cookies: " + Arrays.toString(cookies));
 		if (cookies == null) {
 
 			throw new NoExistException(NOT_EXISTS_COOKIE);
@@ -46,6 +49,7 @@ public class AuthServiceImpl implements AuthService {
 				break;
 			}
 		}
+		log.error("토큰 재발급 - refreshToken: " + refreshToken);
 		if (refreshToken == null) {
 
 			throw new NoExistException(NOT_EXISTS_REFRESH_TOKEN);
