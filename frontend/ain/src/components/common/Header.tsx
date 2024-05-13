@@ -77,7 +77,8 @@ export default function Header() {
   const imageLoader = ({ src, width, quality }: Props) => {
     const params = [`imwidth = ${width}`];
     // return `${src}?${params}`;
-    return `https://myain.co.kr/${src}?w=${width}`;
+    // return `https://myain.co.kr/${src}?w=${width}`;
+    return `https://myain.co.kr/${src}?imwidth=${width}`;
     //   return `http://localhost:3000/${src}?w=${width}`;
   };
 
@@ -183,7 +184,7 @@ export default function Header() {
               <Link href='/'>
                 <Image
                   loader={imageLoader}
-                  src='/Logo/ainlogo.svg'
+                  src='/logo/ainlogo.svg'
                   alt='Ain Logo'
                   className='ml-3'
                   width={120}
