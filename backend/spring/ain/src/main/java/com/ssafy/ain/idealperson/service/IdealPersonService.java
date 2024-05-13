@@ -12,4 +12,6 @@ public interface IdealPersonService {
     void addIdealPerson(Long memberId, AddIdealPersonRequest addIdealPersonRequest);
 
     void removeIdealPerson(Long memberId, Long idealPersonId);
+
+    void modifyIdealPersonNickname(Long memberId, Long idealPersonId, String idealPersonNickname);
 }
