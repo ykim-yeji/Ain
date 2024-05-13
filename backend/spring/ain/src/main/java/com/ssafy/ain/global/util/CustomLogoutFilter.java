@@ -114,6 +114,6 @@ public class CustomLogoutFilter extends GenericFilterBean {
 
 		response.setContentType("application/json");
 		response.setCharacterEncoding("UTF-8");
-		response.setHeader(HttpHeaders.SET_COOKIE, authService.createCookie(REFRESH_TOKEN, null, 0L));
+		response.addCookie(authService.createCookie(REFRESH_TOKEN, null, 0L));
 	}
 }

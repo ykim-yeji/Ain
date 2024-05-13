@@ -8,5 +8,5 @@ public interface AuthService {
 
 	String getReissuedToken(HttpServletRequest request, HttpServletResponse response);
 
-	String createCookie(String name, String value, Long expiredMs);
+	Cookie createCookie(String name, String value, Long expiredMs);
 }

@@ -4,9 +4,8 @@ import static com.ssafy.ain.global.constant.ErrorCode.*;
 import static com.ssafy.ain.global.constant.JwtConstant.*;
 
 import jakarta.servlet.http.Cookie;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Service;
 
 import com.ssafy.ain.global.entity.RefreshToken;
@@ -22,6 +21,7 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class AuthServiceImpl implements AuthService {
 
 	private final JwtUtil jwtUtil;
@@ -34,13 +34,24 @@ public class AuthServiceImpl implements AuthService {
 
 	@Override
 	public String getReissuedToken(HttpServletRequest request, HttpServletResponse response) {
-		String cookie = request.getHeader(HttpHeaders.SET_COOKIE);
-		if (cookie == null || !cookie.startsWith(REFRESH_TOKEN + "=")) {
+		Cookie[] cookies = request.getCookies();
+		if (cookies == null) {
+
+			throw new NoExistException(NOT_EXISTS_COOKIE);
+		}
+		String refreshToken = null;
+		for (Cookie cookie : cookies) {
+			if (REFRESH_TOKEN.equals(cookie.getName())) {
+				refreshToken = cookie.getValue();
+				break;
+			}
+		}
+		if (refreshToken == null) {
 
 			throw new NoExistException(NOT_EXISTS_REFRESH_TOKEN);
 		}
+		log.info("refreshToken(" + refreshToken + ")");
 
-		String refreshToken = cookie.split("=")[1];
 		if (jwtUtil.isExpired(refreshToken)) {
 
 			throw new InvalidException(EXPIRES_REFRESH_TOKEN);
@@ -71,21 +82,20 @@ public class AuthServiceImpl implements AuthService {
 		);
 
 		response.setHeader("Authorization", "Bearer " + reissuedAccessToken);
-		response.setHeader(HttpHeaders.SET_COOKIE, createCookie(REFRESH_TOKEN, reissuedRefreshToken, refreshExpiredMs));
+		response.addCookie(createCookie(REFRESH_TOKEN, reissuedRefreshToken, refreshExpiredMs));
 
 		return null;
 	}
 
 	@Override
-	public String createCookie(String name, String value, Long expiredMs) {
+	public Cookie createCookie(String name, String value, Long expiredMs) {
+		Cookie cookie = new Cookie(name, value);
+		cookie.setMaxAge(expiredMs.intValue());
+		cookie.setPath("/");
+		cookie.setSecure(true);
+		cookie.setHttpOnly(true);
 
-		return ResponseCookie.from(name, value)
-				.maxAge(expiredMs.intValue())
-				.path("/")
-				.secure(true)
-				.sameSite("None")
-				.httpOnly(true)
-				.build()
-				.toString();
+		return cookie;
+
 	}
 }
