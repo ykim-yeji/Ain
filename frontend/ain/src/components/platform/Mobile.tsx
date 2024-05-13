@@ -159,12 +159,12 @@ export const MobilePage = () => {
   };
 
   return (
-    <div className="flex flex-col justify-center items-center" style={{ height: "calc(100vh-65px-68px)", overflowY: "auto" }}>
-      <div className="relative w-[75%]">
+    <div className="flex flex-col justify-center items-center" style={{ height: "calc(100vh - 65px - 68px)", overflowY: "auto" }}>
+      <div className="relative w-[75%]" style={{ border: isCameraOn ? '4px solid white' : 'none' }}>
         {image ? (
-          <img src={image} className="w-full" alt="Captured" /> // 캡처된 이미지 표시
+          <img src={image} className="w-full" alt="Captured" /> // Captured image
         ) : (
-          <video ref={videoRef} autoPlay playsInline muted className="w-full h-auto"/> // 비디오 스트림 표시
+          <video ref={videoRef} autoPlay playsInline muted className="w-full h-auto"/> // Video stream
         )}
         {isCameraOn && selectedIdealPersonImage && (
           <div style={{ position: "absolute", right: "0", bottom: "0" }}>
@@ -178,84 +178,84 @@ export const MobilePage = () => {
         )}
       </div>
       <div className='flex flex-row justify-center items-center space-x-2' style={{width: 'calc(3 * 120px)', justifyContent: 'space-between' }}>
-      {/* 이전 버튼 */}
-      <button onClick={handlePrevClick}>
-            <img src="./icon/angle_left_white.png" alt="이전" className='w-6'/>
-          </button>
-
-          {/* 케러셀 컴포넌트 */}
-          {isCameraOn && (
-            <Carousel
-              items={currentPageIdealPersons?.map((p) => ({
-                idealPersonImageUrl: p.idealPersonImageUrl,
-                idealPersonNickname: p.idealPersonNickname
-              })) || []}
-              selectedImage={selectedIdealPersonImage}
-              onSelectImage={selectIdealPersonImage}
-            />
-          )}
-
-          {/* 다음 버튼 */}
-          <button onClick={handleNextClick}>
-            <img src="./icon/angle_left_white.png" alt="다음" className='w-6' style={{ transform: 'scaleX(-1)' }} />
-          </button>
+        {/* Previous button */}
+        <button onClick={handlePrevClick}>
+          <img src="./icon/angle_left_white.png" alt="이전" className='w-6'/>
+        </button>
+  
+        {/* Carousel component */}
+        {isCameraOn && (
+          <Carousel
+            items={currentPageIdealPersons?.map((p) => ({
+              idealPersonImageUrl: p.idealPersonImageUrl,
+              idealPersonNickname: p.idealPersonNickname
+            })) || []}
+            selectedImage={selectedIdealPersonImage}
+            onSelectImage={selectIdealPersonImage}
+          />
+        )}
+  
+        {/* Next button */}
+        <button onClick={handleNextClick}>
+          <img src="./icon/angle_left_white.png" alt="다음" className='w-6' style={{ transform: 'scaleX(-1)' }} />
+        </button>
       </div>
       <div className='flex flex-row justify-center items-center mb-5'>
-      {isCameraOn && (
-            <div className='flex flex-row justify-center items-center space-x-5'>
-              {/* 돌아가기 버튼 */}
-                <button
-                  onClick={handleGoBack}
-                  disabled={!isPictureTaken}
-                  className={`px-2 py-2 rounded-lg transition-colors duration-300 flex items-center space-x-2 ${
-                    isPictureTaken ? 'bg-[#AB42CF] text-white' : 'bg-gray-400 text-gray-600'
-                  }`}
-                >
-                  <img
-                      src={isPictureTaken ? './icon/camera_back_white.png' : './icon/camera_back_gray.png'}
-                      alt="돌아가기"
-                      className="w-5 h-5"
-                    />
-                    <span>다시찍기</span>
-                </button>
-              {/* 촬영 버튼 */}
-              {!isPictureTaken ? (
-                <img
-                  src={isHovering ? "./icon/camera_start2.png" : "./icon/camera_start.png"}
-                  alt="사진 촬영"
-                  onClick={takePicture}
-                  onMouseEnter={() => setIsHovering(true)}
-                  onMouseLeave={() => setIsHovering(false)}
-                  style={cameraImgStyle}
-                />
-              ) : (
-                <div className="success-icon" style={{ width: '40px', height: '40px', fontSize: '4.5px', fontWeight:'bold' }}>
-                  <div className="success-icon__tip"></div>
-                  <div className="success-icon__long"></div>
-                </div>
-              )}
-              {/* 저장하기 버튼 */}
-              <button
-                onClick={handleSavePicture}
-                disabled={!isPictureTaken}
-                className={`px-2 py-2 rounded-lg transition-colors duration-300 flex items-center space-x-2 ${
-                  isPictureTaken ? 'bg-[#AB42CF] text-white' : 'bg-gray-400 text-gray-600'
-                }`}
-              >
-                <img
-                  src={isPictureTaken ? './icon/camera_save_white.png' : './icon/camera_save_gray.png'}
-                  alt="저장하기"
-                  className="w-5 h-5"
-                />
-                <span>저장하기</span>
-              </button>
-            </div>
-          )}
-
-          {/* 카메라 시작 버튼 (카메라가 꺼져있을 때만 표시) */}
-          {!isCameraOn && (
-            <button onClick={startCamera}>카메라 시작</button>
-          )}
+        {isCameraOn && (
+          <div className='flex flex-row justify-center items-center space-x-5'>
+            {/* Go back button */}
+            <button
+              onClick={handleGoBack}
+              disabled={!isPictureTaken}
+              className={`px-2 py-2 rounded-lg transition-colors duration-300 flex items-center space-x-2 ${
+                isPictureTaken ? 'bg-[#AB42CF] text-white' : 'bg-gray-400 text-gray-600'
+              }`}
+            >
+              <img
+                src={isPictureTaken ? './icon/camera_back_white.png' : './icon/camera_back_gray.png'}
+                alt="돌아가기"
+                className="w-5 h-5"
+              />
+              <span>다시찍기</span>
+            </button>
+            {/* Capture button */}
+            {!isPictureTaken ? (
+              <img
+                src={isHovering ? "./icon/camera_start2.png" : "./icon/camera_start.png"}
+                alt="사진 촬영"
+                onClick={takePicture}
+                onMouseEnter={() => setIsHovering(true)}
+                onMouseLeave={() => setIsHovering(false)}
+                style={cameraImgStyle}
+              />
+            ) : (
+              <div className="success-icon" style={{ width: '40px', height: '40px', fontSize: '4.5px', fontWeight:'bold' }}>
+                <div className="success-icon__tip"></div>
+                <div className="success-icon__long"></div>
+              </div>
+            )}
+            {/* Save button */}
+            <button
+              onClick={handleSavePicture}
+              disabled={!isPictureTaken}
+              className={`px-2 py-2 rounded-lg transition-colors duration-300 flex items-center space-x-2 ${
+                isPictureTaken ? 'bg-[#AB42CF] text-white' : 'bg-gray-400 text-gray-600'
+              }`}
+            >
+              <img
+                src={isPictureTaken ? './icon/camera_save_white.png' : './icon/camera_save_gray.png'}
+                alt="저장하기"
+                className="w-5 h-5"
+              />
+              <span>저장하기</span>
+            </button>
+          </div>
+        )}
+  
+        {/* Start camera button (only shown when camera is off) */}
+        {!isCameraOn && (
+          <button onClick={startCamera}>카메라 시작</button>
+        )}
       </div>
     </div>
   );  
