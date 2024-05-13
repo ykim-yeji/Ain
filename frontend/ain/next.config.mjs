@@ -11,6 +11,10 @@ const withPWA = withPWAInit({
   reloadOnOnline: true,
   swcMinify: true,
   disable: false,
+  images: {
+    loader: 'custom',
+    loaderFile: './image-loader.tsx',
+  },
 
   // test
   // workboxPluginMode: 'GenerateSW',
