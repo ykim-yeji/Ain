@@ -6,7 +6,7 @@ from starlette.middleware.cors import CORSMiddleware
 from chatbot.assistants import IdealPersonAssistant
 from total.dto.Response import Response
 from total.constant.SuccessCode import SuccessCode
-from chatbot.dto.ChatDTO import AddIdealPersonChatRequest, AddIdealPersonChatResponse, DeleteIdealPersonReqeust
+from chatbot.dto.ChatDTO import AddIdealPersonChatRequest, AddIdealPersonChatResponse, DeleteIdealPersonChatBotReqeust
 from chatbot.messages import IdealPersonMessage
 
 from pydantic import BaseModel
@@ -85,7 +85,7 @@ async def add_ideal_person_chat(
 # 이상형 챗봇 삭제
 @app.delete("/chatbots/ideal-people")
 async def delete_ideal_person_chatbot(
-        delete_ideal_person_request: DeleteIdealPersonReqeust
+        delete_ideal_person_request: DeleteIdealPersonChatBotReqeust
 ):
     try:
         IdealPersonThread().delete_thread(delete_ideal_person_request.idealPersonThreadId)
