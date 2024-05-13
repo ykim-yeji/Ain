@@ -8,10 +8,6 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL;
 export default function Page() {
   const router = useRouter();
 
-  // const confirm = () => {
-  //   console.log('>>>>>', API_URL + `/oauth2/authorization/kakao`);
-  // };
-
   const kakaoLogin = () => {
     window.location.href = `${API_URL}/oauth2/authorization/kakao`;
   };
