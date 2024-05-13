@@ -5,7 +5,6 @@ import com.ssafy.ain.chat.service.ChatService;
 import com.ssafy.ain.global.dto.ApiResponse;
 import com.ssafy.ain.global.dto.UserPrincipal;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;

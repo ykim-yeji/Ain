@@ -27,7 +27,6 @@ import static com.ssafy.ain.global.constant.ErrorCode.NOT_EXISTS_MEMBER_ID;
 public class ChatServiceImpl implements ChatService {
 
     private final ChatOpenFeign chatOpenFeign;
-    private final ChatBotOpenFeign chatBotOpenFeign;
     private final IdealPersonRepository idealPersonRepository;
     private final MemberRepository memberRepository;
     private final ChatBotService chatBotService;
