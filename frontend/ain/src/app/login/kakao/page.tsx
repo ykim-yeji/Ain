@@ -42,13 +42,13 @@ export default function Page() {
     const redirectTimer = setTimeout(() => {
       if ((param.get('new') as string) === 'true') {
         //  새로운 회원이면 /nickname 페이지로
-        // router.push('/nickname');
+        router.push('/nickname');
       } else {
-        // router.push('/');
+        router.push('/');
         // 기존 회원이면 메인 페이지로
         // 기존 회원인데 생성한 이상형이 있으면? chat || main ?
       }
-    }, 1000);
+    }, 10);
 
     return () => clearTimeout(redirectTimer);
   }, [param]);
