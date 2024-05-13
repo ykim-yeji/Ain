@@ -19,7 +19,7 @@ export default function LoadingPage() {
     };
 
     try {
-      await fetch('https://myain.co.kr/fast/ideal-people/images', {
+      await fetch(`${process.env.NEXT_PUBLIC_FAST_API_URL}/ideal-people/images`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

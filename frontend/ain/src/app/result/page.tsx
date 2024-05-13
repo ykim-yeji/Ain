@@ -3,8 +3,10 @@
 import useCreateStore from "@/store/createStore";
 import { useRouter } from 'next/navigation'
 import { useState, useEffect } from "react";
+import useUserStore from "@/store/userStore";
 
 export default function ResultPage() {
+    const { accessToken } = useUserStore();
 
     const router = useRouter()
     const { genderInput, mbti, imageUrl, characterName, imageFile } = useCreateStore();
@@ -34,11 +36,13 @@ export default function ResultPage() {
           formData.append('idealPersonImage', imageFile, 'image.png'); // 파일 이름 추가
         }
 
+        if (accessToken !== null) {
+
         try {
-            const response = await fetch('https://myain.co.kr/api/ideal-people', {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/ideal-people`, {
             method: 'POST',
             headers: {
-                'Authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJjYXRlZ29yeSI6ImFjY2Vzc1Rva2VuIiwibWVtYmVySWQiOjUsImlhdCI6MTcxNTMxNjg5NiwiZXhwIjoxNzE1MzIwNDk2fQ.pwagze372u5tJQn_WzT71W5sUx-r7-aKJj8VB_e-zWo'
+                'Authorization': `Bearer ` + accessToken,
             },
             body: formData
             });
@@ -51,7 +55,7 @@ export default function ResultPage() {
         } catch (error) {
             console.error('API request failed: ', error);
         }
-    }
+    }}
 
 
     return <div className="relative mt-[65px] mb-[68px] w-full h-full flex flex-col justify-evenly items-center">
