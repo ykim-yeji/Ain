@@ -1,7 +1,6 @@
 package com.ssafy.ain.idealperson.service.impl;
 
 import com.ssafy.ain.chat.service.ChatBotService;
-import com.ssafy.ain.global.exception.InvalidException;
 import com.ssafy.ain.global.exception.NoExistException;
 import com.ssafy.ain.global.util.S3Service;
 import com.ssafy.ain.idealperson.dto.IdealPersonDTO.*;
@@ -11,12 +10,10 @@ import com.ssafy.ain.idealperson.repository.IdealPersonRepository;
 import com.ssafy.ain.idealperson.repository.LastNameRepository;
 import com.ssafy.ain.idealperson.service.IdealPersonService;
 import com.ssafy.ain.idealperson.util.IdealPersonUtilService;
-import com.ssafy.ain.member.repository.MemberRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
