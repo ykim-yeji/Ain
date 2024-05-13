@@ -61,12 +61,6 @@ export default function IdealDetailModal({
     } else {
       setIdealDropDownFalse();
     }
-
-    // setDropDown(!dropDown);
-    // setHeaderDropDown();
-    // if (idealDropDown) {
-    //   setIdealDropDownFalse();
-    // }
   };
 
   const confirmTemp = () => {
