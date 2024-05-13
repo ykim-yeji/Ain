@@ -13,15 +13,30 @@ class AddIdealPersonChatRequest(BaseModel):
     memberNickname: str
     memberChatMessage: str
 
+
 class AddIdealPersonChatResponse(BaseModel):
     idealPersonChatMessageId: str
     idealPersonChatMessage: str
     idealPersonChatTime: str
+
 
 class IdealPersonReplyChatResponse(BaseModel):
     id: str
     content: str
     time: str
 
+
 class DeleteIdealPersonReqeust(BaseModel):
     idealPersonThreadId: str
+
+
+class GetIdealPersonChatRequest(BaseModel):
+    idealPersonThreadId: str
+    lastChatMessageId: str
+
+
+class GetIdealPersonChatResponse(BaseModel):
+    chatMessageId: str
+    chatMessage: str
+    chatSender: str
+    chatTime: str

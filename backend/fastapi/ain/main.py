@@ -6,7 +6,7 @@ from starlette.middleware.cors import CORSMiddleware
 from chatbot.assistants import IdealPersonAssistant
 from total.dto.Response import Response
 from total.constant.SuccessCode import SuccessCode
-from chatbot.dto.ChatDTO import AddIdealPersonChatRequest, AddIdealPersonChatResponse, DeleteIdealPersonReqeust
+from chatbot.dto.ChatDTO import *
 from chatbot.messages import IdealPersonMessage
 
 from pydantic import BaseModel
@@ -14,6 +14,7 @@ from fastapi.responses import StreamingResponse
 import io
 import dalle_test
 from chatbot.threads import IdealPersonThread
+import random
 
 # FastAPI 호출
 app = FastAPI()
@@ -94,9 +95,30 @@ async def delete_ideal_person_chatbot(
     except Exception as e:
         logging.error(e)
 
+
+# 채팅 메시지 목록 조회
+# @app.post("/chats/dialogs")
+# async def get_ideal_person_chat(
+#         get_ideal_person_chat: GetIdealPersonChatRequest
+# ):
+#     try:
+#         ideal_person_chat_list = {'id': 'id', 'content':[]}
+#         response_data = GetIdealPersonChatResponse(
+#             chatMessageId=ideal_person_chat_list.id,
+#             chatMessage=ideal_person_chat_list.content[0].text.value,
+#             chatSender=ideal_person_chat_list.role,
+#             chatTime=str(datetime.datetime.fromtimestamp(ideal_person_chat_list.created_at)).replace('T', ' ')
+#         )
+#
+#         return Response.success(SuccessCode.GET_IDEAL_PERSON_CHAT, data=response_data.dict())
+#     except Exception as e:
+#         logging.error(e)
+
+
+# 이상형 이미지 생성
 @app.post("/ideal-people/images")
 async def generate_image(
-        ip_content: IPContent,
+        ip_content: IPContent
 ):
     try:
         image = dalle_test.call_dalle(
@@ -109,15 +131,15 @@ async def generate_image(
         image.save(img_byte_arr, format='PNG')
         img_byte_arr.seek(0)
 
-        headers = {"MBTI": "ENTP"}
+        headers = {"MBTI": random.choice(list(Mbti))}
         return StreamingResponse(img_byte_arr, headers=headers)
 
     except Exception as e:
         # 에러 발생 시 적절한 에러 메시지와 에러 코드 반환
-        print(e)
-        return e
+        logging.error(e)
 
 
-@app.post("/test")
+@app.get("/test")
 async def test():
-    return {"test": "test"}
+    date_time = str(datetime.datetime.fromtimestamp(1715324186)).replace('T', ' ')
+    return {"test": date_time}

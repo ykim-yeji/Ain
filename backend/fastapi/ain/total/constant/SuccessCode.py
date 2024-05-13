@@ -8,3 +8,4 @@ class SuccessCode(Enum):
 
     # 채팅
     CREATE_IDEAL_PERSON_CHAT = "이상형에게 채팅 메시지를 전송하는데 성공했습니다!"
+    GET_IDEAL_PERSON_CHAT = "이상형과의 채팅 메시지 목록을 조회하는데 성공했습니다!"
