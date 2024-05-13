@@ -1,21 +1,17 @@
-"use client";
+'use client';
 
-import {
-  DragDropContext,
-  Draggable,
-  Droppable,
-  DropResult,
-} from "react-beautiful-dnd";
+import { DragDropContext, Draggable, Droppable, DropResult } from 'react-beautiful-dnd';
 
-import { useState, useEffect } from "react";
+import { useState, useEffect } from 'react';
 
-import useUserStore from "@/store/userStore";
-import useModalStore from "@/store/modalStore";
+import useUserStore from '@/store/userStore';
+import useModalStore from '@/store/modalStore';
+import useIdealStore from '@/store/idealStore';
 
-import IdealDetailModal from "@/components/modal/IdealDetailModal";
+import IdealDetailModal from '@/components/modal/IdealDetailModal';
 
-import { DndProvider } from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 
 interface IdealPeople {
   idealPersonId: number;
@@ -49,16 +45,27 @@ export default function Page() {
     setHideIdealListFalse,
   } = useModalStore();
 
+  const {
+    selectedIdealName,
+    selectedIdealId,
+    selectedIdealThreadId,
+    setTempIdealName,
+    setTempIdealId,
+    setTempIdealThreadId,
+  } = useIdealStore();
+
   const { accessToken } = useUserStore();
 
-  const [tempNickname, setTempNickname] = useState<string>("");
-  const [tempFullName, setTempFullName] = useState<string>("");
+  const [tempNickname, setTempNickname] = useState<string>('');
+  const [tempFullName, setTempFullName] = useState<string>('');
+  const [tempPersonId, setTempPersonId] = useState<number>();
+  const [tempThreadId, setTempThreadId] = useState<string>('');
   const [idealIdArray, setIdealIdArray] = useState<number[]>([]);
   const [tempTestArray, setTempTestArray] = useState<IdealPeople[]>([]);
 
   // const idealPersonRankings = [12, 11, 10, 9, 8, 7, 6, 5, 4];
 
-  const handleModalTest = (nickname: string, fullname: string, url: string) => {
+  const handleModalTest = (nickname: string, fullname: string, url: string, personId: number, threadId: string) => {
     if (idealDetailModalOpen === true) {
       setIdealDetailModalFalse();
     } else {
@@ -74,6 +81,12 @@ export default function Page() {
     setIdealDropDownFalse();
     setTempNickname(nickname);
     setTempFullName(fullname);
+    setTempPersonId(personId);
+    setTempThreadId(threadId);
+
+    setTempIdealName(nickname);
+    setTempIdealId(personId);
+    setTempIdealThreadId(threadId);
   };
 
   const onDragStart = () => {
@@ -95,11 +108,11 @@ export default function Page() {
           // console.log('결과', result);
           setListData(result.data);
         } else {
-          console.log("fetch실패");
+          console.log('fetch실패');
           console.log(res.status);
         }
       } catch (error) {
-        console.log(">>>>", error);
+        console.log('>>>>', error);
       }
     };
     getData();
@@ -111,9 +124,9 @@ export default function Page() {
     try {
       setIsArrayUpdated(isArrayUpdated + 1);
       const res = await fetch(`${API_URL}/ideal-people/ranks`, {
-        method: "PATCH",
+        method: 'PATCH',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
           Authorization: `Bearer ` + accessToken,
         },
         body: JSON.stringify({
@@ -123,10 +136,10 @@ export default function Page() {
 
       if (res.ok) {
         // console.log('fetchIdeal', idealIdArray);
-        console.log("이상형 순서 변경 성공");
+        console.log('이상형 순서 변경 성공');
         setIsNewFetch(isNewFetch + 1);
       } else {
-        console.log("이상형 순서 변경 실패");
+        console.log('이상형 순서 변경 실패');
       }
     } catch (error) {
       console.log(error);
@@ -141,28 +154,27 @@ export default function Page() {
     // console.log('!!!!!!!!!!!!', listData);
 
     const sourceIndex = source.index;
-    console.log("SOURCE", sourceIndex + 1);
+    console.log('SOURCE', sourceIndex + 1);
     const destinationIndex = destination.index;
-    console.log("DESTI", destinationIndex + 1);
+    console.log('DESTI', destinationIndex + 1);
 
     // const draggedItem = listData?.idealPeople[sourceIndex];
     // const destinationItem = listData?.idealPeople[destinationIndex];
 
     // console.log('드래그드', draggedItem?.idealPersonFullName);
     // console.log('데스티네이션', destinationItem?.idealPersonFullName);
-    console.log("기존 어레이!!");
+    console.log('기존 어레이!!');
     console.log(idealIdArray);
     if (listData && listData.idealPeople) {
       const tempPeople = listData.idealPeople[sourceIndex];
-      listData.idealPeople[sourceIndex] =
-        listData.idealPeople[destinationIndex];
+      listData.idealPeople[sourceIndex] = listData.idealPeople[destinationIndex];
       listData.idealPeople[destinationIndex] = tempPeople;
 
       for (let i = 0; i < listData.idealPeople.length; i++) {
         idealIdArray[i] = listData.idealPeople[i].idealPersonId;
       }
 
-      console.log("변경된 어레이!!");
+      console.log('변경된 어레이!!');
       console.log(idealIdArray);
       changeIdealList();
 
@@ -237,83 +249,74 @@ export default function Page() {
   }
 
   return (
-    <div className="overflow-auto mt-[65px] mb-[68px]">
-      <div className="text-xl text-white flex mt-2 mb-4 px-4">
-        치킨님의 아인
-      </div>
+    <div className='overflow-auto mt-[65px] mb-[68px]'>
+      <div className='text-xl text-white flex mt-2 mb-4 px-4'>치킨님의 아인</div>
 
       <DragDropContext onDragStart={onDragStart} onDragEnd={onDragEnd}>
         {listData &&
           listData.idealPeople &&
-          Array.from(
-            { length: Math.ceil(listData.idealPeople.length / 2) },
-            (_, rowIndex) => (
-              <div key={rowIndex} className="grid grid-cols-2 gap-8 mb-8 mt-8">
-                {listData.idealPeople
-                  .slice(rowIndex * 2, rowIndex * 2 + 2)
-                  .map((item, colIndex) => (
-                    <Droppable
-                      key={`${rowIndex}-${colIndex}`}
-                      droppableId={`${rowIndex}-${colIndex}`}
-                    >
-                      {(provided) => (
-                        <div
-                          ref={provided.innerRef}
-                          {...provided.droppableProps}
-                        >
-                          <Draggable
-                            key={item?.idealPersonFullName}
-                            draggableId={`${rowIndex}-${colIndex}`}
-                            index={item?.idealPersonRank}
+          Array.from({ length: Math.ceil(listData.idealPeople.length / 2) }, (colIndex, rowIndex) => (
+            <Droppable key={`${rowIndex}-${colIndex}`} droppableId={`${rowIndex}-${colIndex}`}>
+              {(provided) => (
+                <div ref={provided.innerRef} {...provided.droppableProps}>
+                  <div key={rowIndex} className='grid grid-cols-2 gap-8 mb-8 mt-8'>
+                    {listData.idealPeople.slice(rowIndex * 2, rowIndex * 2 + 2).map((item, colIndex) => (
+                      <Draggable
+                        key={item?.idealPersonFullName}
+                        draggableId={`${rowIndex}-${colIndex}`}
+                        index={item?.idealPersonRank}
+                      >
+                        {(provided) => (
+                          <div
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                            {...provided.dragHandleProps}
+                            onClick={() =>
+                              handleModalTest(
+                                item?.idealPersonNickname,
+                                item?.idealPersonFullName,
+                                item?.idealPersonImageUrl,
+                                item?.idealPersonId,
+                                item?.idealPersonThreadId
+                              )
+                            }
+                            className='flex flex-col text-center rounded-2xl h-38 w-38 cursor-pointer'
+                            //   key={item.idealPersonRank}
+                            //   key={index}
                           >
-                            {(provided) => (
-                              <div
-                                ref={provided.innerRef}
-                                {...provided.draggableProps}
-                                {...provided.dragHandleProps}
-                                onClick={() =>
-                                  handleModalTest(
-                                    item?.idealPersonNickname,
-                                    item?.idealPersonFullName,
-                                    item?.idealPersonImageUrl
-                                  )
-                                }
-                                className="flex flex-col text-center rounded-2xl h-38 w-38 cursor-pointer"
-                                //   key={item.idealPersonRank}
-                                //   key={index}
-                              >
-                                <img
-                                  className="rounded-t-2xl"
-                                  src={item?.idealPersonImageUrl}
-                                  alt="이미지"
-                                  height={170}
-                                  width={170}
-                                />
-                                <div
-                                  className="pt-2.5 pb-1.5 text-xl text-white rounded-b-2xl shadow-[0px_3px_5px_0px_rgba(0,0,0,0.3)]"
-                                  style={{ backgroundColor: "#BE44E9" }}
-                                >
-                                  {item?.idealPersonNickname}
-                                </div>
-                              </div>
-                            )}
-                          </Draggable>
-                          {provided.placeholder}
-                        </div>
-                      )}
-                    </Droppable>
-                  ))}
-                {/* <button onClick={changeIdealList}>순서변경TEST</button> */}
-              </div>
-            )
-          )}
+                            <img
+                              className='rounded-t-2xl'
+                              src={item?.idealPersonImageUrl}
+                              alt='이미지'
+                              height={170}
+                              width={170}
+                            />
+                            <div
+                              className='pt-2.5 pb-1.5 text-xl text-white rounded-b-2xl shadow-[0px_3px_5px_0px_rgba(0,0,0,0.3)]'
+                              style={{ backgroundColor: '#BE44E9' }}
+                            >
+                              {item?.idealPersonNickname}
+                            </div>
+                          </div>
+                        )}
+                      </Draggable>
+                    ))}
+                    {/* <button onClick={changeIdealList}>순서변경TEST</button> */}
+                  </div>
+                  {provided.placeholder}
+                </div>
+              )}
+            </Droppable>
+          ))}
       </DragDropContext>
       <div>
         {idealDetailModalOpen && (
-          <div className="">
+          <div className=''>
             <IdealDetailModal
               tempNickname={tempNickname}
               tempFullName={tempFullName}
+              tempPersonId={tempPersonId}
+              tempThreadId={tempThreadId}
               closeModal={handleModalTest}
             />
           </div>
