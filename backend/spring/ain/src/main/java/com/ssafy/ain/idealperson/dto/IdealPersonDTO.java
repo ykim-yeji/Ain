@@ -83,4 +83,11 @@ public class IdealPersonDTO {
     public static class ModifyIdealPersonNicknameRequest {
         private String idealPersonNickname;
     }
+
+    @Getter
+    @AllArgsConstructor
+    @Builder
+    public static class GetIdealPersonCountResponse {
+        private Integer idealPersonCount;
+    }
 }
