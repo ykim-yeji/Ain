@@ -14,8 +14,6 @@ import useUserStore from '@/store/userStore';
 
 import UserNicknameModifyModal from '@/components/modal/UserNicknameModify';
 
-import ReissueToken from '../oauth/ReissueToken';
-
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 const accessToken = process.env.NEXT_PUBLIC_ACCESS_TOKEN;
 const refreshToken = process.env.NEXT_PUBLIC_REFRESH_TOKEN || '';
@@ -115,17 +113,11 @@ export default function Header() {
       const res = await fetch(`${API_URL}/auth/logout`, {
         method: 'POST',
         credentials: 'include',
-        // headers: {
-        //   Cookie:
-        //     'refreshToken=eyJhbGciOiJIUzI1NiJ9.eyJjYXRlZ29yeSI6InJlZnJlc2hUb2tlbiIsIm1lbWJlcklkIjoyLCJpYXQiOjE3MTUzMTg0NjYsImV4cCI6MTcxNjUyODA2Nn0.uRNoUPzWAjp0ye-5iKFSbzN1QBokm-DjlZ20TO8a55w',
-        // },
       });
 
       if (res.ok) {
-        alert('성공');
+        // alert('성공');
         const result = await res.json();
-        // console.log('>>>$#%#$@%@#%#@' + res);
-        // console.log('>>>>' + result);
         console.log('치킨', result);
         console.log('바보', result.message);
         if (result.code === 200) {
@@ -144,7 +136,8 @@ export default function Header() {
           alert('ERROR_NOT_FOUND');
           return;
         } else {
-          alert('401,403,404 이외의 에러 발생');
+          console.log(result.code);
+          // alert('401,403,404 이외의 에러 발생');
           return;
         }
       } else {
