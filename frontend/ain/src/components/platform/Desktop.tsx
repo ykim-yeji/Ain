@@ -5,6 +5,7 @@ import { useCamera } from '../desktop_camera/useCamera';
 import { usePhotoCapture } from '../desktop_camera/usePhotoCapture';
 import { CreateIdealPersonPage } from './CreateIdealPerson';
 import Carousel from './Carousel';
+import useUserStore from "@/store/userStore";
 import './success-icon.scss';
 
 export const DesktopPage = () => {
@@ -18,6 +19,7 @@ export const DesktopPage = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const [isHovering, setIsHovering] = useState(false);
   const [isClicked, setIsClicked] = useState(false);
+  const { accessToken } = useUserStore();
 
   const itemsPerPage = 3;
 
@@ -37,7 +39,12 @@ export const DesktopPage = () => {
   useEffect(() => {
     const fetchIdealPersonsCount = async () => {
       try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_AIN_SPRING_API_URL}/ideal-people/count`);
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/ideal-people/count`, {
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ` + accessToken,
+          },
+        });
         const data = await response.json();
         if (data.code === 200 && data.status === 'OK') {
           setIdealPersons(data.data.idealPeople);
@@ -63,10 +70,11 @@ export const DesktopPage = () => {
     const fetchIdealPersons = async () => {
       try {
     
-        const response = await fetch(`${process.env.NEXT_PUBLIC_AIN_SPRING_API_URL}/ideal-people`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/ideal-people`, {
           headers: {
-            'Authorization': `Bearer eyJhbGciOiJIUzI1NiJ9.eyJjYXRlZ29yeSI6ImFjY2Vzc1Rva2VuIiwibWVtYmVySWQiOjUsImlhdCI6MTcxNTMwOTQ2MywiZXhwIjoxNzE1MzEzMDYzfQ.u1gSw2NT9aM8deXJgc-29rXlwOvGl7mkjJ7p3jbZdW8` // 헤더에 액세스 토큰 추가
-          }
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ` + accessToken,
+          },
         });
     
         const data = await response.json();
