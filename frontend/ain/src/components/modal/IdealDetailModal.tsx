@@ -8,6 +8,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
 import useModalStore from '@/store/modalStore';
+import useIdealStore from '@/store/idealStore';
 
 import IdealNicknameModify from './IdealNicknameModify';
 
@@ -15,9 +16,17 @@ interface Props {
   closeModal: any;
   tempNickname: string;
   tempFullName: string;
+  tempPersonId: number | undefined;
+  tempThreadId: string;
 }
 
-export default function IdealDetailModal({ closeModal, tempNickname, tempFullName }: Props) {
+export default function IdealDetailModal({
+  closeModal,
+  tempNickname,
+  tempFullName,
+  tempPersonId,
+  tempThreadId,
+}: Props) {
   const router = useRouter();
   const { accessToken } = userStore();
   const koreanRegex = /^[가-힣]*$/;
@@ -31,6 +40,15 @@ export default function IdealDetailModal({ closeModal, tempNickname, tempFullNam
     idealNicknameModalState,
     setIdealNicknameModalState,
   } = useModalStore();
+
+  const {
+    selectedIdealName,
+    selectedIdealId,
+    selectedIdealThreadId,
+    setTempIdealName,
+    setTempIdealId,
+    setTempIdealThreadId,
+  } = useIdealStore();
 
   const [dropDown, setDropDown] = useState(false);
 
@@ -49,6 +67,12 @@ export default function IdealDetailModal({ closeModal, tempNickname, tempFullNam
     // if (idealDropDown) {
     //   setIdealDropDownFalse();
     // }
+  };
+
+  const confirmTemp = () => {
+    alert(selectedIdealName);
+    alert(selectedIdealId);
+    alert(selectedIdealThreadId);
   };
 
   const goToChatroom = () => {
@@ -130,6 +154,11 @@ export default function IdealDetailModal({ closeModal, tempNickname, tempFullNam
                     style={{ fontSize: '16px' }}
                   >
                     이상형 삭제
+                  </button>
+                </div>
+                <div>
+                  <button type='button' onClick={confirmTemp}>
+                    확인하세요
                   </button>
                 </div>
               </div>

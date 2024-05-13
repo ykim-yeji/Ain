@@ -1,29 +1,49 @@
 'use client';
 
-import ReissueToken from '@/components/oauth/ReissueToken';
-
 import { useEffect, useState } from 'react';
 
+import useUserStore from '@/store/userStore';
+
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
 export default function Page() {
-  const [token, setToken] = useState<string>('');
+  const { accessToken, refreshToken } = useUserStore();
+  const [newAccessToken, setNewAccessToken] = useState();
+  const [newRefreshToken, setNewRefreshToken] = useState();
 
   useEffect(() => {
-    const getToken = async () => {
+    const reissueTokens = async () => {
       try {
-        const res = await ReissueToken();
-        if (res && res !== undefined && res !== null) {
-          setToken(res);
-          console.log(res);
+        const res = await fetch(`${API_URL}/auth/reissue`, {
+          method: 'POST',
+          credentials: 'include',
+        });
+
+        if (res.ok) {
+          const result = await res.json();
+          console.log('결과', result);
+          const tempAccessToken = res.headers.get('Authorization');
+          const tempRefreshToken = res.headers.get('Set-Cookie');
+
+          // console.log(newAccessToken);
+          // console.log(newRefreshToken);
+
+          // return newAccessToken;
         } else {
-          console.log('실패');
+          alert('실패');
+          console.log(res.status);
+          console.log('대실패');
+          //   return;
         }
       } catch (error) {
+        alert('실패2');
         console.log(error);
+        return;
       }
     };
 
-    getToken();
+    reissueTokens();
   }, []);
 
-  return <div>{token}</div>;
+  return <div>토큰 리이슈</div>;
 }
