@@ -1,8 +1,6 @@
 package com.ssafy.ain.chat.dto;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 public class ChatBotOpenFeignDTO {
 
@@ -10,6 +8,14 @@ public class ChatBotOpenFeignDTO {
     @Setter
     @ToString
     public static class AddIdealPersonChatBotResponse {
+        private String idealPersonThreadId;
+    }
+
+    @Getter
+    @Setter
+    @Builder
+    @AllArgsConstructor
+    public static class DeleteIdealPersonChatBotRequest {
         private String idealPersonThreadId;
     }
 }

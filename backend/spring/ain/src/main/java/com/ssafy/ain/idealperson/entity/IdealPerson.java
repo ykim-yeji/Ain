@@ -81,4 +81,8 @@ public class IdealPerson extends BaseEntity {
     public void modifyIdealPersonNickname(String nickname) {
         this.nickname = nickname;
     }
+
+    public void updateThreadId(String threadId) {
+        this.threadId = threadId;
+    }
 }

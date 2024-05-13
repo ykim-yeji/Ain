@@ -1,8 +1,11 @@
 package com.ssafy.ain.chat.service.impl;
 
+import com.ssafy.ain.chat.dto.ChatBotOpenFeignDTO.*;
 import com.ssafy.ain.chat.dto.ChatDTO.*;
 import com.ssafy.ain.chat.dto.ChatOpenFeignDTO.*;
+import com.ssafy.ain.chat.openfeign.ChatBotOpenFeign;
 import com.ssafy.ain.chat.openfeign.ChatOpenFeign;
+import com.ssafy.ain.chat.service.ChatBotService;
 import com.ssafy.ain.chat.service.ChatService;
 import com.ssafy.ain.global.dto.OpenFeignResponse;
 import com.ssafy.ain.global.exception.NoExistException;
@@ -10,6 +13,7 @@ import com.ssafy.ain.idealperson.entity.IdealPerson;
 import com.ssafy.ain.idealperson.repository.IdealPersonRepository;
 import com.ssafy.ain.member.entity.Member;
 import com.ssafy.ain.member.repository.MemberRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -25,6 +29,7 @@ public class ChatServiceImpl implements ChatService {
     private final ChatOpenFeign chatOpenFeign;
     private final IdealPersonRepository idealPersonRepository;
     private final MemberRepository memberRepository;
+    private final ChatBotService chatBotService;
 
     /**
      * 이상형과의 채팅 전송
@@ -65,5 +70,20 @@ public class ChatServiceImpl implements ChatService {
     @Override
     public GetRecentDialogsResponse getRecentDialogs(Long memberId, Long idealPersonId, GetRecentDialogsRequest getRecentDialogsRequest) {
         return null;
+    }
+
+    /**
+     * 이상형과의 채팅 초기화
+     * @param memberId 회원 id
+     * @param idealPersonId 채팅 초기화될 이상형 id
+     */
+    @Override
+    @Transactional
+    public void deleteIdealPersonChat(Long memberId, Long idealPersonId) {
+        IdealPerson idealPerson = idealPersonRepository.findById(idealPersonId)
+                .orElseThrow(() -> new NoExistException(NOT_EXISTS_IDEAL_PERSON_ID));
+        chatBotService.deleteIdealPersonChatBot(idealPerson.getThreadId());
+        AddIdealPersonChatBotResponse addIdealPersonChatBotResponse = chatBotService.addIdealPersonChatBot();
+        idealPerson.updateThreadId(addIdealPersonChatBotResponse.getIdealPersonThreadId());
     }
 }
