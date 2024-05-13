@@ -5,16 +5,17 @@ import { faHouse, faComments, faCamera } from '@fortawesome/free-solid-svg-icons
 
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 
 import modalStore from '@/store/modalStore';
 import userStore from '@/store/userStore';
 import IdealDetailModal from '../modal/IdealDetailModal';
+import { Router } from 'next/router';
 
 export default function Navigation() {
+  const router = useRouter();
   const pathName = usePathname();
   const [showOverlay, setShowOverlay] = useState<boolean>(false);
-  // const isLogin = useState<boolean>(userStore().isLogin);
 
   const [isLogin] = userStore((state) => [state.isLogin]);
 
@@ -37,75 +38,61 @@ export default function Navigation() {
     console.log(idealDetailModalOpen);
   };
 
-  // const confirm = () => {
-  //   alert(isLogin);
-  // };
+  const needToLoginChat = () => {
+    alert('채팅을 이용하시려면 로그인해주세요.');
+    router.push('/login');
+  };
 
-  // useEffect(() => {
-  //   const unsubscribe = userStore.subscribe(() => {
-  //     setIsLogin();
-  //   });
-
-  //   return () => {
-  //     unsubscribe();
-  //   };
-  // }, []);
+  const needToLoginCamera = () => {
+    alert('사진촬영을 하시려면 로그인해주세요.');
+    router.push('/login');
+  };
 
   return (
     pathName !== '/chat/chatroom' && (
       <div className='flex justify-around bottom-0 left-0 right-0 py-3 w-full bg-[#5F0F7A] '>
         <div className='flex justify-center'>
-          {/* <button type='button' onClick={() => confirm()}>
-          이즈로긴?
-        </button> */}
-
-          <Link href='/chat' onClick={modalClose}>
+          {/* <Link href='/chat' onClick={modalClose}>
             <div
               className='flex 
  flex-col cursor-pointer'
             >
               <FontAwesomeIcon
-                // style={{ color: pathName.startsWith('/chat') ? '#C776E3' : 'white' }}
                 style={{ color: pathName === '/chat' ? '#C776E3' : 'white' }}
                 icon={faComments}
                 size='xl'
               />
-              <div
-                // style={{ color: pathName.startsWith('/chat') ? '#C776E3' : 'white' }}
-                style={{ color: pathName === '/chat' ? '#C776E3' : 'white' }}
-                className='text-sm'
-              >
+              <div style={{ color: pathName === '/chat' ? '#C776E3' : 'white' }} className='text-sm'>
                 Chat
               </div>
             </div>
-          </Link>
-          {/* <div onClick={modalClose}>TEST</div> */}
+          </Link> */}
 
           {/* 아래는 회원이냐 아니냐에 따라 접근을 막는 코드 */}
-          {/* {isLogin === true ? (
-          <Link href='/chat'>
-            <div
-              className='flex 
+          {isLogin === true ? (
+            <Link href='/chat'>
+              <div
+                className='flex 
  flex-col cursor-pointer'
-            >
-              <FontAwesomeIcon
-                style={{ color: pathName.startsWith('/chat') ? '#C776E3' : 'white' }}
-                icon={faComments}
-                size='xl'
-              />
-              <div style={{ color: pathName.startsWith('/chat') ? '#C776E3' : 'white' }} className='text-sm'>
+              >
+                <FontAwesomeIcon
+                  style={{ color: pathName.startsWith('/chat') ? '#C776E3' : 'white' }}
+                  icon={faComments}
+                  size='xl'
+                />
+                <div style={{ color: pathName.startsWith('/chat') ? '#C776E3' : 'white' }} className='text-sm'>
+                  Chat
+                </div>
+              </div>
+            </Link>
+          ) : (
+            <div className='flex flex-col cursor-pointer' onClick={needToLoginChat}>
+              <FontAwesomeIcon style={{ color: 'white' }} icon={faComments} size='xl' />
+              <div style={{ color: 'white' }} className='text-sm'>
                 Chat
               </div>
             </div>
-          </Link>
-        ) : (
-          <div className='flex flex-col cursor-pointer' onClick={() => alert('채팅을 이용하시려면 로그인해주세요.')}>
-            <FontAwesomeIcon style={{ color: 'white' }} icon={faComments} size='xl' />
-            <div style={{ color: 'white' }} className='text-sm'>
-              Chat
-            </div>
-          </div>
-        )} */}
+          )}
         </div>
         <div className='flex justify-center'>
           <Link href='/' onClick={setHeaderDropDownFalse}>
@@ -130,29 +117,29 @@ export default function Navigation() {
         </div>
         <div className='flex justify-center'>
           {/* 아래는 회원이냐 아니냐에 따라 접근을 막는 코드 */}
-          {/* {isLogin === true ? (
-          <Link href='/photo'>
-            <div className='flex flex-col cursor-pointer'>
-              <FontAwesomeIcon
-                style={{ color: pathName.startsWith('/photo') ? '#C776E3' : 'white' }}
-                icon={faCamera}
-                size='xl'
-              />
-              <div style={{ color: pathName.startsWith('/photo') ? '#C776E3' : 'white' }} className='text-sm'>
+          {isLogin === true ? (
+            <Link href='/photo'>
+              <div className='flex flex-col cursor-pointer'>
+                <FontAwesomeIcon
+                  style={{ color: pathName.startsWith('/photo') ? '#C776E3' : 'white' }}
+                  icon={faCamera}
+                  size='xl'
+                />
+                <div style={{ color: pathName.startsWith('/photo') ? '#C776E3' : 'white' }} className='text-sm'>
+                  Photo
+                </div>
+              </div>
+            </Link>
+          ) : (
+            <div className='flex flex-col cursor-pointer' onClick={needToLoginCamera}>
+              <FontAwesomeIcon style={{ color: 'white' }} icon={faCamera} size='xl' />
+              <div style={{ color: 'white' }} className='text-sm'>
                 Photo
               </div>
             </div>
-          </Link>
-        ) : (
-          <div className='flex flex-col cursor-pointer' onClick={() => alert('사진촬영을 하시려면 로그인해주세요.')}>
-            <FontAwesomeIcon style={{ color: 'white' }} icon={faCamera} size='xl' />
-            <div style={{ color: 'white' }} className='text-sm'>
-              Photo
-            </div>
-          </div>
-        )} */}
+          )}
 
-          <Link href='/photo' onClick={setHeaderDropDownFalse}>
+          {/* <Link href='/photo' onClick={setHeaderDropDownFalse}>
             <div className='flex flex-col cursor-pointer'>
               <FontAwesomeIcon
                 style={{ color: pathName.startsWith('/photo') ? '#C776E3' : 'white' }}
@@ -163,7 +150,7 @@ export default function Navigation() {
                 Photo
               </div>
             </div>
-          </Link>
+          </Link> */}
         </div>
         {navOverlay && (
           <div

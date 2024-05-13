@@ -10,6 +10,8 @@ import useIdealStore from '@/store/idealStore';
 
 import IdealDetailModal from '@/components/modal/IdealDetailModal';
 
+import { CreateIdealPersonPage } from '@/components/platform/CreateIdealPerson';
+
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 
@@ -94,29 +96,35 @@ export default function Page() {
   };
 
   useEffect(() => {
-    const getData = async () => {
-      try {
-        const res = await fetch(`${API_URL}/ideal-people`, {
-          headers: {
-            Authorization: `Bearer ` + accessToken,
-          },
-        });
+    if (accessToken !== null) {
+      const getData = async () => {
+        try {
+          const res = await fetch(`${API_URL}/ideal-people`, {
+            headers: {
+              Authorization: `Bearer ` + accessToken,
+            },
+          });
 
-        if (res.ok) {
-          // console.log(res.status);
-          const result = await res.json();
-          // console.log('결과', result);
-          setListData(result.data);
-        } else {
-          console.log('fetch실패');
-          console.log(res.status);
+          if (res.ok) {
+            // console.log(res.status);
+            const result = await res.json();
+            // console.log('결과', result);
+            setListData(result.data);
+          } else {
+            console.log('fetch실패');
+            console.log(res.status);
+          }
+        } catch (error) {
+          console.log('>>>>', error);
         }
-      } catch (error) {
-        console.log('>>>>', error);
-      }
-    };
-    getData();
+      };
+      getData();
+    }
   }, [isNewFetch]);
+
+  if (listData && listData.idealPeople && listData.idealPeople.length === 0) {
+    return <CreateIdealPersonPage />;
+  }
 
   const changeIdealList = async () => {
     // isArrayUpdatedCount();
@@ -247,6 +255,10 @@ export default function Page() {
   if (!enabled) {
     return null;
   }
+
+  // if (listData && listData.idealPeople && listData.idealPeople.length === 0) {
+  //   return <CreateIdealPersonPage />;
+  // }
 
   return (
     <div className='overflow-auto mt-[65px] mb-[68px]'>
