@@ -78,4 +78,9 @@ public class IdealPersonDTO {
     public static class GetIdealPersonThreadIdResponse {
         private String idealPersonThreadId;
     }
+
+    @Getter
+    public static class ModifyIdealPersonNicknameRequest {
+        private String idealPersonNickname;
+    }
 }

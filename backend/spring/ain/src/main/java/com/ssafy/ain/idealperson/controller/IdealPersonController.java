@@ -24,7 +24,7 @@ public class IdealPersonController {
 
     @PatchMapping("/ranks")
     public ApiResponse<?> modifyRankingOfIdealPeople(@AuthenticationPrincipal UserPrincipal userPrincipal,
-            @RequestBody ModifyRankingOfIdealPeopleRequest modifyRankingOfIdealPeopleRequest) {
+                                                     @RequestBody ModifyRankingOfIdealPeopleRequest modifyRankingOfIdealPeopleRequest) {
         idealPersonService.modifyRankingOfIdealPeople(
                 userPrincipal.getUserInfoDTO().getMemberId(),
                 modifyRankingOfIdealPeopleRequest);
@@ -51,5 +51,14 @@ public class IdealPersonController {
                                             @PathVariable Long idealPersonId) {
         idealPersonService.removeIdealPerson(userPrincipal.getUserInfoDTO().getMemberId(), idealPersonId);
         return ApiResponse.success(SuccessCode.REMOVE_IDEAL_PERSON);
+    }
+
+    @PatchMapping("/{idealPersonId}/nicknames")
+    public ApiResponse<?> modifyIdealPersonNickname(@AuthenticationPrincipal UserPrincipal userPrincipal,
+                                                    @PathVariable Long idealPersonId,
+                                                    @RequestBody ModifyIdealPersonNicknameRequest idealPersonNickname) {
+        idealPersonService.modifyIdealPersonNickname(userPrincipal.getUserInfoDTO().getMemberId(),
+                idealPersonId, idealPersonNickname.getIdealPersonNickname());
+        return ApiResponse.success(SuccessCode.MODIFY_IDEAL_PERSON_NICKNAME);
     }
 }

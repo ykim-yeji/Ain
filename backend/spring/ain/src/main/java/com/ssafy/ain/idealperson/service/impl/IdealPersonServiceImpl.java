@@ -9,6 +9,7 @@ import com.ssafy.ain.idealperson.repository.FirstNameRepository;
 import com.ssafy.ain.idealperson.repository.IdealPersonRepository;
 import com.ssafy.ain.idealperson.repository.LastNameRepository;
 import com.ssafy.ain.idealperson.service.IdealPersonService;
+import com.ssafy.ain.idealperson.util.IdealPersonUtilService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,6 +29,7 @@ public class IdealPersonServiceImpl implements IdealPersonService {
     private final LastNameRepository lastNameRepository;
     private final S3Service s3Service;
     private final ChatBotService chatBotService;
+    private final IdealPersonUtilService idealPersonUtilService;
 
     @Value("${openai.chatgpt.ideal-person.assistant-id}")
     private String idealPersonAssistantId;
@@ -107,5 +109,17 @@ public class IdealPersonServiceImpl implements IdealPersonService {
                 idealPerson.updateRanking(idealPerson.getRanking() - 1);
         }
 
+    }
+
+    @Transactional
+    @Override
+    public void modifyIdealPersonNickname(Long memberId, Long idealPersonId, String idealPersonNickname) {
+        IdealPerson idealPerson = idealPersonRepository.findIdealPersonByIdAndMemberId(idealPersonId, memberId)
+                .orElseThrow(() -> new NoExistException(NOT_EXISTS_IDEAL_PERSON));
+
+        idealPersonUtilService.validateNicknameNotInput(idealPersonNickname);
+        idealPersonUtilService.validateSameNickname(idealPerson.getNickname(), idealPersonNickname);
+
+        idealPerson.modifyIdealPersonNickname(idealPersonNickname);
     }
 }
