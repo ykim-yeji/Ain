@@ -11,6 +11,8 @@ export default function Page() {
   const [newAccessToken, setNewAccessToken] = useState();
   const [newRefreshToken, setNewRefreshToken] = useState();
 
+  const { setAccessToken } = useUserStore();
+
   useEffect(() => {
     const reissueTokens = async () => {
       try {
@@ -23,7 +25,11 @@ export default function Page() {
           const result = await res.json();
           console.log('결과', result);
           const tempAccessToken = res.headers.get('Authorization');
-          const tempRefreshToken = res.headers.get('Set-Cookie');
+          if (tempAccessToken !== undefined && tempAccessToken !== null) {
+            setAccessToken(tempAccessToken);
+          }
+          console.log('@@$!@$!@$@#!', accessToken);
+          // const tempRefreshToken = res.headers.get('Set-Cookie');
 
           // console.log(newAccessToken);
           // console.log(newRefreshToken);
