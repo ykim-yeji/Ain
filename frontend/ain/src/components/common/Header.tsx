@@ -20,6 +20,12 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL;
 const accessToken = process.env.NEXT_PUBLIC_ACCESS_TOKEN;
 const refreshToken = process.env.NEXT_PUBLIC_REFRESH_TOKEN || '';
 
+interface Props {
+  src: string;
+  width: number;
+  quality?: number;
+}
+
 export default function Header() {
   // const [isLogin, setIsLogin] = useState<boolean>(true);
   // const [dropDown, setDropDown] = useState<boolean>(false);
@@ -67,6 +73,13 @@ export default function Header() {
   // const handleDropDown = () => {
   //   setHeaderDropDown();
   // };
+
+  const imageLoader = ({ src, width, quality }: Props) => {
+    const params = [`imwidth = ${width}`];
+    // return `${src}?${params}`;
+    return `https://myain.co.kr/${src}?w=${width}`;
+    //   return `http://localhost:3000/${src}?w=${width}`;
+  };
 
   const confirm = () => {
     console.log('zustand상태확인');
@@ -168,7 +181,15 @@ export default function Header() {
             <div>
               {/* 로그인 상태 테스트 중 나중에 변경 */}
               <Link href='/'>
-                <Image src='/Logo/ainlogo.svg' alt='Ain Logo' className='ml-3' width={120} height={30} priority />
+                <Image
+                  loader={imageLoader}
+                  src='/Logo/ainlogo.svg'
+                  alt='Ain Logo'
+                  className='ml-3'
+                  width={120}
+                  height={30}
+                  priority
+                />
               </Link>
               {/* <div onClick={handleLoginState}>
               <Image src='/logo/ainlogo.svg' alt='Ain Logo' className='ml-3' width={120} height={30} priority />
