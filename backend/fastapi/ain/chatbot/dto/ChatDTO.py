@@ -22,3 +22,6 @@ class IdealPersonReplyChatResponse(BaseModel):
     id: str
     content: str
     time: str
+
+class DeleteIdealPersonReqeust(BaseModel):
+    idealPersonThreadId: str

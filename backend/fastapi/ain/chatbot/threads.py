@@ -25,3 +25,7 @@ class IdealPersonThread:
         thread = self.client.beta.threads.create()
 
         return thread.id
+
+    # 스레드 삭제
+    def delete_thread(self, thread_id):
+        self.client.beta.threads.delete(thread_id)
