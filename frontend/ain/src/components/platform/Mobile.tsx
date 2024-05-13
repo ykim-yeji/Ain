@@ -5,6 +5,7 @@ import { useCamera } from '../mobile_camera/useCamera';
 import { usePhotoCapture } from '../mobile_camera/usePhotoCapture';
 import { CreateIdealPersonPage } from './CreateIdealPerson';
 import Carousel from './Carousel';
+import useUserStore from "@/store/userStore";
 
 export const MobilePage = () => {
   const [idealPersons, setIdealPersons] = useState<IdealPerson[] | null>(null);
@@ -18,7 +19,8 @@ export const MobilePage = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const [isHovering, setIsHovering] = useState(false);
   const [isClicked, setIsClicked] = useState(false);
-
+  const { accessToken } = useUserStore();
+  
   const itemsPerPage = 3;
 
   useEffect(() => {
@@ -36,14 +38,23 @@ export const MobilePage = () => {
 
   useEffect(() => {
     const fetchIdealPersonsCount = async () => {
-      try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/ideal-people/count`);
-        const data = await response.json();
-        if (data.code === 200 && data.status === 'CREATED') {
-          setIdealPersonCount(data.data.idealPersonCount);
+      if (accessToken !== null) { // accessToken이 null이 아닐 때만 아래 코드 실행
+        try {
+          const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/ideal-people/count`, {
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ` + accessToken,
+            },
+          });
+          const data = await response.json();
+          if (data.code === 200 && data.status === 'OK') {
+            setIdealPersons(data.data.idealPeople);
+          }
+        } catch (error) {
+          console.error('이상형 개수 정보 가져오기 실패:', error);
         }
-      } catch (error) {
-        console.error('이상형 개수 정보 가져오기 실패:', error);
+      } else {
+        console.log('accessToken이 null입니다. API 요청을 보내지 않습니다.');
       }
     };
     fetchIdealPersonsCount();
@@ -55,20 +66,25 @@ export const MobilePage = () => {
     }
 
     const fetchIdealPersons = async () => {
-      try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/ideal-people`, {
-          headers: {
-            Authorization: `Bearer eyJhbGciOiJIUzI1NiJ9.eyJjYXRlZ29yeSI6ImFjY2Vzc1Rva2VuIiwibWVtYmVySWQiOjUsImlhdCI6MTcxNTMwOTQ2MywiZXhwIjoxNzE1MzEzMDYzfQ.u1gSw2NT9aM8deXJgc-29rXlwOvGl7mkjJ7p3jbZdW8`, // 헤더에 액세스 토큰 추가
-          },
-        });
-
-        const data = await response.json();
-
-        if (data.code === 200 && data.status === 'OK') {
-          setIdealPersons(data.data.idealPeople);
+      if (accessToken !== null) { // accessToken이 null이 아닐 때만 아래 코드 실행
+        try {
+          const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/ideal-people`, {
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ` + accessToken,
+            },
+          });
+    
+          const data = await response.json();
+    
+          if (data.code === 200 && data.status === 'OK') {
+            setIdealPersons(data.data.idealPeople);
+          }
+        } catch (error) {
+          console.error('이상형 정보 가져오기 실패:', error);
         }
-      } catch (error) {
-        console.error('이상형 정보 가져오기 실패:', error);
+      } else {
+        console.log('accessToken이 null입니다. API 요청을 보내지 않습니다.');
       }
     };
 
