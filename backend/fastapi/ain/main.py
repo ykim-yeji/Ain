@@ -6,7 +6,7 @@ from starlette.middleware.cors import CORSMiddleware
 from chatbot.assistants import IdealPersonAssistant
 from total.dto.Response import Response
 from total.constant.SuccessCode import SuccessCode
-from chatbot.dto.ChatDTO import AddIdealPersonChatRequest, AddIdealPersonChatResponse
+from chatbot.dto.ChatDTO import AddIdealPersonChatRequest, AddIdealPersonChatResponse, DeleteIdealPersonReqeust
 from chatbot.messages import IdealPersonMessage
 
 from pydantic import BaseModel
@@ -66,11 +66,11 @@ async def add_ideal_person_chatbot(
 # 이상형과의 채팅 전송
 @app.post("/chats/ideal-people")
 async def add_ideal_person_chat(
-    addIdealPersonChatRequest: AddIdealPersonChatRequest
+    add_chat_request: AddIdealPersonChatRequest
 ):
     try:
-        IdealPersonMessage().send_message(addIdealPersonChatRequest.idealPersonThreadId, addIdealPersonChatRequest.memberChatMessage)
-        reply_chat_message = IdealPersonMessage().get_message(addIdealPersonChatRequest)
+        IdealPersonMessage().send_message(add_chat_request.idealPersonThreadId, add_chat_request.memberChatMessage)
+        reply_chat_message = IdealPersonMessage().get_message(add_chat_request)
 
         response_data = AddIdealPersonChatResponse(
             idealPersonChatMessageId=reply_chat_message.id,
@@ -79,6 +79,18 @@ async def add_ideal_person_chat(
         )
 
         return Response.success(SuccessCode.CREATE_IDEAL_PERSON_CHAT, data=response_data.dict())
+    except Exception as e:
+        logging.error(e)
+
+# 이상형 챗봇 삭제
+@app.delete("/chatbots/ideal-people")
+async def delete_ideal_person_chatbot(
+        delete_ideal_person_request: DeleteIdealPersonReqeust
+):
+    try:
+        IdealPersonThread().delete_thread(delete_ideal_person_request.idealPersonThreadId)
+
+        return Response.success(SuccessCode.DELETE_IDEAL_PERSON_CHATBOT)
     except Exception as e:
         logging.error(e)
 
