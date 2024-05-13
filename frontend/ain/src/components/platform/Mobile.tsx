@@ -43,7 +43,7 @@ export const MobilePage = () => {
           const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/ideal-people/count`, {
             headers: {
               "Content-Type": "application/json",
-              "Authorization": `Bearer ` + accessToken,
+              "Authorization": `Bearer ${accessToken}`,
             },
           });
           const data = await response.json();
@@ -71,7 +71,7 @@ export const MobilePage = () => {
           const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/ideal-people`, {
             headers: {
               "Content-Type": "application/json",
-              "Authorization": `Bearer ` + accessToken,
+              "Authorization": `Bearer ${accessToken}`,
             },
           });
     
@@ -100,7 +100,7 @@ export const MobilePage = () => {
   const totalPages = Math.ceil((idealPersons?.length ?? 0) / itemsPerPage);
 
   const handleNextClick = () => {
-    // 다음 페이지로 이동, 마지막  페이지에서는 첫 번째 페이지로
+    // 다음 페이지로 이동, 마지막 페이지에서는 첫 번째 페이지로
     setCurrentPage((prevPage) => (prevPage + 1) % totalPages);
   };
 
@@ -115,7 +115,9 @@ export const MobilePage = () => {
     : [];
 
   const selectIdealPersonImage = (idealPersonImage: string) => {
-    setSelectedIdealPersonImage(idealPersonImage);
+    if (!isPictureTaken) {
+      setSelectedIdealPersonImage(idealPersonImage);
+    }
   };
 
   const handleStartCamera = () => {
@@ -182,14 +184,31 @@ export const MobilePage = () => {
           <div style={{ position: 'absolute', right: '0', bottom: '0' }}>
             <img
               src={selectedIdealPersonImage}
-              className='w-auto h-auto pointer-events-none'
+              className={`w-auto h-auto pointer-events-none ${isPictureTaken ? 'pointer-events-none' : ''}`}
               alt='Overlay'
               style={{ width: '134px', height: '134px' }}
             />
+            {/* Speech bubble */}
+            <div style={{ 
+              position: "absolute", 
+              bottom: "140px", 
+              right: "12px", 
+              background: "rgba(95,15,122,0.8)", 
+              borderRadius: "10px", 
+              padding: "5px 10px", 
+              boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)",
+              display: "flex", 
+              alignItems: "center",
+              justifyContent: "center",
+              fontSize: "12px",
+              color: "white" 
+            }}>
+              오늘 멋진데요~?
+            </div>
           </div>
         )}
       </div>
-      <div className='flex flex-row justify-center items-center space-x-2' style={{width: 'calc(3 * 120px)', justifyContent: 'space-between' }}>
+      <div className={`flex flex-row justify-center items-center space-x-2 ${isPictureTaken ? 'pointer-events-none' : ''}`} style={{width: 'calc(3 * 120px)', justifyContent: 'space-between' }}>
         {/* Previous button */}
         <button onClick={handlePrevClick}>
           <img src="./icon/angle_left_white.png" alt="이전" className='w-6'/>

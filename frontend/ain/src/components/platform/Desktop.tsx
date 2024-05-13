@@ -207,7 +207,7 @@ export const DesktopPage = () => {
           </div>
         )}
       </div>
-      <div className='flex flex-row justify-center items-center space-x-2' style={{width: 'calc(3 * 120px)', justifyContent: 'space-between' }}>
+      <div className={`flex flex-row justify-center items-center space-x-2 ${isPictureTaken ? 'pointer-events-none' : ''}`} style={{width: 'calc(3 * 120px)', justifyContent: 'space-between' }}>
         {/* Previous button */}
         <button onClick={handlePrevClick}>
           <img src="./icon/angle_left_white.png" alt="이전" className='w-6'/>
