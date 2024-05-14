@@ -177,6 +177,7 @@ export const DesktopPage = () => {
   return (
     <div className="flex flex-col justify-center items-center space-y-10" style={{ height: "calc(100vh - 65px - 68px)", overflowY: "auto" }}>
       <div className="relative w-[75%]" style={{ border: isCameraOn ? '4px solid white' : 'none' }}>
+        
         {image ? (
           <img src={image} className="w-full" alt="Captured" /> // Captured image
         ) : (
