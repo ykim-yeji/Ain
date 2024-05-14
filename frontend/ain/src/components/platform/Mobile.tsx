@@ -69,6 +69,9 @@ export const MobilePage = () => {
       if (accessToken !== null) { // accessToken이 null이 아닐 때만 아래 코드 실행
         try {
           const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/ideal-people`, {
+            cache: 'no-store',
+            mode: 'cors',
+            credentials: 'include',
             headers: {
               "Content-Type": "application/json",
               "Authorization": `Bearer ${accessToken}`,
