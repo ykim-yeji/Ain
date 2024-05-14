@@ -51,9 +51,11 @@ export default function Page() {
     selectedIdealName,
     selectedIdealId,
     selectedIdealThreadId,
+    selectedIdealImageUrl,
     setTempIdealName,
     setTempIdealId,
     setTempIdealThreadId,
+    setTempIdealImageUrl,
   } = useIdealStore();
 
   const { accessToken } = useUserStore();
@@ -62,12 +64,20 @@ export default function Page() {
   const [tempFullName, setTempFullName] = useState<string>('');
   const [tempPersonId, setTempPersonId] = useState<number>();
   const [tempThreadId, setTempThreadId] = useState<string>('');
+  const [tempImageUrl, setTempImageUrl] = useState<string>('');
   const [idealIdArray, setIdealIdArray] = useState<number[]>([]);
   const [tempTestArray, setTempTestArray] = useState<IdealPeople[]>([]);
 
   // const idealPersonRankings = [12, 11, 10, 9, 8, 7, 6, 5, 4];
 
-  const handleModalTest = (nickname: string, fullname: string, url: string, personId: number, threadId: string) => {
+  const handleModalTest = (
+    nickname: string,
+    fullname: string,
+    url: string,
+    personId: number,
+    threadId: string,
+    imageUrl: string
+  ) => {
     if (idealDetailModalOpen === true) {
       setIdealDetailModalFalse();
     } else {
@@ -89,6 +99,7 @@ export default function Page() {
     setTempIdealName(nickname);
     setTempIdealId(personId);
     setTempIdealThreadId(threadId);
+    setTempIdealImageUrl(imageUrl);
   };
 
   const onDragStart = () => {
@@ -100,6 +111,7 @@ export default function Page() {
       const getData = async () => {
         try {
           const res = await fetch(`${API_URL}/ideal-people`, {
+            cache: 'no-store',
             headers: {
               Authorization: `Bearer ` + accessToken,
             },
@@ -289,7 +301,8 @@ export default function Page() {
                                 item?.idealPersonFullName,
                                 item?.idealPersonImageUrl,
                                 item?.idealPersonId,
-                                item?.idealPersonThreadId
+                                item?.idealPersonThreadId,
+                                item?.idealPersonImageUrl
                               )
                             }
                             className='flex flex-col text-center rounded-2xl h-38 w-38 cursor-pointer'
@@ -329,6 +342,7 @@ export default function Page() {
               tempFullName={tempFullName}
               tempPersonId={tempPersonId}
               tempThreadId={tempThreadId}
+              tempImageUrl={tempImageUrl}
               closeModal={handleModalTest}
             />
           </div>
