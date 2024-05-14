@@ -1,7 +1,7 @@
 // usePhotoCapture.ts
 import { useState } from 'react';
 
-export const usePhotoCapture = (videoRef: React.RefObject<HTMLVideoElement>, selectedIdealPersonImage: string) => {
+export const usePhotoCapture = (videoRef: React.RefObject<HTMLVideoElement>, selectedIdealPersonImage: string, setSelectedIdealPersonImage: (image: string) => void) => {
   const [image, setImage] = useState<string | null>(null);
 
   const takePicture = async () => {
@@ -36,6 +36,8 @@ export const usePhotoCapture = (videoRef: React.RefObject<HTMLVideoElement>, sel
         // 이미지 URL 생성 및 상태 업데이트
         const imageUrl = canvas.toDataURL('image/png');
         setImage(imageUrl);
+
+        setSelectedIdealPersonImage('');
       }
     }
   };

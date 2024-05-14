@@ -11,7 +11,7 @@ export const MobilePage = () => {
   const [idealPersons, setIdealPersons] = useState<IdealPerson[] | null>(null);
   const [selectedIdealPersonImage, setSelectedIdealPersonImage] = useState('');
   const { videoRef, isCameraOn, startCamera, stopCamera } = useCamera();
-  const { image, setImage, takePicture } = usePhotoCapture(videoRef, selectedIdealPersonImage);
+  const { image, setImage, takePicture } = usePhotoCapture(videoRef, selectedIdealPersonImage, setSelectedIdealPersonImage);
   const [carouselIndex, setCarouselIndex] = useState(0);
   const [isPictureTaken, setIsPictureTaken] = useState(false);
   const [idealPersonCount, setIdealPersonCount] = useState<number | null>(null);
