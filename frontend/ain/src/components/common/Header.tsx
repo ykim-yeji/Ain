@@ -62,8 +62,8 @@ export default function Header() {
           title: '로그아웃 되었습니다.',
           icon: 'success',
           confirmButtonColor: '#ff7169',
+          heightAuto: false,
         });
-        Swal;
         if (result.code === 200) {
           console.log('로그아웃 성공');
           router.push('/');
