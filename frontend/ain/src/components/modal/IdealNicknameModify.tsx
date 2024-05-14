@@ -13,7 +13,7 @@ interface Props {
   closeModal: any;
   tempNickname: string;
   tempFullName: string;
-  tempPersonId: number;
+  tempPersonId: number | undefined;
 }
 
 export default function IdealNicknameModify({ closeModal, tempNickname, tempFullName, tempPersonId }: Props) {
