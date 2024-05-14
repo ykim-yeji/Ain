@@ -73,7 +73,7 @@ export default function UserNicknameModifyModal({ closeModal }: Props) {
   const modifyMyNickname = async () => {
     if (koreanRegex.test(inputValue) && inputValue !== '' && inputValue !== null && accessToken !== null) {
       // fetch post
-      alert(accessToken);
+      // alert(accessToken);
       try {
         const res = await fetch(`${API_URL}/members`, {
           method: 'PATCH',

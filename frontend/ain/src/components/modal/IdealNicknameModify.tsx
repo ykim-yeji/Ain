@@ -14,13 +14,25 @@ interface Props {
   tempNickname: string;
   tempFullName: string;
   tempPersonId: number | undefined;
+  setIsNicknameModified: any;
+  isNicknameModified: number;
+  setTempNickname: any;
 }
 
-export default function IdealNicknameModify({ closeModal, tempNickname, tempFullName, tempPersonId }: Props) {
+export default function IdealNicknameModify({
+  closeModal,
+  tempNickname,
+  tempFullName,
+  tempPersonId,
+  setIsNicknameModified,
+  isNicknameModified,
+  setTempNickname,
+}: Props) {
   const router = useRouter();
   const [inputValue, setInputValue] = useState<string>(tempNickname);
   // const [originNickname, setOriginNickname] = useState<string>(tempNickname);
   const [realNickname, setRealNickname] = useState<string>('');
+  const [tempModifiedName, setTempModifiedName] = useState<string>('');
 
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
   const { accessToken } = userStore();
@@ -32,6 +44,7 @@ export default function IdealNicknameModify({ closeModal, tempNickname, tempFull
     idealNicknameModalState,
     setIdealNicknameModalState,
     setHeaderDropDown,
+    // setIdealNicknameModalState,
   } = useModalStore();
 
   const modifyIdealNickname = async () => {
@@ -52,6 +65,9 @@ export default function IdealNicknameModify({ closeModal, tempNickname, tempFull
 
           if (result.code === 200) {
             alert('이상형의 이름을 변경했습니다.');
+            setIdealNicknameModalState();
+            setIsNicknameModified(isNicknameModified + 1);
+            setTempNickname(inputValue);
           } else if (result.code === 400) {
             alert('현재 이상형 닉네임과 동일합니다');
           } else {
@@ -61,16 +77,11 @@ export default function IdealNicknameModify({ closeModal, tempNickname, tempFull
         } else {
           console.log(res);
           console.log('이상형 이름 변경 실패');
-          // return;
         }
       } catch (error) {
         console.log(error);
         console.log('에러발생으로 실패');
-        // return;
       }
-
-      // console.log(inputValue);
-      // closeModal();
     } else {
       alert('이상형의 별명은 한글 1~5자 사이로 해주세요.');
     }

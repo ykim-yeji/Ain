@@ -67,6 +67,9 @@ export default function Page() {
   const [tempImageUrl, setTempImageUrl] = useState<string>('');
   const [idealIdArray, setIdealIdArray] = useState<number[]>([]);
   const [tempTestArray, setTempTestArray] = useState<IdealPeople[]>([]);
+  const [isNicknameModified, setIsNicknameModified] = useState<number>(0);
+
+  const [originNickname, setOriginNickname] = useState<string>('');
 
   // const idealPersonRankings = [12, 11, 10, 9, 8, 7, 6, 5, 4];
 
@@ -107,8 +110,49 @@ export default function Page() {
   };
 
   useEffect(() => {
-    if (accessToken !== null) {
-      const getData = async () => {
+    const getMyNickname = async () => {
+      try {
+        const res = await fetch(`${API_URL}/members`, {
+          headers: {
+            Authorization: `Bearer ` + accessToken,
+          },
+        });
+
+        if (res.ok) {
+          const result = await res.json();
+          if (result.code === 200) {
+            setOriginNickname(result.data.memberNickname);
+          } else if (result.code === 401) {
+            alert('ERROR UNAUTHORIZED');
+            return;
+          } else if (result.code === 403) {
+            alert('ERROR FORBIDDEN');
+            return;
+          } else if (result.code === 404) {
+            alert('ERROR NOT FOUND');
+            return;
+          } else {
+            alert('401, 403, 404 이외 에러 발생');
+            return;
+          }
+        } else {
+          console.log('에러발생');
+          return;
+        }
+      } catch (error) {
+        alert('에러발생으로 닉네임 정보 불러오기 실패');
+        console.log(error);
+      }
+    };
+
+    if (accessToken !== '' && accessToken !== null && accessToken !== undefined) {
+      getMyNickname();
+    }
+  }, [isNewFetch, accessToken, isNicknameModified]);
+
+  useEffect(() => {
+    const getData = async () => {
+      if (accessToken !== null && accessToken !== undefined && accessToken !== '') {
         try {
           const res = await fetch(`${API_URL}/ideal-people`, {
             cache: 'no-store',
@@ -120,27 +164,37 @@ export default function Page() {
           if (res.ok) {
             // console.log(res.status);
             const result = await res.json();
+            console.log('>>>', result);
             // console.log('결과', result);
-            setListData(result.data);
+            if (result.code === 200) {
+              setListData(result.data);
+            } else {
+              alert(result.code);
+            }
           } else {
             console.log('fetch실패');
             console.log(res.status);
+            alert('실패다');
           }
         } catch (error) {
+          alert('에러실패');
           console.log('>>>>', error);
         }
-      };
+      } else {
+        alert('뭔가..');
+      }
+    };
+
+    if (accessToken !== '' && accessToken !== null && accessToken !== undefined) {
       getData();
     }
-  }, [isNewFetch]);
+  }, [isNewFetch, accessToken, isNicknameModified]);
 
   if (listData && listData.idealPeople && listData.idealPeople.length === 0) {
     return <CreateIdealPersonPage />;
   }
 
   const changeIdealList = async () => {
-    // isArrayUpdatedCount();
-
     try {
       setIsArrayUpdated(isArrayUpdated + 1);
       const res = await fetch(`${API_URL}/ideal-people/ranks`, {
@@ -149,9 +203,9 @@ export default function Page() {
           'Content-Type': 'application/json',
           Authorization: `Bearer ` + accessToken,
         },
-        body: JSON.stringify({
-          idealPersonRankings: idealIdArray,
-        }),
+        // body: JSON.stringify({
+        //   idealPersonRankings: idealIdArray,
+        // }),
       });
 
       if (res.ok) {
@@ -274,80 +328,84 @@ export default function Page() {
 
   return (
     <div className='overflow-auto mt-[65px] mb-[68px]'>
-      <div className='text-xl text-white flex mt-2 mb-4 px-4'>치킨님의 아인</div>
+      {!hideIdealList && (
+        <DragDropContext onDragStart={onDragStart} onDragEnd={onDragEnd}>
+          {originNickname && <div className='text-xl text-white flex mt-2 mb-4 px-4'>{originNickname}님의 아인</div>}
 
-      <DragDropContext onDragStart={onDragStart} onDragEnd={onDragEnd}>
-        {listData &&
-          listData.idealPeople &&
-          Array.from({ length: Math.ceil(listData.idealPeople.length / 2) }, (colIndex, rowIndex) => (
-            <Droppable key={`${rowIndex}-${colIndex}`} droppableId={`${rowIndex}-${colIndex}`}>
-              {(provided) => (
-                <div ref={provided.innerRef} {...provided.droppableProps}>
-                  <div key={rowIndex} className='grid grid-cols-2 gap-8 mb-8 mt-8'>
-                    {listData.idealPeople.slice(rowIndex * 2, rowIndex * 2 + 2).map((item, colIndex) => (
-                      <Draggable
-                        key={item?.idealPersonFullName}
-                        draggableId={`${rowIndex}-${colIndex}`}
-                        index={item?.idealPersonRank}
-                      >
-                        {(provided) => (
-                          <div
-                            ref={provided.innerRef}
-                            {...provided.draggableProps}
-                            {...provided.dragHandleProps}
-                            onClick={() =>
-                              handleModalTest(
-                                item?.idealPersonNickname,
-                                item?.idealPersonFullName,
-                                item?.idealPersonImageUrl,
-                                item?.idealPersonId,
-                                item?.idealPersonThreadId,
-                                item?.idealPersonImageUrl
-                              )
-                            }
-                            className='flex flex-col text-center rounded-2xl h-38 w-38 cursor-pointer'
-                            //   key={item.idealPersonRank}
-                            //   key={index}
-                          >
-                            <img
-                              className='rounded-t-2xl'
-                              src={item?.idealPersonImageUrl}
-                              alt='이미지'
-                              height={170}
-                              width={170}
-                            />
+          {listData &&
+            listData.idealPeople &&
+            Array.from({ length: Math.ceil(listData.idealPeople.length / 2) }, (colIndex, rowIndex) => (
+              <Droppable key={`${rowIndex}-${colIndex}`} droppableId={`${rowIndex}-${colIndex}`}>
+                {(provided) => (
+                  <div ref={provided.innerRef} {...provided.droppableProps}>
+                    <div key={rowIndex} className='grid grid-cols-2 gap-8 mb-8 mt-8'>
+                      {listData.idealPeople.slice(rowIndex * 2, rowIndex * 2 + 2).map((item, colIndex) => (
+                        <Draggable
+                          key={item?.idealPersonFullName}
+                          draggableId={`${rowIndex}-${colIndex}`}
+                          index={item?.idealPersonRank}
+                        >
+                          {(provided) => (
                             <div
-                              className='pt-2.5 pb-1.5 text-xl text-white rounded-b-2xl shadow-[0px_3px_5px_0px_rgba(0,0,0,0.3)]'
-                              style={{ backgroundColor: '#BE44E9' }}
+                              ref={provided.innerRef}
+                              {...provided.draggableProps}
+                              {...provided.dragHandleProps}
+                              onClick={() =>
+                                handleModalTest(
+                                  item?.idealPersonNickname,
+                                  item?.idealPersonFullName,
+                                  item?.idealPersonImageUrl,
+                                  item?.idealPersonId,
+                                  item?.idealPersonThreadId,
+                                  item?.idealPersonImageUrl
+                                )
+                              }
+                              className='flex flex-col text-center rounded-2xl h-38 w-38 cursor-pointer'
+                              //   key={item.idealPersonRank}
+                              //   key={index}
                             >
-                              {item?.idealPersonNickname}
+                              <img
+                                className='rounded-t-2xl'
+                                src={item?.idealPersonImageUrl}
+                                alt='이미지'
+                                height={170}
+                                width={170}
+                              />
+                              <div
+                                className='pt-2.5 pb-1.5 text-xl text-white rounded-b-2xl shadow-[0px_3px_5px_0px_rgba(0,0,0,0.3)]'
+                                style={{ backgroundColor: '#BE44E9' }}
+                              >
+                                {item?.idealPersonNickname}
+                              </div>
                             </div>
-                          </div>
-                        )}
-                      </Draggable>
-                    ))}
-                    {/* <button onClick={changeIdealList}>순서변경TEST</button> */}
+                          )}
+                        </Draggable>
+                      ))}
+                      {/* <button onClick={changeIdealList}>순서변경TEST</button> */}
+                    </div>
+                    {provided.placeholder}
                   </div>
-                  {provided.placeholder}
-                </div>
-              )}
-            </Droppable>
-          ))}
-      </DragDropContext>
-      <div>
-        {idealDetailModalOpen && (
-          <div className=''>
-            <IdealDetailModal
-              tempNickname={tempNickname}
-              tempFullName={tempFullName}
-              tempPersonId={tempPersonId}
-              tempThreadId={tempThreadId}
-              tempImageUrl={tempImageUrl}
-              closeModal={handleModalTest}
-            />
-          </div>
-        )}
-      </div>
+                )}
+              </Droppable>
+            ))}
+        </DragDropContext>
+      )}
+
+      {idealDetailModalOpen && (
+        <div className=''>
+          <IdealDetailModal
+            tempNickname={tempNickname}
+            tempFullName={tempFullName}
+            tempPersonId={tempPersonId}
+            tempThreadId={tempThreadId}
+            tempImageUrl={tempImageUrl}
+            closeModal={handleModalTest}
+            isNicknameModified={isNicknameModified}
+            setIsNicknameModified={setIsNicknameModified}
+            setTempNickname={setTempNickname}
+          />
+        </div>
+      )}
     </div>
   );
 }
