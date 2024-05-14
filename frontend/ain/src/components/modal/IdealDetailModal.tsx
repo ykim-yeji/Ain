@@ -18,7 +18,7 @@ interface Props {
   closeModal: any;
   tempNickname: string;
   tempFullName: string;
-  tempPersonId: number;
+  tempPersonId: number | undefined;
   tempThreadId: string;
   tempImageUrl: string;
 }
