@@ -14,6 +14,7 @@ export default function ChatRoomPage() {
     selectedIdealName,
     selectedIdealId,
     selectedIdealThreadId,
+    selectedIdealImageUrl
   } = useIdealStore();
   const { messages, addMessage, clearMessages } = useMessagesStore()
 
@@ -33,6 +34,8 @@ export default function ChatRoomPage() {
 
     const userMessageId = Math.random().toString(36).substring(2, 9); // 임의의 고유 ID 생성
     addMessage({ id: userMessageId, sender: 'user', message: sendMessage, time: sendTime })
+    
+    setSendMessage('');
 
     if (accessToken !== null) {
 
@@ -59,12 +62,12 @@ export default function ChatRoomPage() {
       }
   }
 
-    setSendMessage('');
   }
 
   // 엔터 키 누를 때 메세지 전송
   const handleKeyPress = (event: KeyboardEvent) => {
     if (event.key === 'Enter') {
+      event.preventDefault();
       sendAndReceiveMessage();
     }
   };
@@ -107,49 +110,51 @@ export default function ChatRoomPage() {
   }, [messages]); // 메시지 목록이 업데이트될 때마다 실행
 
 
-  return <div className="relative w-full h-full flex flex-col justify-between"  onClick={() => setIsResetModalOpen(false)}>
+  return <div className="relative w-full h-full"  onClick={() => setIsResetModalOpen(false)}>
     {isDetailModalOpen &&
     <div className='absolute z-20 w-full h-full bg-[rgba(0,0,0,0.6)] flex justify-center items-center' onClick={() => setIsDetailModalOpen(false)}>
       <div className='relative w-[300px] h-[300px] rounded-full bg-white' onClick={(e) => {e.stopPropagation()}} >
-        <img src="../image/taebin.png" className='absolute top-0 left-0 w-[300px] h-[300px] rounded-full'/>
+        <img src={selectedIdealImageUrl} className='absolute top-0 left-0 w-[300px] h-[300px] rounded-full'/>
       </div>
       </div>}
-    <div className="fixed top-0 w-full max-w-md h-[70px] bg-inherit flex justify-between items-center shadow-md">
+    <div className="absolute top-0 w-full max-w-md h-[70px] bg-inherit flex justify-between items-center shadow-md">
       <Link href='/chat'><img src="../icon/go_back.png" className="w-[40px] ml-2"/></Link>
       <h2 className="text-2xl text-white tracking-widest">{selectedIdealName}</h2>
       <button onClick={(e) => {e.stopPropagation(); setIsResetModalOpen(!isResetModalOpen)}}><img src="../icon/menu.png" className="w-[40px] mr-2"/></button>
       {isResetModalOpen &&
       <button onClick={(e) => {e.stopPropagation(); messageClear()}} className='absolute z-10 top-[55px] right-2 w-[140px] h-[40px] bg-white text-black '>채팅 내역 초기화</button>}
     </div>
-    <div className='w-full h-[70px]'></div>
-    <div className='flex flex-col flex-grow overflow-y-auto'>
-        {messages.map((msg, index) => (
-          <div key={index} >
-            {msg.sender === "user" ? (
-            <div className='flex justify-end m-4'>
-              <div className='relative max-w-[250px] bg-[#F0D5FA] text-sm rounded-md p-2' style={{fontWeight: 'lighter'}}>{msg.message}
-                <small className='absolute bottom-0 left-[-35px] text-[10px] text-gray-200'>{msg.time}</small>
+    <div className='flex flex-col w-full h-full'>
+      <div className='flex-none w-full h-[70px] '></div>
+      <div className='grow overflow-scroll'>
+          {messages.map((msg, index) => (
+            <div key={index} >
+              {msg.sender === "user" ? (
+              <div className='flex justify-end m-4'>
+                <div className='relative max-w-[250px] bg-[#F0D5FA] text-sm rounded-md p-2'>{msg.message}
+                  <small className='absolute bottom-0 left-[-35px] text-[10px] text-gray-200'>{msg.time}</small>
+                </div>
               </div>
+              ) : (
+              <div className='flex justify-start items-start m-4'>
+                <button onClick={() => setIsDetailModalOpen(true)}
+                className='relative w-[30px] h-[30px] rounded-full bg-white mr-2'>
+                  <img src={selectedIdealImageUrl} className='absolute top-0 left-0 w-[30px] h-[30px] rounded-full' />
+                </button>
+                <div className='flex flex-col '>
+                  <p className='text-xs '>{selectedIdealName}</p>
+                  <div className='relative max-w-[250px] bg-[rgba(95,15,122,0.7)] text-sm text-white rounded-md p-2'>{msg.message}
+                  <small className='absolute bottom-0 right-[-35px] text-[10px] text-gray-200'>{msg.time}</small>
+                </div>
+                </div>
+              </div>
+              )}
             </div>
-            ) : (
-            <div className='flex justify-start items-start m-4'>
-              <button onClick={() => setIsDetailModalOpen(true)}
-              className='relative w-[30px] h-[30px] rounded-full bg-white mr-2'>
-                <img src="../image/taebin.png" className='absolute top-0 left-0 w-[30px] h-[30px] rounded-full' />
-              </button>
-              <div className='flex flex-col '>
-                <p className='text-xs '>{selectedIdealName}</p>
-                <div className='relative max-w-[250px] bg-[rgba(95,15,122,0.7)] text-sm text-white rounded-md p-2' style={{fontWeight: 'lighter'}}>{msg.message}
-                <small className='absolute bottom-0 right-[-35px] text-[10px] text-gray-200'>{msg.time}</small>
-              </div>
-              </div>
-            </div>
-            )}
-          </div>
-        ))}
-        <div ref={messagesEndRef} />
+          ))}
+          <div ref={messagesEndRef} />
+      </div>
+      <div className='flex-none w-full h-[70px]'></div>
     </div>
-    <div className='w-full h-[70px]'></div>
     <div className="fixed bottom-0 w-full max-w-md h-[70px] bg-[#5F0F7A] flex justify-center items-center px-4">
       <input type="text" placeholder="아인과 대화를 나눠보세요" className="w-[80%] h-[45px] bg-[#F0D5FA] rounded-full px-4 placeholder:text-[#CCB7D3] outline-none"
       value={sendMessage}

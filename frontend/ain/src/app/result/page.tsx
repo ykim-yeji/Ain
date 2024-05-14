@@ -66,14 +66,49 @@ export default function ResultPage() {
         className='absolute top-[180px] left-1/2 transform -translate-x-1/2 -translate-y-1/2'
       />
 
-      {/* 이상형 정보 */}
-      <div className='w-full h-[75%] flex flex-col justify-center items-center'>
-        <div className='relative w-full flex justify-center items-center'>
-          <img src='./image/purple_speech.png' alt='' className='w-[300px] mb-4 z-10' />
-          <p className='absolute top-[50px] left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10 text-[15px]'>
-            제 이름은 <span className='text-[#FF7FCE] text-xl'>{characterName}</span> 입니다. <br />
-            만나서 반가워요!
-          </p>
+        try {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/ideal-people`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ` + accessToken,
+            },
+            body: formData
+            });
+
+            const data = await response.json();
+            console.log(data);
+
+            router.push('/chat');
+            
+        } catch (error) {
+            console.error('API request failed: ', error);
+        }
+    } else {
+        router.push('/login')
+    }
+
+}
+
+
+    return <div className="relative mt-[65px] mb-[68px] w-full h-full flex flex-col justify-evenly items-center">
+        <img src="./gif/result_firework2.gif" className="absolute top-[180px] left-1/2 transform -translate-x-1/2 -translate-y-1/2"/>
+
+        {/* 이상형 정보 */}
+        <div className="w-full h-[75%] flex flex-col justify-center items-center">
+            <div className="relative w-full flex justify-center items-center">
+              <img src="./image/purple_speech.png" alt="" className="w-[300px] mb-4 z-10"/> 
+              <p className="absolute top-[50px] left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10 text-[15px]">
+                 제 이름은 <span className="text-[#FF7FCE] text-xl">{characterName}</span> 입니다. <br />만나서 반가워요!</p>  
+            </div>
+                       
+            {/* 이상형 결과 */}
+            <div className="relative w-full flex flex-col items-center justify-center">
+                <div className="relative w-[250px] h-[250px]">
+                    <img src="./image/purple_circle.jpg" className="rounded-full"/>
+                    <div className="absolute w-[220px] h-[220px] bg-[#faedff] rounded-full shadow-lg top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10"></div>
+                </div>       
+                <img src={imageUrl} className="absolute w-[150px] top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20" />
+            </div>       
         </div>
 
         {/* 이상형 결과 */}

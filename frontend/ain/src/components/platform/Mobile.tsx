@@ -11,7 +11,7 @@ export const MobilePage = () => {
   const [idealPersons, setIdealPersons] = useState<IdealPerson[] | null>(null);
   const [selectedIdealPersonImage, setSelectedIdealPersonImage] = useState('');
   const { videoRef, isCameraOn, startCamera, stopCamera } = useCamera();
-  const { image, setImage, takePicture } = usePhotoCapture(videoRef, selectedIdealPersonImage);
+  const { image, setImage, takePicture } = usePhotoCapture(videoRef, selectedIdealPersonImage, setSelectedIdealPersonImage);
   const [carouselIndex, setCarouselIndex] = useState(0);
   const [isPictureTaken, setIsPictureTaken] = useState(false);
   const [idealPersonCount, setIdealPersonCount] = useState<number | null>(null);
@@ -36,63 +36,6 @@ export const MobilePage = () => {
     }
   };
 
-  useEffect(() => {
-    const fetchIdealPersonsCount = async () => {
-      if (accessToken !== null) { // accessToken이 null이 아닐 때만 아래 코드 실행
-        try {
-          const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/ideal-people/count`, {
-            headers: {
-              "Content-Type": "application/json",
-              "Authorization": `Bearer ${accessToken}`,
-            },
-          });
-          const data = await response.json();
-          if (data.code === 200 && data.status === 'OK') {
-            setIdealPersons(data.data.idealPeople);
-          }
-        } catch (error) {
-          console.error('이상형 개수 정보 가져오기 실패:', error);
-        }
-      } else {
-        console.log('accessToken이 null입니다. API 요청을 보내지 않습니다.');
-      }
-    };
-    fetchIdealPersonsCount();
-  }, []);
-
-  useEffect(() => {
-    if (idealPersonCount === 0) {
-      return;
-    }
-
-    const fetchIdealPersons = async () => {
-      if (accessToken !== null) { // accessToken이 null이 아닐 때만 아래 코드 실행
-        try {
-          const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/ideal-people`, {
-            cache: 'no-store',
-            mode: 'cors',
-            credentials: 'include',
-            headers: {
-              "Content-Type": "application/json",
-              "Authorization": `Bearer ${accessToken}`,
-            },
-          });
-    
-          const data = await response.json();
-    
-          if (data.code === 200 && data.status === 'OK') {
-            setIdealPersons(data.data.idealPeople);
-          }
-        } catch (error) {
-          console.error('이상형 정보 가져오기 실패:', error);
-        }
-      } else {
-        console.log('accessToken이 null입니다. API 요청을 보내지 않습니다.');
-      }
-    };
-
-    fetchIdealPersons();
-  }, [idealPersonCount]);
 
   useEffect(() => {
     if (idealPersons && idealPersons.length > 0) {
@@ -110,6 +53,47 @@ export const MobilePage = () => {
   const handlePrevClick = () => {
     // 이전 페이지로 이동, 첫 번째 페이지에서는 마지막 페이지로
     setCurrentPage((prevPage) => (prevPage - 1 + totalPages) % totalPages);
+  };
+
+  const fetchIdealPersons = async () => {
+    if (accessToken) {
+      try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/ideal-people`, {
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${accessToken}`,
+          },
+          cache: 'no-store',
+          mode: 'cors',
+          credentials: 'include',
+        });
+        const data = await response.json();
+        if (data.code === 200 && data.status === 'OK') {
+          setIdealPersons(data.data.idealPeople);
+        }
+      } catch (error) {
+        console.error('이상형 정보 가져오기 실패:', error);
+      }
+    }
+  };
+
+  const fetchIdealPersonsCount = async () => {
+    if (accessToken) {
+      try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/ideal-people/count`, {
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${accessToken}`,
+          },
+        });
+        const data = await response.json();
+        if (data.code === 200 && data.status === 'OK') {
+          setIdealPersonCount(data.data.idealPeopleCount);
+        }
+      } catch (error) {
+        console.error('이상형 개수 정보 가져오기 실패:', error);
+      }
+    }
   };
 
   // 현재 페이지에 해당하는 이상형 목록 계산
@@ -135,6 +119,8 @@ export const MobilePage = () => {
     setIsPictureTaken(false);
     setImage(null);
     setSelectedIdealPersonImage(idealPersons?.[0].idealPersonImageUrl || '');
+    fetchIdealPersons();
+    fetchIdealPersonsCount();
   };
 
   if (idealPersonCount === 0) {
