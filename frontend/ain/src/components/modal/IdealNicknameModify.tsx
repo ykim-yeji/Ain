@@ -13,14 +13,16 @@ interface Props {
   closeModal: any;
   tempNickname: string;
   tempFullName: string;
+  tempPersonId: number;
 }
 
-export default function IdealNicknameModify({ closeModal, tempNickname, tempFullName }: Props) {
+export default function IdealNicknameModify({ closeModal, tempNickname, tempFullName, tempPersonId }: Props) {
   const router = useRouter();
   const [inputValue, setInputValue] = useState<string>(tempNickname);
   // const [originNickname, setOriginNickname] = useState<string>(tempNickname);
   const [realNickname, setRealNickname] = useState<string>('');
 
+  const API_URL = process.env.NEXT_PUBLIC_API_URL;
   const { accessToken } = userStore();
   const koreanRegex = /^[가-힣]*$/;
 
@@ -32,11 +34,43 @@ export default function IdealNicknameModify({ closeModal, tempNickname, tempFull
     setHeaderDropDown,
   } = useModalStore();
 
-  const modifyIdealNickname = () => {
+  const modifyIdealNickname = async () => {
     if (koreanRegex.test(inputValue) && inputValue !== '' && inputValue !== null) {
-      // fetch post
-      console.log(inputValue);
-      closeModal();
+      try {
+        const res = await fetch(`${API_URL}/ideal-people/${tempPersonId}/nicknames`, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ` + accessToken,
+          },
+          body: JSON.stringify({
+            idealPersonNickname: inputValue,
+          }),
+        });
+        if (res.ok) {
+          const result = await res.json();
+
+          if (result.code === 200) {
+            alert('이상형의 이름을 변경했습니다.');
+          } else if (result.code === 400) {
+            alert('현재 이상형 닉네임과 동일합니다');
+          } else {
+            console.log(result);
+            console.log(result.code, '번 에러발생');
+          }
+        } else {
+          console.log(res);
+          console.log('이상형 이름 변경 실패');
+          // return;
+        }
+      } catch (error) {
+        console.log(error);
+        console.log('에러발생으로 실패');
+        // return;
+      }
+
+      // console.log(inputValue);
+      // closeModal();
     } else {
       alert('이상형의 별명은 한글 1~5자 사이로 해주세요.');
     }
@@ -74,6 +108,8 @@ export default function IdealNicknameModify({ closeModal, tempNickname, tempFull
             onChange={(e) => handleInputChange(e)}
           />
           <button
+            type='button'
+            onClick={modifyIdealNickname}
             className='mt-2 border-solid rounded-full  px-2 py-2 mx-10 text-lg text-white shadow-md'
             style={{ backgroundColor: '#BE44E9' }}
           >

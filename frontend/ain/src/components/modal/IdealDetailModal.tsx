@@ -18,7 +18,7 @@ interface Props {
   closeModal: any;
   tempNickname: string;
   tempFullName: string;
-  tempPersonId: number | undefined;
+  tempPersonId: number;
   tempThreadId: string;
   tempImageUrl: string;
 }
@@ -199,6 +199,7 @@ export default function IdealDetailModal({
                   closeModal={setIdealNicknameModalState}
                   tempNickname={tempNickname}
                   tempFullName={tempFullName}
+                  tempPersonId={tempPersonId}
                 />
               </div>
             </div>
