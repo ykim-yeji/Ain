@@ -50,11 +50,11 @@ public class IdealPersonServiceImpl implements IdealPersonService {
 
     @Override
     @Transactional
-    public void modifyRankingOfIdealPeople(Long memberId, ModifyRankingOfIdealPeopleRequest modifyRankingOfIdealPeopleRequest) {
-        for (int i = 0; i < modifyRankingOfIdealPeopleRequest.getIdealPersonRankings().length; i++) {
-            IdealPerson idealPerson =
-                    idealPersonRepository.findById(modifyRankingOfIdealPeopleRequest.getIdealPersonRankings()[i])
-                            .orElseThrow(() -> new NoExistException(NOT_EXISTS_IDEAL_PERSON));
+    public void modifyRankingOfIdealPeople(Long memberId, Long[] idealPersonRankings) {
+        int len = idealPersonRankings.length;
+        for (int i = 0; i < len; i++) {
+            IdealPerson idealPerson = idealPersonRepository.findById(idealPersonRankings[i])
+                    .orElseThrow(() -> new NoExistException(NOT_EXISTS_IDEAL_PERSON));
             idealPerson.updateRanking(i);
         }
     }

@@ -27,7 +27,7 @@ public class IdealPersonController {
                                                      @RequestBody ModifyRankingOfIdealPeopleRequest modifyRankingOfIdealPeopleRequest) {
         idealPersonService.modifyRankingOfIdealPeople(
                 userPrincipal.getUserInfoDTO().getMemberId(),
-                modifyRankingOfIdealPeopleRequest);
+                modifyRankingOfIdealPeopleRequest.getIdealPersonRankings());
         return ApiResponse.success(SuccessCode.MODIFY_RANKING_OF_IDEAL_PEOPLE);
     }
 
@@ -68,5 +68,4 @@ public class IdealPersonController {
                 idealPersonService.getIdealPersonCount(userPrincipal.getUserInfoDTO()
                         .getMemberId()));
     }
-
 }
