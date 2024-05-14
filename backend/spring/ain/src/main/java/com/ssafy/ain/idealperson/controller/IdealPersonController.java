@@ -27,14 +27,14 @@ public class IdealPersonController {
                                                      @RequestBody ModifyRankingOfIdealPeopleRequest modifyRankingOfIdealPeopleRequest) {
         idealPersonService.modifyRankingOfIdealPeople(
                 userPrincipal.getUserInfoDTO().getMemberId(),
-                modifyRankingOfIdealPeopleRequest);
+                modifyRankingOfIdealPeopleRequest.getIdealPersonRankings());
         return ApiResponse.success(SuccessCode.MODIFY_RANKING_OF_IDEAL_PEOPLE);
     }
 
-    @PostMapping("/names")
-    public ApiResponse<?> getNameOfIdealPerson(@RequestBody GetNameOfIdealPersonRequest getNameOfIdealPersonRequest) {
+    @GetMapping("/names")
+    public ApiResponse<?> getNameOfIdealPerson(@RequestParam String idealPersonGender) {
         return ApiResponse.success(SuccessCode.GET_NAME_OF_IDEAL_PERSON,
-                idealPersonService.getNameOfIdealPerson(getNameOfIdealPersonRequest));
+                idealPersonService.getNameOfIdealPerson(idealPersonGender));
     }
 
     @PostMapping("")
@@ -68,5 +68,4 @@ public class IdealPersonController {
                 idealPersonService.getIdealPersonCount(userPrincipal.getUserInfoDTO()
                         .getMemberId()));
     }
-
 }

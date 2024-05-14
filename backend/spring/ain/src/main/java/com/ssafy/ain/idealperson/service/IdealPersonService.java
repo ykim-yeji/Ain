@@ -5,9 +5,9 @@ import com.ssafy.ain.idealperson.dto.IdealPersonDTO.*;
 public interface IdealPersonService {
     GetIdealPeopleResponse getAllIdealPerson(Long memberId);
 
-    void modifyRankingOfIdealPeople(Long memberId, ModifyRankingOfIdealPeopleRequest modifyRankingOfIdealPeopleRequest);
+    void modifyRankingOfIdealPeople(Long memberId, Long[] modifyRankingOfIdealPeopleRequest);
 
-    GetNameOfIdealPersonResponse getNameOfIdealPerson(GetNameOfIdealPersonRequest getNameOfIdealPersonRequest);
+    GetNameOfIdealPersonResponse getNameOfIdealPerson(String getNameOfIdealPersonRequest);
 
     void addIdealPerson(Long memberId, AddIdealPersonRequest addIdealPersonRequest);
 
