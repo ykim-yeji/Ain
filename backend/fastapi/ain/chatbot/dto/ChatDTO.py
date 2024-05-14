@@ -1,6 +1,7 @@
 from pydantic import BaseModel
 from chatbot.constant.Gender import Gender
 from chatbot.constant.Mbti import Mbti
+from typing import Optional, List
 
 
 class AddIdealPersonChatRequest(BaseModel):
@@ -36,7 +37,7 @@ class DeleteIdealPersonChatBotReqeust(BaseModel):
 
 class GetIdealPersonChatRequest(BaseModel):
     idealPersonThreadId: str
-    lastChatMessageId: str
+    lastChatMessageId: Optional[str] = None
 
 
 class GetIdealPersonChatResponse(BaseModel):
@@ -44,3 +45,7 @@ class GetIdealPersonChatResponse(BaseModel):
     chatMessage: str
     chatSender: str
     chatTime: str
+
+
+class GetIdealPeopleChatResponse(BaseModel):
+    dialogs: List[GetIdealPersonChatResponse]

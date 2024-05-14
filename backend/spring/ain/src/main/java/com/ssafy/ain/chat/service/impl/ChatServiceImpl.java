@@ -18,6 +18,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static com.ssafy.ain.global.constant.ErrorCode.NOT_EXISTS_IDEAL_PERSON_ID;
 import static com.ssafy.ain.global.constant.ErrorCode.NOT_EXISTS_MEMBER_ID;
 
@@ -68,7 +71,9 @@ public class ChatServiceImpl implements ChatService {
     }
 
     @Override
-    public GetRecentDialogsResponse getRecentDialogs(Long memberId, Long idealPersonId, GetRecentDialogsRequest getRecentDialogsRequest) {
+    public GetRecentDialogsResponse getRecentDialogs(GetRecentDialogsRequest getRecentDialogsRequest) {
+        OpenFeignResponse<?> chatDTO = chatOpenFeign.getRecentDialogs(getRecentDialogsRequest);
+        List<GetRecentDialogResponse> response = new ArrayList<>();
         return null;
     }
 

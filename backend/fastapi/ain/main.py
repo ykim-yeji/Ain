@@ -42,6 +42,7 @@ class IPContent(BaseModel):
     idealPersonDescriptions: str
     idealPersonGender: str
 
+
 # assistant 생성
 @app.post("/assistants/ideal-people")
 async def add_ideal_person_assistant(
@@ -53,6 +54,7 @@ async def add_ideal_person_assistant(
     except Exception as e:
         logging.error(e)
 
+
 # 이상형 챗봇 생성
 @app.post("/chatbots/ideal-people")
 async def add_ideal_person_chatbot(
@@ -60,14 +62,16 @@ async def add_ideal_person_chatbot(
     try:
         ideal_person_thread_id = IdealPersonThread().add_thread()
 
-        return Response.success(SuccessCode.CREATE_IDEAL_PERSON_CHATBOT, data={"idealPersonThreadId": ideal_person_thread_id})
+        return Response.success(SuccessCode.CREATE_IDEAL_PERSON_CHATBOT,
+                                data={"idealPersonThreadId": ideal_person_thread_id})
     except Exception as e:
         logging.error(e)
+
 
 # 이상형과의 채팅 전송
 @app.post("/chats/ideal-people")
 async def add_ideal_person_chat(
-    add_chat_request: AddIdealPersonChatRequest
+        add_chat_request: AddIdealPersonChatRequest
 ):
     try:
         IdealPersonMessage().send_message(add_chat_request.idealPersonThreadId, add_chat_request.memberChatMessage)
@@ -83,6 +87,7 @@ async def add_ideal_person_chat(
     except Exception as e:
         logging.error(e)
 
+
 # 이상형 챗봇 삭제
 @app.delete("/chatbots/ideal-people")
 async def delete_ideal_person_chatbot(
@@ -97,22 +102,19 @@ async def delete_ideal_person_chatbot(
 
 
 # 채팅 메시지 목록 조회
-# @app.post("/chats/dialogs")
-# async def get_ideal_person_chat(
-#         get_ideal_person_chat: GetIdealPersonChatRequest
-# ):
-#     try:
-#         ideal_person_chat_list = {'id': 'id', 'content':[]}
-#         response_data = GetIdealPersonChatResponse(
-#             chatMessageId=ideal_person_chat_list.id,
-#             chatMessage=ideal_person_chat_list.content[0].text.value,
-#             chatSender=ideal_person_chat_list.role,
-#             chatTime=str(datetime.datetime.fromtimestamp(ideal_person_chat_list.created_at)).replace('T', ' ')
-#         )
-#
-#         return Response.success(SuccessCode.GET_IDEAL_PERSON_CHAT, data=response_data.dict())
-#     except Exception as e:
-#         logging.error(e)
+@app.post("/chats/dialogs")
+async def get_ideal_person_chat(
+        get_ideal_person_chat: GetIdealPersonChatRequest
+):
+    try:
+        chats = IdealPersonMessage().get_dialogs(
+            get_ideal_person_chat.idealPersonThreadId,
+            get_ideal_person_chat.lastChatMessageId
+        )
+
+        return Response.success(SuccessCode.GET_IDEAL_PERSON_CHAT, data={'chats': chats})
+    except Exception as e:
+        logging.error(e)
 
 
 # 이상형 이미지 생성

@@ -39,9 +39,7 @@ public class ChatController {
     public ApiResponse<?> getRecentDialogs(@AuthenticationPrincipal UserPrincipal userPrincipal,
                                             @PathVariable Long idealPersonId,
                                             @RequestBody GetRecentDialogsRequest getRecentDialogsRequest) {
-        return ApiResponse.success(GET_RECENT_DIALOGS, chatService.getRecentDialogs(
-                        userPrincipal.getUserInfoDTO().getMemberId(),
-                        idealPersonId, getRecentDialogsRequest));
+        return ApiResponse.success(GET_RECENT_DIALOGS, chatService.getRecentDialogs(getRecentDialogsRequest));
     }
 
     /**
