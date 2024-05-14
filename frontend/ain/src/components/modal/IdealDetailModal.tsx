@@ -21,6 +21,9 @@ interface Props {
   tempPersonId: number | undefined;
   tempThreadId: string;
   tempImageUrl: string;
+  setIsNicknameModified: any;
+  isNicknameModified: number;
+  setTempNickname: any;
 }
 
 export default function IdealDetailModal({
@@ -30,6 +33,9 @@ export default function IdealDetailModal({
   tempPersonId,
   tempThreadId,
   tempImageUrl,
+  setIsNicknameModified,
+  isNicknameModified,
+  setTempNickname,
 }: Props) {
   const router = useRouter();
   const { accessToken } = useUserStore();
@@ -41,6 +47,8 @@ export default function IdealDetailModal({
     idealDetailModalOpen,
     setIdealDetailModalFalse,
     idealDropDown,
+    hideIdealList,
+    setHideIdealListFalse,
     setIdealDropDownTrue,
     setIdealDropDownFalse,
     idealNicknameModalState,
@@ -51,6 +59,7 @@ export default function IdealDetailModal({
     selectedIdealName,
     selectedIdealId,
     selectedIdealThreadId,
+    selectedIdealImageUrl,
     setTempIdealName,
     setTempIdealId,
     setTempIdealThreadId,
@@ -92,6 +101,7 @@ export default function IdealDetailModal({
       cancelButtonColor: '#afafaf',
       confirmButtonText: '네',
       cancelButtonText: '아니요',
+      heightAuto: false,
     }).then(async (result) => {
       if (result.isConfirmed) {
         console.log(`${API_URL}/ideal-person/${tempPersonId}`);
@@ -113,7 +123,10 @@ export default function IdealDetailModal({
                 title: '이상형이 삭제되었습니다.',
                 icon: 'success',
                 confirmButtonColor: '#ff7169',
+                heightAuto: false,
               });
+              setIsNicknameModified(isNicknameModified + 1);
+              setHideIdealListFalse();
             } else {
               console.log(result.code, '번 에러발생');
             }
@@ -157,11 +170,11 @@ export default function IdealDetailModal({
                     이상형 삭제
                   </button>
                 </div>
-                <div>
-                  <button type='button' onClick={confirmTemp}>
+                {/* <div> */}
+                {/* <button type='button' onClick={confirmTemp}>
                     확인하세요
-                  </button>
-                </div>
+                  </button> */}
+                {/* </div> */}
               </div>
             ) : (
               ''
@@ -171,7 +184,7 @@ export default function IdealDetailModal({
         <div className='flex flex-col justify-center items-center mt-2 w-120 h-144'>
           <img
             className='rounded-[10%] mb-2 mt-4 object-cover'
-            src='https://ih1.redbubble.net/image.319291377.1118/st,small,507x507-pad,600x600,f8f8f8.u2.jpg'
+            src={selectedIdealImageUrl}
             style={{ width: '60%', height: '60%', objectFit: 'cover' }}
           />
           <div className='text-white text-[40px] mt-4'>{tempNickname}</div>
@@ -200,6 +213,9 @@ export default function IdealDetailModal({
                   tempNickname={tempNickname}
                   tempFullName={tempFullName}
                   tempPersonId={tempPersonId}
+                  setIsNicknameModified={setIsNicknameModified}
+                  isNicknameModified={isNicknameModified}
+                  setTempNickname={setTempNickname}
                 />
               </div>
             </div>

@@ -19,10 +19,7 @@ const useIdealStore = create(
       selectedIdealId: 0,
       selectedIdealThreadId: '',
       selectedIdealImageUrl: '',
-      setTempIdealName: (name: string) =>
-        set({
-          selectedIdealName: name,
-        }),
+      setTempIdealName: (name: string) => set({ selectedIdealName: name }),
       setTempIdealId: (id: number) => set({ selectedIdealId: id }),
       setTempIdealThreadId: (threadId: string) => set({ selectedIdealThreadId: threadId }),
       setTempIdealImageUrl: (imageUrl: string) => set({ selectedIdealImageUrl: imageUrl }),
