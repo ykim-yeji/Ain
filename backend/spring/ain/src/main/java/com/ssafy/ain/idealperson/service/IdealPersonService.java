@@ -7,7 +7,7 @@ public interface IdealPersonService {
 
     void modifyRankingOfIdealPeople(Long memberId, Long[] modifyRankingOfIdealPeopleRequest);
 
-    GetNameOfIdealPersonResponse getNameOfIdealPerson(GetNameOfIdealPersonRequest getNameOfIdealPersonRequest);
+    GetNameOfIdealPersonResponse getNameOfIdealPerson(String getNameOfIdealPersonRequest);
 
     void addIdealPerson(Long memberId, AddIdealPersonRequest addIdealPersonRequest);
 

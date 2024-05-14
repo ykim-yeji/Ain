@@ -32,9 +32,9 @@ public class IdealPersonController {
     }
 
     @GetMapping("/names")
-    public ApiResponse<?> getNameOfIdealPerson(@RequestBody GetNameOfIdealPersonRequest getNameOfIdealPersonRequest) {
+    public ApiResponse<?> getNameOfIdealPerson(@RequestParam String idealPersonGender) {
         return ApiResponse.success(SuccessCode.GET_NAME_OF_IDEAL_PERSON,
-                idealPersonService.getNameOfIdealPerson(getNameOfIdealPersonRequest));
+                idealPersonService.getNameOfIdealPerson(idealPersonGender));
     }
 
     @PostMapping("")

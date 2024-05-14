@@ -32,6 +32,7 @@ public enum ErrorCode {
     NOT_EXISTS_IDEAL_PERSON_NICKNAME(BAD_REQUEST, "이상형 닉네임을 입력해주세요!"),
     INVALID_SAME_IDEAL_PERSON_NICKNAME(BAD_REQUEST, "이미 해당 닉네임을 사용중입니다!"),
     INVALID_IDEAL_PERSON_RANKINGS_DUPLICATION(BAD_REQUEST, "idealPersonRankings의 값들 중 서로 중복된 pk가 존재합니다!"),
+    INVALID_IDEAL_PERSON_GENDER(BAD_REQUEST, "이상형 성별 정보를 입력해주세요! (MALE 또는 FEMALE)"),
 
     //s3
     NOT_EXISTS_FILE(NOT_FOUND, "file이 존재하지 않습니다!"),

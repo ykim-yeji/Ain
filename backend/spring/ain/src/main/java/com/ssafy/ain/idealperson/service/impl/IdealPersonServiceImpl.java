@@ -73,11 +73,15 @@ public class IdealPersonServiceImpl implements IdealPersonService {
 
     @Override
     @Transactional
-    public GetNameOfIdealPersonResponse getNameOfIdealPerson(GetNameOfIdealPersonRequest getNameOfIdealPersonRequest) {
+    public GetNameOfIdealPersonResponse getNameOfIdealPerson(String idealPersonGender) {
+        if (!"MALE".equals(idealPersonGender) && !"FEMALE".equals(idealPersonGender)) {
+            throw new InvalidException(INVALID_IDEAL_PERSON_GENDER);
+        }
+
         String lastName = lastNameRepository.findRandomLastName().getName();
 
         String firstName = firstNameRepository
-                .findRandomFirstName(getNameOfIdealPersonRequest.getIdealPersonGender()).getName();
+                .findRandomFirstName(idealPersonGender).getName();
 
         return GetNameOfIdealPersonResponse.builder()
                 .idealPersonName(lastName + firstName)
