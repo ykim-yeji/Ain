@@ -3,6 +3,8 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 
+import Swal from 'sweetalert2';
+
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -56,6 +58,12 @@ export default function Header() {
         const result = await res.json();
         console.log('치킨', result);
         console.log('바보', result.message);
+        Swal.fire({
+          title: '로그아웃 되었습니다.',
+          icon: 'success',
+          confirmButtonColor: '#ff7169',
+        });
+        Swal;
         if (result.code === 200) {
           console.log('로그아웃 성공');
           router.push('/');
