@@ -2,11 +2,13 @@
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-import userStore from '@/store/userStore';
+import Swal from 'sweetalert2';
+
 import { useState, useEffect } from 'react';
 
 import { useRouter } from 'next/navigation';
 
+import useUserStore from '@/store/userStore';
 import useModalStore from '@/store/modalStore';
 import useIdealStore from '@/store/idealStore';
 
@@ -18,6 +20,7 @@ interface Props {
   tempFullName: string;
   tempPersonId: number | undefined;
   tempThreadId: string;
+  tempImageUrl: string;
 }
 
 export default function IdealDetailModal({
@@ -26,14 +29,17 @@ export default function IdealDetailModal({
   tempFullName,
   tempPersonId,
   tempThreadId,
+  tempImageUrl,
 }: Props) {
   const router = useRouter();
-  const { accessToken } = userStore();
+  const { accessToken } = useUserStore();
   const koreanRegex = /^[가-힣]*$/;
 
   const {
     headerDropDown,
     setHeaderDropDown,
+    idealDetailModalOpen,
+    setIdealDetailModalFalse,
     idealDropDown,
     setIdealDropDownTrue,
     setIdealDropDownFalse,
@@ -75,54 +81,55 @@ export default function IdealDetailModal({
 
   const deleteMyIdeal = async () => {
     setIdealDropDownFalse();
-    alert('이상형이 삭제되었습니다');
+    // alert('이상형이 삭제되었습니다');
     // sweetAlert를 쓴다면?
-    // Swal.fire({
-    //   title: '이상형을 삭제하시겠습니까?',
-    //   icon: 'warning',
-    //   showCancelButton: true,
-    //   confirmButtonColor: '#ff7169',
-    //   cancelButtonColor: '#afafaf',
-    //   confirmButtonText: '네',
-    //   cancelButtonText: '아니요',
-    // }).then(async (result) => {
-    //   if (result.isConfirmed) {
-    //     try {
-    //       const response = await fetch(
-    //         `${process.env.NEXT_PUBLIC_API_URL}`,
-    //         {
-    //           method: 'DELETE',
-    //           headers: {
-    //             // authorization,
-    //           },
-    //         },
-    //       );
-    //       if (response.ok) {
-    //         router.push(`/chat`);
-    //       } else {
-    //         // Swal.fire({
-    //         //   title: '이상형 삭제를 실패하였습니다.',
-    //         //   icon: 'error',
-    //         //   confirmButtonColor: '#ff7169',
-    //         // });
-    //         alert("이상형 삭제 실패")
-    //       }
-    //     } catch (error) {
-    //       /* empty */
-    //     }
-    //     Swal.fire({
-    //       title: '이상형이 삭제되었습니다.',
-    //       icon: 'success',
-    //       confirmButtonColor: '#ff7169',
-    //     });
-    //   }
-    // });
-    // };
+
+    Swal.fire({
+      title: '이상형을 삭제하시겠습니까?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#ff7169',
+      cancelButtonColor: '#afafaf',
+      confirmButtonText: '네',
+      cancelButtonText: '아니요',
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        console.log(`${API_URL}/ideal-person/${tempPersonId}`);
+        console.log(accessToken);
+        try {
+          const response = await fetch(`${API_URL}/ideal-people/${tempPersonId}`, {
+            method: 'DELETE',
+            headers: {
+              Authorization: `Bearer ` + accessToken,
+            },
+          });
+          if (response.ok) {
+            const result = await response.json();
+            console.log(result);
+            // router.push(`/chat`);
+            if (result.code === 200) {
+              setIdealDetailModalFalse();
+              Swal.fire({
+                title: '이상형이 삭제되었습니다.',
+                icon: 'success',
+                confirmButtonColor: '#ff7169',
+              });
+            } else {
+              console.log(result.code, '번 에러발생');
+            }
+          } else {
+            alert('이상형 삭제 실패');
+            return;
+          }
+        } catch (error) {
+          return;
+        }
+      }
+    });
   };
 
   return (
     <div>
-      {/* <div className='fixed bottom-1/2 transform -translate-x-1/2 translate-y-1/2 flex flex-col'> */}
       <div className='fixed bottom-1/2 transform -translate-x-1/2 translate-y-1/2 flex flex-col'>
         <div className='flex justify-between mt-4'>
           <img onClick={closeModal} className='ml-[20%] cursor-pointer' src='./icon/back_icon.svg' />
