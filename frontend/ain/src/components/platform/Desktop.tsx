@@ -12,7 +12,7 @@ export const DesktopPage = () => {
   const [idealPersons, setIdealPersons] = useState<IdealPerson[] | null>(null);
   const [selectedIdealPersonImage, setSelectedIdealPersonImage] = useState('');
   const { videoRef, isCameraOn, startCamera, stopCamera } = useCamera();
-  const { image, setImage, takePicture } = usePhotoCapture(videoRef, selectedIdealPersonImage);
+  const { image, setImage, takePicture } = usePhotoCapture(videoRef, selectedIdealPersonImage, setSelectedIdealPersonImage);
   const [isPictureTaken, setIsPictureTaken] = useState(false);
   const [idealPersonCount, setIdealPersonCount] = useState<number | null>(null);
   const [showIntro, setShowIntro] = useState(true);
@@ -177,6 +177,7 @@ export const DesktopPage = () => {
   return (
     <div className="flex flex-col justify-center items-center space-y-10" style={{ height: "calc(100vh - 65px - 68px)", overflowY: "auto" }}>
       <div className="relative w-[75%]" style={{ border: isCameraOn ? '4px solid white' : 'none' }}>
+        
         {image ? (
           <img src={image} className="w-full" alt="Captured" /> // Captured image
         ) : (
