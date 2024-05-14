@@ -6,6 +6,6 @@ import com.ssafy.ain.global.dto.OpenFeignResponse;
 
 public interface ChatService {
     AddIdealPersonChatResponse addIdealPersonChat(Long memberId, Long idealPersonId, AddIdealPersonChatRequest addIdealPersonChatRequest);
-    GetRecentDialogsResponse getRecentDialogs(Long memberId, Long idealPersonId, GetRecentDialogsRequest getRecentDialogsRequest);
+    GetRecentDialogsResponse getRecentDialogs(GetRecentDialogsRequest getRecentDialogsRequest);
     void deleteIdealPersonChat(Long memberId, Long idealPersonId);
 }

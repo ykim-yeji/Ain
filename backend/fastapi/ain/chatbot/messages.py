@@ -5,7 +5,7 @@ from datetime import datetime, timedelta, timezone
 
 from openai import OpenAI
 from dotenv import load_dotenv
-from chatbot.dto.ChatDTO import AddIdealPersonChatRequest, IdealPersonReplyChatResponse
+from chatbot.dto.ChatDTO import AddIdealPersonChatRequest, IdealPersonReplyChatResponse, GetIdealPersonChatResponse
 
 # 로깅 설정
 logging.basicConfig(level=logging.INFO)
@@ -89,3 +89,22 @@ class IdealPersonMessage:
         chat_korea_time = chat_utc_time.replace(tzinfo=timezone.utc).astimezone(korea_timezone)
 
         return chat_korea_time.strftime('%Y-%m-%d %H:%M')
+
+    # 메세지 조회
+    def get_dialogs(self, thread_id, last_chat_id):
+        if last_chat_id is None:
+            thread_messages = self.client.beta.threads.messages.list(thread_id, limit=3).data
+        else:
+            thread_messages = self.client.beta.threads.messages.list(thread_id, limit=3, after=last_chat_id).data
+
+        response = []
+        for thread_message in thread_messages:
+            response.append(GetIdealPersonChatResponse(
+                chatMessageId=thread_message.id,
+                chatMessage=thread_message.content[0].text.value,
+                chatSender=thread_message.role,
+                chatTime=self.convert_time(thread_message.created_at)
+            ))
+
+        response.reverse()
+        return response
