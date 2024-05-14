@@ -31,7 +31,7 @@ public class IdealPersonController {
         return ApiResponse.success(SuccessCode.MODIFY_RANKING_OF_IDEAL_PEOPLE);
     }
 
-    @PostMapping("/names")
+    @GetMapping("/names")
     public ApiResponse<?> getNameOfIdealPerson(@RequestBody GetNameOfIdealPersonRequest getNameOfIdealPersonRequest) {
         return ApiResponse.success(SuccessCode.GET_NAME_OF_IDEAL_PERSON,
                 idealPersonService.getNameOfIdealPerson(getNameOfIdealPersonRequest));
