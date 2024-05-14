@@ -190,9 +190,9 @@ export default function Page() {
     }
   }, [isNewFetch, accessToken, isNicknameModified]);
 
-  if (listData && listData.idealPeople && listData.idealPeople.length === 0) {
-    return <CreateIdealPersonPage />;
-  }
+  // if (listData && listData.idealPeople && listData.idealPeople.length === 0) {
+  //   return <CreateIdealPersonPage />;
+  // }
 
   const changeIdealList = async () => {
     try {
@@ -328,10 +328,11 @@ export default function Page() {
 
   return (
     <div className='overflow-auto mt-[65px] mb-[68px]'>
-      {!hideIdealList && (
+      {!hideIdealList && listData && listData.idealPeople && (
         <DragDropContext onDragStart={onDragStart} onDragEnd={onDragEnd}>
-          {originNickname && <div className='text-xl text-white flex mt-2 mb-4 px-4'>{originNickname}님의 아인</div>}
-
+          {listData && listData.idealPeople.length > 0 && originNickname && (
+            <div className='text-xl text-white flex mt-2 mb-4 px-4'>{originNickname}님의 아인</div>
+          )}
           {listData &&
             listData.idealPeople &&
             Array.from({ length: Math.ceil(listData.idealPeople.length / 2) }, (colIndex, rowIndex) => (
@@ -390,7 +391,7 @@ export default function Page() {
             ))}
         </DragDropContext>
       )}
-
+      {listData && listData.idealPeople && listData.idealPeople.length === 0 && <CreateIdealPersonPage />}
       {idealDetailModalOpen && (
         <div className=''>
           <IdealDetailModal
