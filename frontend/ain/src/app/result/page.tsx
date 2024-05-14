@@ -55,7 +55,11 @@ export default function ResultPage() {
         } catch (error) {
             console.error('API request failed: ', error);
         }
-    }}
+    } else {
+        router.push('/login')
+    }
+
+}
 
 
     return <div className="relative mt-[65px] mb-[68px] w-full h-full flex flex-col justify-evenly items-center">
