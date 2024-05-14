@@ -65,7 +65,7 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests(
                         (request) -> request
-                                .requestMatchers("/**", "/auth/reissue", "/test/**").permitAll()
+                                .requestMatchers("/", "/auth/reissue", "/test/**").permitAll()
                                 .requestMatchers("/ideal-people/names").permitAll()
                                 .anyRequest().authenticated()
                 )
