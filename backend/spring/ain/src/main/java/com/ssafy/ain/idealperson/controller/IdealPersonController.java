@@ -62,7 +62,7 @@ public class IdealPersonController {
         return ApiResponse.success(SuccessCode.MODIFY_IDEAL_PERSON_NICKNAME);
     }
 
-    @GetMapping("/ideal-people/count")
+    @GetMapping("/count")
     public ApiResponse<?> getIdealPersonCount(@AuthenticationPrincipal UserPrincipal userPrincipal) {
         return ApiResponse.success(SuccessCode.GET_IDEAL_PERSON_COUNT,
                 idealPersonService.getIdealPersonCount(userPrincipal.getUserInfoDTO()
