@@ -91,13 +91,10 @@ public class IdealPersonServiceImpl implements IdealPersonService {
     @Override
     @Transactional
     public void addIdealPerson(Long memberId, AddIdealPersonRequest addIdealPersonRequest) {
-        // s3 호출 && url 받기  --> url
         String idealPersonImageUrl = s3Service.upload(addIdealPersonRequest.getIdealPersonImage());
 
-        // /fast/chatbots/ideal-people 호출 후 threadId 받기 --> threadId
         String idealPersonThreadId = chatBotService.addIdealPersonChatBot().getIdealPersonThreadId();
 
-        // 해당 memberId에 있는 이상형들 랭크+1
         List<IdealPerson> idealPeople = idealPersonRepository.findIdealPeopleByMemberIdOrderByRanking(memberId);
         for (IdealPerson idealPerson : idealPeople)
             idealPerson.updateRanking(idealPerson.getRanking() + 1);
@@ -109,7 +106,6 @@ public class IdealPersonServiceImpl implements IdealPersonService {
     @Override
     @Transactional
     public void removeIdealPerson(Long memberId, Long idealPersonId) {
-        // memberId, idealPersonId 존재 여부 검사 필요
         List<IdealPerson> idealPeople = idealPersonRepository.findIdealPeopleByMemberIdOrderByRanking(memberId);
 
         boolean rankDownChecker = false;
