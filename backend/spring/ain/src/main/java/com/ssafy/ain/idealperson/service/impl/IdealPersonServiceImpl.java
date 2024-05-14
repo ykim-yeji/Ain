@@ -1,6 +1,7 @@
 package com.ssafy.ain.idealperson.service.impl;
 
 import com.ssafy.ain.chat.service.ChatBotService;
+import com.ssafy.ain.global.exception.InvalidException;
 import com.ssafy.ain.global.exception.NoExistException;
 import com.ssafy.ain.global.util.S3Service;
 import com.ssafy.ain.idealperson.dto.IdealPersonDTO.*;
@@ -16,6 +17,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static com.ssafy.ain.global.constant.ErrorCode.*;
@@ -52,6 +54,16 @@ public class IdealPersonServiceImpl implements IdealPersonService {
     @Transactional
     public void modifyRankingOfIdealPeople(Long memberId, Long[] idealPersonRankings) {
         int len = idealPersonRankings.length;
+        Long[] copyOfIdealPersonRankings = new Long[len];
+        System.arraycopy(idealPersonRankings, 0, copyOfIdealPersonRankings, 0, len);
+        Arrays.sort(copyOfIdealPersonRankings);
+
+        for (int i = 0; i < len - 1; i++) {
+            if (copyOfIdealPersonRankings[i].equals(copyOfIdealPersonRankings[i + 1])) {
+                throw new InvalidException(INVALID_IDEAL_PERSON_RANKINGS_DUPLICATION);
+            }
+        }
+
         for (int i = 0; i < len; i++) {
             IdealPerson idealPerson = idealPersonRepository.findById(idealPersonRankings[i])
                     .orElseThrow(() -> new NoExistException(NOT_EXISTS_IDEAL_PERSON));
