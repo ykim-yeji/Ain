@@ -31,9 +31,10 @@ export const MobilePage = () => {
 
   useEffect(() => {
     if (accessToken) {
+      fetchIdealPersons();
       fetchIdealPersonsCount();
     }
-  }, [accessToken]);
+  }, [accessToken]); 
 
   const handleSavePicture = () => {
     if (image) {
@@ -61,9 +62,8 @@ export const MobilePage = () => {
     setCurrentPage((prevPage) => (prevPage - 1 + totalPages) % totalPages);
   };
 
-  // 이상형 목록 조회
   const fetchIdealPersons = async () => {
-    if (accessToken !== null && accessToken !== undefined && accessToken !== '') {
+    if (accessToken) {
       try {
         const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/ideal-people`, {
           headers: {
@@ -72,7 +72,6 @@ export const MobilePage = () => {
           },
           cache: 'no-store',
           mode: 'cors',
-          // credentials: 'include',
         });
         const data = await response.json();
         if (data.code === 200 && data.status === 'OK') {
@@ -85,7 +84,7 @@ export const MobilePage = () => {
         console.error('이상형 정보 가져오기 실패:', error);
       }
     }
-  };
+  };  
 
   // 이상형 개수 조회
 const fetchIdealPersonsCount = async () => {
