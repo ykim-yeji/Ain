@@ -106,8 +106,12 @@ class IdealPersonMessage:
                 chatTime=self.convert_time(thread_message.created_at)
             ))
 
+        if thread_messages.has_more:
+            isLastChat = False
+        else:
+            isLastChat = True
         chats.reverse()
         return GetIdealPeopleChatsResponse(
             chats=chats,
-            isLastChats=thread_messages.has_more
+            isLastChats=isLastChat
         )
