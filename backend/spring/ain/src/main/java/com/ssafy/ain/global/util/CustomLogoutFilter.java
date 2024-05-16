@@ -64,6 +64,7 @@ public class CustomLogoutFilter extends GenericFilterBean {
 		try {
 			refreshToken = authService.getRefreshTokenFromCookie(request);
 			authService.isTokenExpired(refreshToken, REFRESH_TOKEN);
+			authService.equalTokenCategory(refreshToken, REFRESH_TOKEN);
 		} catch (NoExistException e) {
 
 			request.setAttribute(EXCEPTION, e.getCode());
@@ -72,14 +73,6 @@ public class CustomLogoutFilter extends GenericFilterBean {
 		} catch (InvalidException e) {
 
 			request.setAttribute(EXCEPTION, e.getCode());
-			filterChain.doFilter(request, response);
-			return;
-		}
-
-		String category = jwtUtil.getCategory(refreshToken);
-		if (!category.equals(REFRESH_TOKEN)) {
-
-			request.setAttribute(EXCEPTION, NOT_REFRESH_TOKEN);
 			filterChain.doFilter(request, response);
 			return;
 		}

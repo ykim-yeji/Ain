@@ -38,17 +38,10 @@ public class JWTFilter extends OncePerRequestFilter {
         String accessToken = authorization.split(" ")[1];
         try {
             authService.isTokenExpired(accessToken, ACCESS_TOKEN);
+            authService.equalTokenCategory(accessToken, ACCESS_TOKEN);
         } catch (InvalidException e) {
 
             request.setAttribute(EXCEPTION, e.getCode());
-            filterChain.doFilter(request, response);
-            return;
-        }
-
-        String category = jwtUtil.getCategory(accessToken);
-        if (!category.equals(ACCESS_TOKEN)) {
-
-            request.setAttribute(EXCEPTION, NOT_ACCESS_TOKEN);
             filterChain.doFilter(request, response);
             return;
         }

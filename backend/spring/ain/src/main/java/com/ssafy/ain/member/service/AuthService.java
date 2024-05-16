@@ -11,4 +11,5 @@ public interface AuthService {
 	Cookie createCookie(String name, String value, Long expiredMs);
 	String getRefreshTokenFromCookie(HttpServletRequest request);
 	void isTokenExpired(String token, String category);
+	void equalTokenCategory(String token, String categoryForCheck);
 }

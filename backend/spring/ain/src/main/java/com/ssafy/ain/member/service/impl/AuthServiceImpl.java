@@ -37,12 +37,7 @@ public class AuthServiceImpl implements AuthService {
 	public void getReissuedToken(HttpServletRequest request, HttpServletResponse response) {
 		String refreshToken = getRefreshTokenFromCookie(request);
 		isTokenExpired(refreshToken, REFRESH_TOKEN);
-
-		String category = jwtUtil.getCategory(refreshToken);
-		if (!category.equals(REFRESH_TOKEN)) {
-
-			throw new InvalidException(NOT_REFRESH_TOKEN);
-		}
+		equalTokenCategory(refreshToken, REFRESH_TOKEN);
 
 		if (!refreshTokenRepository.existsById(refreshToken)) {
 
@@ -108,7 +103,8 @@ public class AuthServiceImpl implements AuthService {
 
 	/**
 	 * 토큰이 만료됬는지 확인
-	 * @param token 토큰 (access token 또는 refresh token)
+	 * @param token 토큰
+	 * @param category 토큰 종류 (access token 또는 refresh token)
 	 */
 	@Override
 	public void isTokenExpired(String token, String category) {
@@ -122,6 +118,27 @@ public class AuthServiceImpl implements AuthService {
 			}
 
             throw new InvalidException(errorCode);
+		}
+	}
+
+	/**
+	 * 토큰 종류가 올바른 지 확인
+	 * @param token 토큰
+	 * @param categoryForCheck 토큰 종류 (access token 또는 refresh token)
+	 */
+	@Override
+	public void equalTokenCategory(String token, String categoryForCheck) {
+		String jwtCategory = jwtUtil.getCategory(token);
+		if (!jwtCategory.equals(categoryForCheck)) {
+			ErrorCode errorCode = SERVER_ERROR;
+			if (categoryForCheck.equals(ACCESS_TOKEN)) {
+				errorCode = NOT_ACCESS_TOKEN;
+			}
+			if (categoryForCheck.equals(REFRESH_TOKEN)) {
+				errorCode = NOT_REFRESH_TOKEN;
+			}
+
+			throw new InvalidException(errorCode);
 		}
 	}
 }
