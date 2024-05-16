@@ -27,6 +27,8 @@ import static com.ssafy.ain.global.constant.ErrorCode.*;
 @RequiredArgsConstructor
 public class IdealPersonServiceImpl implements IdealPersonService {
 
+    private static final int MAX_IDEAL_PERSON_SIZE = 10;
+
     private final IdealPersonRepository idealPersonRepository;
     private final FirstNameRepository firstNameRepository;
     private final LastNameRepository lastNameRepository;
@@ -93,7 +95,7 @@ public class IdealPersonServiceImpl implements IdealPersonService {
     @Transactional
     public void addIdealPerson(Long memberId, AddIdealPersonRequest addIdealPersonRequest) {
         if (idealPersonRepository.findIdealPeopleByMemberIdOrderByRanking(memberId)
-                .size() >= 10) {
+                .size() >= MAX_IDEAL_PERSON_SIZE) {
             throw new InvalidException(INVALID_IDEAL_PERSON_COUNT);
         }
 
