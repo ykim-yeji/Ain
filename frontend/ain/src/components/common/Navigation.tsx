@@ -26,6 +26,7 @@ export default function Navigation() {
     idealDetailModalOpen,
     setIdealDetailModalFalse,
     setHideIdealListFalse,
+    setHideIdealListTrue,
     setHeaderDropDownFalse,
   } = modalStore();
 
@@ -86,7 +87,14 @@ export default function Navigation() {
               </div>
             </Link>
           ) : (
-            <div className='flex flex-col cursor-pointer' onClick={needToLoginChat}>
+            <div
+              className='flex flex-col cursor-pointer'
+              onClick={() => {
+                setHeaderDropDownFalse();
+                setIdealDetailModalFalse();
+                setHideIdealListFalse();
+              }}
+            >
               <FontAwesomeIcon style={{ color: 'white' }} icon={faComments} size='xl' />
               <div style={{ color: 'white' }} className='text-sm'>
                 Chat
@@ -95,7 +103,14 @@ export default function Navigation() {
           )}
         </div>
         <div className='flex justify-center'>
-          <Link href='/' onClick={setHeaderDropDownFalse}>
+          <Link
+            href='/'
+            onClick={() => {
+              setHeaderDropDownFalse();
+              setIdealDetailModalFalse();
+              setHideIdealListFalse();
+            }}
+          >
             <div className='flex flex-col cursor-pointer'>
               <FontAwesomeIcon
                 style={{
@@ -131,7 +146,14 @@ export default function Navigation() {
               </div>
             </Link>
           ) : (
-            <div className='flex flex-col cursor-pointer' onClick={needToLoginCamera}>
+            <div
+              className='flex flex-col cursor-pointer'
+              onClick={() => {
+                setHeaderDropDownFalse();
+                setIdealDetailModalFalse();
+                setHideIdealListFalse();
+              }}
+            >
               <FontAwesomeIcon style={{ color: 'white' }} icon={faCamera} size='xl' />
               <div style={{ color: 'white' }} className='text-sm'>
                 Photo
