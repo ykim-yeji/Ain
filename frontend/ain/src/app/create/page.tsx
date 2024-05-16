@@ -3,6 +3,7 @@
 import useCreateStore from '@/store/createStore';
 import { useState } from 'react';
 import Link from 'next/link';
+import Swal from 'sweetalert2';
 
 export default function CreatePage() {
   const [currentNum, setCurrentNum] = useState<number>(1);
@@ -16,7 +17,10 @@ export default function CreatePage() {
     if (genderInput !== null) {
       useCreateStore.setState((state) => ({ mergeInput: faceInput + shapeInput + ectInput, genderInput: genderInput }));
     } else {
-      alert('성별을 선택해 주세요');
+      Swal.fire({
+        text: "이상형의 성별을 입력해주세요.",
+        icon: "question"
+      });
       setCurrentNum(1);
     }
   };

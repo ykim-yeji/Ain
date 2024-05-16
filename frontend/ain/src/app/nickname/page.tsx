@@ -4,6 +4,7 @@ import { ChangeEvent, useState } from "react";
 import { useRouter } from "next/navigation";
 
 import useUserStore from "@/store/userStore";
+import Swal from "sweetalert2";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -53,39 +54,55 @@ export default function Page() {
           const result = await res.json();
 
           if (result.code === 200) {
-            alert("닉네임 등록성공");
+            Swal.fire({
+              icon: "success",
+              title: "닉네임 등록을 성공했습니다!",
+              showConfirmButton: false,
+              timer: 1500
+            });
             router.push("/");
           } else if (result.code === 400) {
-            alert("ERROR_BAD_REQUEST");
+            // alert("ERROR_BAD_REQUEST");
             return;
           } else if (result.code === 401) {
-            alert(
-              "ERROR_UNAUTHORIZED, refreshToken으로 accessToken을 재발급합니다."
-            );
+            // alert(
+            //   "ERROR_UNAUTHORIZED, refreshToken으로 accessToken을 재발급합니다."
+            // );
             // 여기서 토큰재발급 함수를 실행하려고 했는데...
             return;
           } else if (result.code === 403) {
-            alert("ERROR_FORBIDDEN");
+            // alert("ERROR_FORBIDDEN");
             return;
           } else if (result.code === 404) {
-            alert("ERROR_NOT_FOUND");
+            // alert("ERROR_NOT_FOUND");
             return;
           } else {
-            alert("400, 401, 403, 404 제외 에러 발생");
+            // alert("400, 401, 403, 404 제외 에러 발생");
             return;
           }
         } else {
-          alert("닉네임 등록 실패");
-          console.log(res.status);
+          Swal.fire({
+            icon: "error",
+            text: "닉네임 등록에 실패했습니다.",
+          });
+          // console.log(res.status);
           return;
         }
       } catch (error) {
-        alert("에러 발생으로 닉네임 등록 실패");
-        console.log(error);
+        Swal.fire({
+          icon: "error",
+          text: "닉네임 등록에 실패했습니다.",
+        });
+        // console.log(error);
         // throw new Error();
       }
     } else {
-      alert("닉네임은 한글 1~5자 사이로 해주세요.");
+      Swal.fire({
+        icon: "error",
+        text: "닉네임은 한글 1~5자로 설정해주세요.",
+        showConfirmButton: false,
+        timer: 1500
+      });
     }
   };
 

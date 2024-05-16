@@ -4,6 +4,7 @@ import useCreateStore from '@/store/createStore';
 import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import useUserStore from '@/store/userStore';
+import Swal from 'sweetalert2';
 
 export default function ResultPage() {
   const { accessToken } = useUserStore();
@@ -61,12 +62,18 @@ export default function ResultPage() {
         const data = await response.json();
 
         if (data.code == 201) {
+          Swal.fire({
+            icon: "success",
+            title: "아인을 저장했습니다!",
+            showConfirmButton: false,
+            timer: 1500
+          });
           useCreateStore.setState((state) => ({ isSave: false }));
           router.push('/chat');
         }
         
       } catch (error) {
-        console.error('API request failed: ', error);
+        // console.error('API request failed: ', error);
       }
     } else {
       router.push('/login')

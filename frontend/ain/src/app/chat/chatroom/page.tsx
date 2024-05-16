@@ -7,6 +7,7 @@ import useUserStore from '@/store/userStore';
 import useIdealStore from '@/store/idealStore';
 import useModalStore from '@/store/modalStore';
 import { useMessagesStore } from '@/store/chatStore';
+import Swal from 'sweetalert2'
 
 export default function ChatRoomPage() {
   const router = useRouter();
@@ -84,28 +85,46 @@ export default function ChatRoomPage() {
   };
 
   const messageClear = async () => {
-    if (accessToken !== null) {
-      try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/chats/ideal-people/${selectedIdealId}`, {
-          method: 'DELETE',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ` + accessToken,
-          },
-          body: JSON.stringify({ idealPersonThreadId: selectedIdealThreadId }),
-        });
 
-        const data = await response.json();
-        // console.log(data);
-        if (data.code == 200) {
-          alert('채팅내역을 모두 삭제하였습니다');
-          setIsResetModalOpen(false);
-          clearMessages();
-        }
-      } catch (error) {
-        console.error('Failed to send message:', error);
+    Swal.fire({
+      text: "채팅을 전부 삭제하시겠습니까?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "삭제",
+      cancelButtonText: "취소"
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        if (accessToken !== null) {
+          try {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/chats/ideal-people/${selectedIdealId}`, {
+              method: 'DELETE',
+              headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ` + accessToken,
+              },
+              body: JSON.stringify({ idealPersonThreadId: selectedIdealThreadId }),
+            });
+    
+            const data = await response.json();
+            // console.log(data);
+            if (data.code == 200) {
+              Swal.fire({
+                text: "삭제되었습니다!",
+                icon: "success"
+              });
+              setIsResetModalOpen(false);
+              clearMessages();
+            }
+          } catch (error) {
+            console.error('Failed to send message:', error);
+          }
+        }        
       }
-    }
+    });
+
+    
   };
 
   const bringMessages = async () => {

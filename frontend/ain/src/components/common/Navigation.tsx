@@ -11,6 +11,7 @@ import modalStore from '@/store/modalStore';
 import userStore from '@/store/userStore';
 import IdealDetailModal from '../modal/IdealDetailModal';
 import { Router } from 'next/router';
+import Swal from 'sweetalert2';
 
 export default function Navigation() {
   const router = useRouter();
@@ -40,12 +41,18 @@ export default function Navigation() {
   };
 
   const needToLoginChat = () => {
-    alert('채팅을 이용하시려면 로그인해주세요.');
+    Swal.fire({
+      text: "채팅을 이용하시려면 로그인해주세요.",
+      icon: "info"
+    });
     router.push('/login');
   };
 
   const needToLoginCamera = () => {
-    alert('사진촬영을 하시려면 로그인해주세요.');
+    Swal.fire({
+      text: "카메라를 이용하시려면 로그인해주세요.",
+      icon: "info"
+    });
     router.push('/login');
   };
 

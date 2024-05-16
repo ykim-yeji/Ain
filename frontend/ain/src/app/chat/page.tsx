@@ -14,6 +14,8 @@ import IdealDetailModal from '@/components/modal/IdealDetailModal';
 
 import { CreateIdealPersonPage } from '@/components/platform/CreateIdealPerson';
 
+import Swal from 'sweetalert2'
+
 interface IdealPeople {
   idealPersonId: number;
   idealPersonFullName: string;

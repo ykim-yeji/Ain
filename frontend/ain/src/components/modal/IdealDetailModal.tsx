@@ -96,11 +96,6 @@ Props) {
     };
   }, [idealDropDown]);
 
-  const confirmTemp = () => {
-    alert(selectedIdealName);
-    alert(selectedIdealId);
-    alert(selectedIdealThreadId);
-  };
 
   const goToChatroom = () => {
     // setIdealDropDownFalse();
@@ -118,11 +113,9 @@ Props) {
       title: '이상형을 삭제하시겠습니까?',
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonColor: '#ff7169',
-      cancelButtonColor: '#afafaf',
+      cancelButtonColor: '#ff7169',
       confirmButtonText: '네',
       cancelButtonText: '아니요',
-      heightAuto: false,
     }).then(async (result) => {
       if (result.isConfirmed) {
         console.log(`${API_URL}/ideal-person/${tempPersonId}`);
@@ -143,8 +136,6 @@ Props) {
               Swal.fire({
                 title: '이상형이 삭제되었습니다.',
                 icon: 'success',
-                confirmButtonColor: '#ff7169',
-                heightAuto: false,
               });
               setIsNicknameModified(isNicknameModified + 1);
               setHideIdealListFalse();
@@ -152,7 +143,7 @@ Props) {
               console.log(result.code, '번 에러발생');
             }
           } else {
-            alert('이상형 삭제 실패');
+            // alert('이상형 삭제 실패');
             return;
           }
         } catch (error) {

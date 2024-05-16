@@ -8,6 +8,7 @@ import { useRouter } from 'next/navigation';
 
 import useModalStore from '@/store/modalStore';
 import useUserStore from '@/store/userStore';
+import Swal from 'sweetalert2';
 
 export default function Home() {
   const router = useRouter();
@@ -41,7 +42,10 @@ export default function Home() {
       confirmIdealCnt().then(() => {
         if (idealNum !== undefined) {
           if (idealNum === 10) {
-            alert('이상형을 10명이상 생성할 수 없습니다.');
+            Swal.fire({
+              text: "아인은 최대 10명까지 생성 가능합니다!",
+              icon: "warning"
+            });
           } else if (idealNum !== undefined) {
             router.push(`/create`);
           }

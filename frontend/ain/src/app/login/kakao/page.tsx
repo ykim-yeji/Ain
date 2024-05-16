@@ -9,6 +9,7 @@ import useUserStore from '@/store/userStore';
 import useCreateStore from '@/store/createStore';
 
 import { access } from 'fs';
+import Swal from 'sweetalert2';
 
 export default function Page() {
   const param = useSearchParams();
@@ -72,6 +73,12 @@ export default function Page() {
         const data = await response.json();
 
         if (data.code == 201) {
+          Swal.fire({
+            icon: "success",
+            title: "아인을 저장했습니다!",
+            showConfirmButton: false,
+            timer: 1500
+          });
           useCreateStore.setState((state) => ({ isSave: false }));
           router.push('/chat');
         }
@@ -135,7 +142,10 @@ export default function Page() {
       save();
     } else if (idealNum && idealNum >= 10) {
       useCreateStore.setState((state) => ({ isSave: false }));
-      alert('이상형은 최대 10개까지 생성가능합니다')
+      Swal.fire({
+        text: "아인은 최대 10명까지 생성 가능합니다!",
+        icon: "warning"
+      });
     }
 
   }, [idealNum])
