@@ -69,7 +69,7 @@ export const MobilePage = () => {
             "Content-Type": "application/json",
             "Authorization": `Bearer ${accessToken}`,
           },
-          cache: 'no-store',
+          // cache: 'no-store',
           mode: 'cors',
           credentials: 'include',
         });
