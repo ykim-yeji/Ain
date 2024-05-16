@@ -68,7 +68,7 @@ export const DesktopPage = () => {
             "Authorization": `Bearer ${accessToken}`,
           },
           // cache: 'no-store',
-          // mode: 'cors',
+          mode: 'cors',
           // credentials: 'include',
         });
         const data = await response.json();
