@@ -93,9 +93,9 @@ class IdealPersonMessage:
     # 메세지 조회
     def get_dialogs(self, thread_id, last_chat_id):
         if last_chat_id is None:
-            thread_messages = self.client.beta.threads.messages.list(thread_id, limit=10)
+            thread_messages = self.client.beta.threads.messages.list(thread_id, limit=30)
         else:
-            thread_messages = self.client.beta.threads.messages.list(thread_id, limit=10, after=last_chat_id)
+            thread_messages = self.client.beta.threads.messages.list(thread_id, limit=30, after=last_chat_id)
 
         chats = []
         for thread_message in thread_messages.data:
