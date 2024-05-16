@@ -70,8 +70,8 @@ export const MobilePage = () => {
             "Authorization": `Bearer ${accessToken}`,
           },
           // cache: 'no-store',
-          mode: 'cors',
-          credentials: 'include',
+          // mode: 'cors',
+          // credentials: 'include',
         });
         const data = await response.json();
         if (data.code === 200 && data.status === 'OK') {
