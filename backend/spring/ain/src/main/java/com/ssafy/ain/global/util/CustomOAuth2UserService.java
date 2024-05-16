@@ -10,6 +10,7 @@ import com.ssafy.ain.member.constant.MemberStatus;
 import com.ssafy.ain.member.entity.Member;
 import com.ssafy.ain.member.repository.MemberRepository;
 import com.ssafy.ain.member.service.MemberService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
@@ -27,6 +28,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     private final MemberService memberService;
 
     @Override
+    @Transactional
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
         OAuth2User oAuth2User = super.loadUser(userRequest);
         String registrationId = userRequest.getClientRegistration().getRegistrationId();
@@ -44,7 +46,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             isNewmember = true;
         }
         if (member.getStatus() == MemberStatus.DELETE) {
-            member.updateStatus(MemberStatus.LOGIN);
+            member.updateStatus(MemberStatus.SIGNUP);
             isNewmember = true;
         }
 
