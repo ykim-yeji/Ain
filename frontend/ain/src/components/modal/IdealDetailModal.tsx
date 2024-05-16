@@ -4,7 +4,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 import Swal from 'sweetalert2';
 
-import { useState, useEffect } from 'react';
+import { useRef, useState, useEffect } from 'react';
 
 import { useRouter } from 'next/navigation';
 
@@ -86,6 +86,9 @@ Props) {
   };
 
   const goToChatroom = () => {
+    setIdealDropDownFalse();
+    setIdealDetailModalFalse();
+    setHideIdealListFalse();
     router.push('/chat/chatroom');
   };
 
@@ -145,9 +148,9 @@ Props) {
   return (
     <div>
       <div className='fixed bottom-1/2 transform -translate-x-1/2 translate-y-1/2 flex flex-col'>
-        <div className='flex justify-between mt-4'>
-          <img onClick={closeModal} className='ml-[20%] cursor-pointer' src='./icon/back_icon.svg' />
-          <div className='mr-[20%]'>
+        <div className='flex justify-between'>
+          <img onClick={closeModal} className=' cursor-pointer' src='./icon/back_icon.svg' />
+          <div className=''>
             <img onClick={handleDropDown} className='cursor-pointer relative' src='./icon/three_dots.svg' />
             {idealDropDown ? (
               <div className='absolute top-8 right-3'>
@@ -182,12 +185,14 @@ Props) {
             )}
           </div>
         </div>
-        <div className='flex flex-col justify-center items-center mt-2 w-120 h-144'>
-          <img
-            className='rounded-[10%] mb-2 mt-4 object-cover'
-            src={selectedIdealImageUrl}
-            style={{ width: '60%', height: '60%', objectFit: 'cover' }}
-          />
+        <div className='flex flex-col justify-center items-center mt-2 w-120 h-144 '>
+          <div className='justify-center mt-4 bg-white w-160 h-160 rounded-[10%] flex items-center'>
+            <img
+              className=' rounded-[10%] mb-8 mt-8 m-4 object-cover  '
+              src={selectedIdealImageUrl}
+              style={{ width: '100%', height: '80%', objectFit: 'cover' }}
+            />
+          </div>
           <div className='text-white text-[40px] mt-4'>{selectedIdealName}</div>
           <button
             type='button'
@@ -211,12 +216,9 @@ Props) {
               <div className='z-40 absolute h-full w-full '>
                 <IdealNicknameModify
                   closeModal={setIdealNicknameModalState}
-                  // tempNickname={tempNickname}
-                  // tempFullName={tempFullName}
                   tempPersonId={tempPersonId}
                   setIsNicknameModified={setIsNicknameModified}
                   isNicknameModified={isNicknameModified}
-                  // setTempNickname={setTempNickname}
                 />
               </div>
             </div>

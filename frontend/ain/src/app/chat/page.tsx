@@ -62,7 +62,7 @@ export default function Page() {
     setTempIdealImageUrl,
   } = useIdealStore();
 
-  const { accessToken } = useUserStore();
+  const { accessToken, isLogin } = useUserStore();
 
   // const [tempNickname, setTempNickname] = useState<string>('');
   const [tempFullName, setTempFullName] = useState<string>('');
@@ -113,6 +113,16 @@ export default function Page() {
   const onDragStart = () => {
     // console.log('DRAG START');
   };
+
+  useEffect(() => {
+    if (isLogin === false) {
+      const timer = setTimeout(() => {
+        window.location.href = `/login`;
+      }, 3000);
+
+      return () => clearTimeout(timer);
+    }
+  }, []);
 
   useEffect(() => {
     const getMyNickname = async () => {
@@ -196,10 +206,6 @@ export default function Page() {
     }
   }, [isNewFetch, accessToken, isNicknameModified]);
 
-  // if (listData && listData.idealPeople && listData.idealPeople.length === 0) {
-  //   return <CreateIdealPersonPage />;
-  // }
-
   const changeIdealList = async () => {
     try {
       setIsArrayUpdated(isArrayUpdated + 1);
@@ -209,13 +215,9 @@ export default function Page() {
           'Content-Type': 'application/json',
           Authorization: `Bearer ` + accessToken,
         },
-        // body: JSON.stringify({
-        //   idealPersonRankings: idealIdArray,
-        // }),
       });
 
       if (res.ok) {
-        // console.log('fetchIdeal', idealIdArray);
         console.log('이상형 순서 변경 성공');
         setIsNewFetch(isNewFetch + 1);
       } else {
@@ -268,7 +270,7 @@ export default function Page() {
 
   return (
     <div className='overflow-auto mt-[65px] mb-[68px]'>
-      {!hideIdealList && listData && listData.idealPeople && (
+      {isLogin && !hideIdealList && listData && listData.idealPeople && (
         <DragDropContext onDragStart={onDragStart} onDragEnd={onDragEnd}>
           {listData && listData.idealPeople.length > 0 && originNickname && (
             <div className='text-xl text-white flex mt-2 mb-4 px-4'>{originNickname}님의 아인</div>
@@ -306,7 +308,7 @@ export default function Page() {
                               //   key={index}
                             >
                               <img
-                                className='rounded-t-2xl'
+                                className='rounded-t-2xl bg-white'
                                 src={item?.idealPersonImageUrl}
                                 alt='이미지'
                                 height={170}
@@ -331,8 +333,8 @@ export default function Page() {
             ))}
         </DragDropContext>
       )}
-      {listData && listData.idealPeople && listData.idealPeople.length === 0 && <CreateIdealPersonPage />}
-      {idealDetailModalOpen && (
+      {isLogin && listData && listData.idealPeople && listData.idealPeople.length === 0 && <CreateIdealPersonPage />}
+      {isLogin && idealDetailModalOpen && (
         <div>
           <IdealDetailModal
             tempPersonId={tempPersonId}
@@ -340,6 +342,14 @@ export default function Page() {
             isNicknameModified={isNicknameModified}
             setIsNicknameModified={setIsNicknameModified}
           />
+        </div>
+      )}
+      {!isLogin && (
+        <div className='relative mt-[65px] mb-[68px] w-full h-full flex flex-col justify-center items-center'>
+          <div className='text-center text-xl text-white mt-32 leading-relaxed'>
+            채팅 기능은 로그인 후 이용할 수 있습니다.
+          </div>
+          <div className='text-center text-xl text-white mt-2 leading-relaxed'>로그인 페이지로 이동합니다.</div>
         </div>
       )}
     </div>
