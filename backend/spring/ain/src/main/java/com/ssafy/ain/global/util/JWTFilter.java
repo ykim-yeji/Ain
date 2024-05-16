@@ -6,6 +6,8 @@ import static com.ssafy.ain.global.constant.JwtConstant.*;
 
 import com.ssafy.ain.global.dto.UserInfoDTO;
 import com.ssafy.ain.global.dto.UserPrincipal;
+import com.ssafy.ain.global.exception.InvalidException;
+import com.ssafy.ain.member.service.AuthService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -22,6 +24,7 @@ import java.io.IOException;
 public class JWTFilter extends OncePerRequestFilter {
 
     private final JwtUtil jwtUtil;
+    private final AuthService authService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -33,9 +36,11 @@ public class JWTFilter extends OncePerRequestFilter {
         }
 
         String accessToken = authorization.split(" ")[1];
-        if (jwtUtil.isExpired(accessToken)) {
+        try {
+            authService.isTokenExpired(accessToken, ACCESS_TOKEN);
+        } catch (InvalidException e) {
 
-            request.setAttribute(EXCEPTION, EXPIRES_ACCESS_TOKEN);
+            request.setAttribute(EXCEPTION, e.getCode());
             filterChain.doFilter(request, response);
             return;
         }
