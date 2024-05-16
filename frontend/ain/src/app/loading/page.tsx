@@ -46,9 +46,9 @@ export default function LoadingPage() {
   const fetchCharacterName = async () => {
     // 쿼리 파라미터 문자열 생성
     const queryParams = new URLSearchParams({
-      idealPersonGender: genderInput,
+      idealPersonGender: genderInput
     }).toString();
-
+  
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/ideal-people/names?${queryParams}`, {
         method: 'GET',

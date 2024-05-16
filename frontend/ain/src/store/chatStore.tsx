@@ -10,13 +10,18 @@ interface Message {
   interface MessagesStoreState {
     messages: Message[];
     addMessage: (message: Message) => void;
+    addPrevMessages: (newMessages: Message[]) => void; 
     clearMessages: () => void;
   }
 
-const useMessagesStore = create<MessagesStoreState>((set) => ({
+
+  export const useMessagesStore = create<MessagesStoreState>((set) => ({
     messages: [],
     addMessage: (message:Message) => set((state) => ({ messages: [...state.messages, message] })),
+    addPrevMessages: (prevMessages: Message[]) => set((state) => ({ messages: [...prevMessages, ...state.messages] })), 
     clearMessages: () => set({ messages: [] }),
   }))
   
-  export default useMessagesStore
+
+
+
