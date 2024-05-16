@@ -92,6 +92,11 @@ public class IdealPersonServiceImpl implements IdealPersonService {
     @Override
     @Transactional
     public void addIdealPerson(Long memberId, AddIdealPersonRequest addIdealPersonRequest) {
+        if (idealPersonRepository.findIdealPeopleByMemberIdOrderByRanking(memberId)
+                .size() > 10) {
+            throw new InvalidException(INVALID_IDEAL_PERSON_COUNT);
+        }
+
         String idealPersonImageUrl = s3Service.upload(addIdealPersonRequest.getIdealPersonImage());
 
         String idealPersonThreadId = chatBotService.addIdealPersonChatBot().getIdealPersonThreadId();
