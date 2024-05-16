@@ -6,7 +6,10 @@ import jakarta.servlet.http.HttpServletResponse;
 
 public interface AuthService {
 
-	String getReissuedToken(HttpServletRequest request, HttpServletResponse response);
-
+	void getReissuedToken(HttpServletRequest request, HttpServletResponse response);
 	Cookie createCookie(String name, String value, Long expiredMs);
+	String getRefreshTokenFromCookie(HttpServletRequest request);
+	void isTokenExpired(String token, String category);
+	void equalTokenCategory(String token, String categoryForCheck);
+	void existRefreshToken(String refreshToken);
 }

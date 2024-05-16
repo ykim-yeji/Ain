@@ -18,5 +18,5 @@ public class RefreshToken {
 
 	@Id
 	private String refreshToken;
-	private Long memberId; //해당 필드 값으로 데이터를 찾아올 수 있다.
+	private Long memberId;
 }

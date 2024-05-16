@@ -9,11 +9,13 @@ import static org.springframework.http.HttpStatus.*;
 @AllArgsConstructor
 @Getter
 public enum ErrorCode {
+    //기본
+    SERVER_ERROR(INTERNAL_SERVER_ERROR, "서버 에러가 발생했습니다!"),
 
     //인증 및 인가
     NOT_EXISTS_REFRESH_TOKEN(UNAUTHORIZED, "refresh token이 존재하지 않습니다!"),
     EXPIRES_ACCESS_TOKEN(UNAUTHORIZED, "access token이 만료되었습니다!"),
-    EXPIRES_REFRESH_TOKEN(UNAUTHORIZED, "만료된 refresh token입니다!"),
+    EXPIRES_REFRESH_TOKEN(UNAUTHORIZED, "refresh token이 만료되었습니다!"),
     INVALID_OAUTH_PROVIDER(UNAUTHORIZED, "유효하지 않는 로그인 기관입니다!"),
     NOT_REFRESH_TOKEN(BAD_REQUEST, "토큰 유형이 refresh token이 아닙니다!"),
     NOT_ACCESS_TOKEN(BAD_REQUEST, "토큰 유형이 access token이 아닙니다!"),

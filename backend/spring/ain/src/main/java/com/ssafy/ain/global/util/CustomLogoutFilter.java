@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ssafy.ain.global.exception.InvalidException;
+import com.ssafy.ain.global.exception.NoExistException;
 import com.ssafy.ain.member.service.AuthService;
 import jakarta.servlet.http.Cookie;
 import lombok.RequiredArgsConstructor;
@@ -58,46 +60,20 @@ public class CustomLogoutFilter extends GenericFilterBean {
 			return;
 		}
 
-		Cookie[] cookies = request.getCookies();
-		if (cookies == null) {
-
-			request.setAttribute(EXCEPTION, NOT_EXISTS_COOKIE);
-			filterChain.doFilter(request, response);
-			return;
-		}
 		String refreshToken = null;
-		for (Cookie cookie : cookies) {
-			if (REFRESH_TOKEN.equals(cookie.getName())) {
-				refreshToken = cookie.getValue();
-				break;
-			}
-		}
-		if (refreshToken == null) {
+		try {
+			refreshToken = authService.getRefreshTokenFromCookie(request);
+			authService.isTokenExpired(refreshToken, REFRESH_TOKEN);
+			authService.equalTokenCategory(refreshToken, REFRESH_TOKEN);
+			authService.existRefreshToken(refreshToken);
+		} catch (NoExistException e) {
 
-			request.setAttribute(EXCEPTION, NOT_EXISTS_REFRESH_TOKEN);
+			request.setAttribute(EXCEPTION, e.getCode());
 			filterChain.doFilter(request, response);
 			return;
-		}
-		log.info("refreshToken(" + refreshToken + ")");
+		} catch (InvalidException e) {
 
-		if (jwtUtil.isExpired(refreshToken)) {
-
-			request.setAttribute(EXCEPTION, EXPIRES_REFRESH_TOKEN);
-			filterChain.doFilter(request, response);
-			return;
-		}
-
-		String category = jwtUtil.getCategory(refreshToken);
-		if (!category.equals(REFRESH_TOKEN)) {
-
-			request.setAttribute(EXCEPTION, NOT_REFRESH_TOKEN);
-			filterChain.doFilter(request, response);
-			return;
-		}
-
-		if (!refreshTokenRepository.existsById(refreshToken)) {
-
-			request.setAttribute(EXCEPTION, NOT_LOGIN_MEMBER);
+			request.setAttribute(EXCEPTION, e.getCode());
 			filterChain.doFilter(request, response);
 			return;
 		}
