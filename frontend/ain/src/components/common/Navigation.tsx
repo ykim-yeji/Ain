@@ -71,7 +71,14 @@ export default function Navigation() {
 
           {/* 아래는 회원이냐 아니냐에 따라 접근을 막는 코드 */}
           {isLogin === true ? (
-            <Link href='/chat'>
+            <Link
+              href='/chat'
+              onClick={() => {
+                setHeaderDropDownFalse();
+                setIdealDetailModalFalse();
+                setHideIdealListFalse();
+              }}
+            >
               <div
                 className='flex 
  flex-col cursor-pointer'
@@ -90,9 +97,7 @@ export default function Navigation() {
             <div
               className='flex flex-col cursor-pointer'
               onClick={() => {
-                setHeaderDropDownFalse();
-                setIdealDetailModalFalse();
-                setHideIdealListFalse();
+                needToLoginChat();
               }}
             >
               <FontAwesomeIcon style={{ color: 'white' }} icon={faComments} size='xl' />
@@ -133,7 +138,14 @@ export default function Navigation() {
         <div className='flex justify-center'>
           {/* 아래는 회원이냐 아니냐에 따라 접근을 막는 코드 */}
           {isLogin === true ? (
-            <Link href='/photo'>
+            <Link
+              href='/photo'
+              onClick={() => {
+                setHeaderDropDownFalse();
+                setIdealDetailModalFalse();
+                setHideIdealListFalse();
+              }}
+            >
               <div className='flex flex-col cursor-pointer'>
                 <FontAwesomeIcon
                   style={{ color: pathName.startsWith('/photo') ? '#C776E3' : 'white' }}
@@ -149,9 +161,7 @@ export default function Navigation() {
             <div
               className='flex flex-col cursor-pointer'
               onClick={() => {
-                setHeaderDropDownFalse();
-                setIdealDetailModalFalse();
-                setHideIdealListFalse();
+                needToLoginCamera();
               }}
             >
               <FontAwesomeIcon style={{ color: 'white' }} icon={faCamera} size='xl' />
