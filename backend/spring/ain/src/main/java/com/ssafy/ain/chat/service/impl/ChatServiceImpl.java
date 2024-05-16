@@ -17,9 +17,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import static com.ssafy.ain.global.constant.ErrorCode.NOT_EXISTS_IDEAL_PERSON_ID;
 import static com.ssafy.ain.global.constant.ErrorCode.NOT_EXISTS_MEMBER_ID;
 
