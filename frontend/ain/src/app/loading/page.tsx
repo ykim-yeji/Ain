@@ -43,33 +43,6 @@ export default function LoadingPage() {
     }
   };
 
-  // const fetchCharacterName = async () => {
-  //   const requestBody = {
-  //     idealPersonGender: genderInput
-  //   };
-
-  //   try {
-  //     const response = await fetch('https://myain.co.kr/api/ideal-people/names', {
-  //       // const response = await fetch('https://bad7e4c4-8676-4672-86a2-212cf9b3de90.mock.pstmn.io/api/ideal-people/names', {
-  //       method: 'POST',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       },
-  //       body: JSON.stringify(requestBody),
-  //     })
-  //     return response.json()
-
-  //     .then((response): any  => {
-
-  //       const newCharacterName : string = response.data.idealPersonName
-  //       useCreateStore.setState(state => ({ characterName: newCharacterName }))
-
-  //     })
-  //   } catch (error) {
-  //     console.error('API request failed: ', error);
-  //   }
-  // }
-
   const fetchCharacterName = async () => {
     // 쿼리 파라미터 문자열 생성
     const queryParams = new URLSearchParams({

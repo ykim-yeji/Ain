@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
+import { devtools } from 'zustand/middleware';
 
 interface StoreState {
   mergeInput: string;
@@ -8,22 +9,25 @@ interface StoreState {
   imageUrl: string;
   characterName: string;
   imageFile: Blob | null;
+  // imageFile: ArrayBuffer | null;
 }
 
 const useCreateStore = create(
-  persist<StoreState>(
-    (set) => ({
-      mergeInput: '',
-      genderInput: '',
-      mbti: '',
-      imageUrl: '',
-      characterName: '',
-      imageFile: null,
-    }),
-    {
-      name: 'create',
-      storage: createJSONStorage(() => localStorage),
-    }
+  devtools(
+    persist<StoreState>(
+      (set) => ({
+        mergeInput: '',
+        genderInput: '',
+        mbti: '',
+        imageUrl: '',
+        characterName: '',
+        imageFile: null,
+      }),
+      {
+        name: 'create',
+        storage: createJSONStorage(() => localStorage),
+      }
+    )
   )
 );
 

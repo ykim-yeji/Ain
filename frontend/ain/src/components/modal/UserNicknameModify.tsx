@@ -20,7 +20,7 @@ export default function UserNicknameModifyModal({ closeModal }: Props) {
   const [inputValue, setInputValue] = useState<string>('');
   const [originNickname, setOriginNickname] = useState<string>('');
 
-  const { nicknameModalState, setNicknameModalState, setHeaderDropDown } = useModalStore();
+  const { nicknameModalState, setNicknameModalState, setHeaderDropDown, setIsNicknameModified } = useModalStore();
 
   const { accessToken } = useUserStore();
   const koreanRegex = /^[가-힣]*$/;
@@ -91,6 +91,7 @@ export default function UserNicknameModifyModal({ closeModal }: Props) {
 
           if (result.code === 200) {
             alert('닉네임 수정 성공');
+            setIsNicknameModified();
             closeModal();
           } else if (result.code === 400) {
             alert('ERROR_BAD_REQUEST');
