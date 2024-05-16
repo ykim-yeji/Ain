@@ -31,6 +31,7 @@ export default function Header() {
   const {
     headerDropDown,
     setHeaderDropDown,
+    setHeaderDropDownFalse,
     nicknameModalState,
     setNicknameModalState,
     testNum,
@@ -39,7 +40,24 @@ export default function Header() {
     setIdealDropDownFalse,
   } = useModalStore();
 
+  const handleClickOutsideMenu = () => {
+    // headerDropDown가 true일 때만 처리
+    if (headerDropDown) {
+      setHeaderDropDownFalse(); // 드롭다운 상태를 닫음
+    }
+  };
+
   const { isLogin, setIsLogin, deleteAccessToken } = useUserStore();
+
+  useEffect(() => {
+    // 컴포넌트가 마운트되었을 때 전체 문서에 클릭 이벤트 리스너 추가
+    document.addEventListener('click', handleClickOutsideMenu);
+
+    // 컴포넌트가 언마운트될 때 클릭 이벤트 리스너 제거
+    return () => {
+      document.removeEventListener('click', handleClickOutsideMenu);
+    };
+  }, [headerDropDown]);
 
   const imageLoader = ({ src, width, quality }: Props) => {
     const params = [`imwidth = ${width}`];

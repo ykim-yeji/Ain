@@ -79,6 +79,23 @@ Props) {
     }
   };
 
+  const handleClickOutsideMenu = () => {
+    // headerDropDown가 true일 때만 처리
+    if (idealDropDown) {
+      setIdealDropDownFalse(); // 드롭다운 상태를 닫음
+    }
+  };
+
+  useEffect(() => {
+    // 컴포넌트가 마운트되었을 때 전체 문서에 클릭 이벤트 리스너 추가
+    document.addEventListener('click', handleClickOutsideMenu);
+
+    // 컴포넌트가 언마운트될 때 클릭 이벤트 리스너 제거
+    return () => {
+      document.removeEventListener('click', handleClickOutsideMenu);
+    };
+  }, [idealDropDown]);
+
   const confirmTemp = () => {
     alert(selectedIdealName);
     alert(selectedIdealId);
@@ -86,9 +103,9 @@ Props) {
   };
 
   const goToChatroom = () => {
-    setIdealDropDownFalse();
-    setIdealDetailModalFalse();
-    setHideIdealListFalse();
+    // setIdealDropDownFalse();
+    // setIdealDetailModalFalse();
+    // setHideIdealListFalse();
     router.push('/chat/chatroom');
   };
 
