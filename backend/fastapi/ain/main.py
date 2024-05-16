@@ -1,4 +1,5 @@
 import logging
+from datetime import datetime
 
 import uvicorn
 from fastapi import FastAPI
@@ -107,15 +108,15 @@ async def get_ideal_person_chat(
         get_ideal_person_chat: GetIdealPersonChatRequest
 ):
     try:
-        chats = IdealPersonMessage().get_dialogs(
+        response_data = IdealPersonMessage().get_dialogs(
             get_ideal_person_chat.idealPersonThreadId,
             get_ideal_person_chat.lastChatMessageId
         )
 
-        return Response.success(SuccessCode.GET_IDEAL_PERSON_CHAT, data={'chats': chats})
+        return Response.success(SuccessCode.GET_IDEAL_PERSON_CHAT,
+                                data={'chats': response_data.chats, 'isLastChats': response_data.isLastChats})
     except Exception as e:
         logging.error(e)
-
 
 # 이상형 이미지 생성
 @app.post("/ideal-people/images")

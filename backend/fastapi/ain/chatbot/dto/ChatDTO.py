@@ -47,5 +47,6 @@ class GetIdealPersonChatResponse(BaseModel):
     chatTime: str
 
 
-class GetIdealPeopleChatResponse(BaseModel):
-    dialogs: List[GetIdealPersonChatResponse]
+class GetIdealPeopleChatsResponse(BaseModel):
+    chats: List[GetIdealPersonChatResponse]
+    isLastChats: bool

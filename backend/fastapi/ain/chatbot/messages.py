@@ -5,7 +5,7 @@ from datetime import datetime, timedelta, timezone
 
 from openai import OpenAI
 from dotenv import load_dotenv
-from chatbot.dto.ChatDTO import AddIdealPersonChatRequest, IdealPersonReplyChatResponse, GetIdealPersonChatResponse
+from chatbot.dto.ChatDTO import *
 
 # 로깅 설정
 logging.basicConfig(level=logging.INFO)
@@ -93,18 +93,21 @@ class IdealPersonMessage:
     # 메세지 조회
     def get_dialogs(self, thread_id, last_chat_id):
         if last_chat_id is None:
-            thread_messages = self.client.beta.threads.messages.list(thread_id, limit=3).data
+            thread_messages = self.client.beta.threads.messages.list(thread_id, limit=10)
         else:
-            thread_messages = self.client.beta.threads.messages.list(thread_id, limit=3, after=last_chat_id).data
+            thread_messages = self.client.beta.threads.messages.list(thread_id, limit=10, after=last_chat_id)
 
-        response = []
-        for thread_message in thread_messages:
-            response.append(GetIdealPersonChatResponse(
+        chats = []
+        for thread_message in thread_messages.data:
+            chats.append(GetIdealPersonChatResponse(
                 chatMessageId=thread_message.id,
                 chatMessage=thread_message.content[0].text.value,
                 chatSender=thread_message.role,
                 chatTime=self.convert_time(thread_message.created_at)
             ))
 
-        response.reverse()
-        return response
+        chats.reverse()
+        return GetIdealPeopleChatsResponse(
+            chats=chats,
+            isLastChats=thread_messages.has_more
+        )
