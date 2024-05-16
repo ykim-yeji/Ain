@@ -8,6 +8,7 @@ import { useRouter } from 'next/navigation';
 import useUserStore from '@/store/userStore';
 
 import useModalStore from '@/store/modalStore';
+import Swal from 'sweetalert2';
 
 interface Props {
   closeModal: any;
@@ -43,16 +44,16 @@ export default function UserNicknameModifyModal({ closeModal }: Props) {
             if (result.code === 200) {
               setOriginNickname(result.data.memberNickname);
             } else if (result.code === 401) {
-              alert('ERROR UNAUTHORIZED');
+              // alert('ERROR UNAUTHORIZED');
               return;
             } else if (result.code === 403) {
-              alert('ERROR FORBIDDEN');
+              // alert('ERROR FORBIDDEN');
               return;
             } else if (result.code === 404) {
-              alert('ERROR NOT FOUND');
+              // alert('ERROR NOT FOUND');
               return;
             } else {
-              alert('401, 403, 404 이외 에러 발생');
+              // alert('401, 403, 404 이외 에러 발생');
               return;
             }
           } else {
@@ -60,7 +61,7 @@ export default function UserNicknameModifyModal({ closeModal }: Props) {
             return;
           }
         } catch (error) {
-          alert('에러발생으로 닉네임 정보 불러오기 실패');
+          // alert('에러발생으로 닉네임 정보 불러오기 실패');
           console.log(error);
         }
       };
@@ -90,38 +91,52 @@ export default function UserNicknameModifyModal({ closeModal }: Props) {
           const result = await res.json();
 
           if (result.code === 200) {
-            alert('닉네임 수정 성공');
+            Swal.fire({
+              icon: "success",
+              title: "닉네임 수정에 성공했습니다!",
+              showConfirmButton: false,
+              timer: 1500
+            });
             setIsNicknameModified();
             closeModal();
           } else if (result.code === 400) {
-            alert('ERROR_BAD_REQUEST');
+            // alert('ERROR_BAD_REQUEST');
             return;
           } else if (result.code === 401) {
-            alert('ERROR_UNAUTHORIZED');
+            // alert('ERROR_UNAUTHORIZED');
             return;
           } else if (result.code === 403) {
-            alert('ERROR_FORBIDDEN');
+            // alert('ERROR_FORBIDDEN');
             return;
           } else if (result.code === 404) {
-            alert('ERROR_NOT_FOUND');
+            // alert('ERROR_NOT_FOUND');
             return;
           } else {
-            alert('400, 401, 403, 404 제외 에러 발생');
+            // alert('400, 401, 403, 404 제외 에러 발생');
             console.log(result);
             return;
           }
         } else {
-          alert('닉네임 수정 실패');
+          Swal.fire({
+            icon: "error",
+            text: "닉네임 등록에 실패했습니다.",
+          });
           console.log(res.status);
           return;
         }
       } catch (error) {
-        alert('에러 발생으로 닉네임 수정 실패');
+        Swal.fire({
+          icon: "error",
+          text: "닉네임 등록에 실패했습니다.",
+        });
         console.log(error);
         // throw new Error();
       }
     } else {
-      alert('닉네임은 한글 1~5자 사이로 해주세요.');
+      Swal.fire({
+        icon: "error",
+        text: "닉네임은 한글 1~5자로 설정해주세요.",
+      });
     }
   };
 

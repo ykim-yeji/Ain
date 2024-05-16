@@ -9,6 +9,7 @@ import userStore from '@/store/userStore';
 
 import useModalStore from '@/store/modalStore';
 import useIdealStore from '@/store/idealStore';
+import Swal from 'sweetalert2';
 
 interface Props {
   closeModal: any;
@@ -67,13 +68,21 @@ Props) {
           const result = await res.json();
 
           if (result.code === 200) {
-            alert('이상형의 이름을 변경했습니다.');
+            Swal.fire({
+              icon: "success",
+              title: "아인의 별명 변경을 성공했습니다!",
+              showConfirmButton: false,
+              timer: 1500
+            });
             setIdealNicknameModalState();
             setIsNicknameModified(isNicknameModified + 1);
             setTempIdealName(inputValue);
           } else if (result.code === 400) {
             console.log('REEEE', result);
-            alert('현재 이상형 닉네임과 동일합니다');
+            Swal.fire({
+              icon: "warning",
+              text: "현재 아인의 별명과 동일합니다",
+            });
           } else {
             console.log(result);
             console.log(result.code, '번 에러발생');
@@ -87,7 +96,10 @@ Props) {
         console.log('에러발생으로 실패');
       }
     } else {
-      alert('이상형의 별명은 한글 1~5자 사이로 해주세요.');
+      Swal.fire({
+        icon: "error",
+        text: "별명은 한글 1~5자로 설정해주세요.",
+      });
     }
   };
 

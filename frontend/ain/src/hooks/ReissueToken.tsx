@@ -28,12 +28,12 @@ export default function Page() {
             setAccessToken(tempAccessToken);
           }
         } else {
-          alert('실패');
+          // alert('실패');
           console.log(res.status);
           console.log('대실패');
         }
       } catch (error) {
-        alert('실패2');
+        // alert('실패2');
         console.log(error);
         return;
       }
