@@ -56,17 +56,20 @@ export default function Header() {
       if (res.ok) {
         // alert('성공');
         const result = await res.json();
-        console.log('치킨', result);
-        console.log('바보', result.message);
+        // console.log('치킨', result);
+        // console.log('바보', result.message);
         Swal.fire({
           title: '로그아웃 되었습니다.',
           icon: 'success',
           confirmButtonColor: '#ff7169',
           heightAuto: false,
         });
+        router.push('/');
+
         if (result.code === 200) {
           console.log('로그아웃 성공');
-          router.push('/');
+
+          // router.push('/');
         } else if (result.code === 401) {
           console.log('바보', result);
           return;
