@@ -45,14 +45,18 @@ export default function Page() {
     hideIdealList,
     setHideIdealListTrue,
     setHideIdealListFalse,
+    isNicknameModified,
+    setIsNicknameModified,
   } = useModalStore();
 
   const {
     selectedIdealName,
+    selectedIdealFullName,
     selectedIdealId,
     selectedIdealThreadId,
     selectedIdealImageUrl,
     setTempIdealName,
+    setTempIdealFullName,
     setTempIdealId,
     setTempIdealThreadId,
     setTempIdealImageUrl,
@@ -60,14 +64,14 @@ export default function Page() {
 
   const { accessToken } = useUserStore();
 
-  const [tempNickname, setTempNickname] = useState<string>('');
+  // const [tempNickname, setTempNickname] = useState<string>('');
   const [tempFullName, setTempFullName] = useState<string>('');
   const [tempPersonId, setTempPersonId] = useState<number>();
   const [tempThreadId, setTempThreadId] = useState<string>('');
   const [tempImageUrl, setTempImageUrl] = useState<string>('');
   const [idealIdArray, setIdealIdArray] = useState<number[]>([]);
   const [tempTestArray, setTempTestArray] = useState<IdealPeople[]>([]);
-  const [isNicknameModified, setIsNicknameModified] = useState<number>(0);
+  // const [isNicknameModified, setIsNicknameModified] = useState<number>(0);
 
   const [originNickname, setOriginNickname] = useState<string>('');
 
@@ -94,12 +98,13 @@ export default function Page() {
     }
 
     setIdealDropDownFalse();
-    setTempNickname(nickname);
+    // setTempNickname(nickname);
     setTempFullName(fullname);
     setTempPersonId(personId);
     setTempThreadId(threadId);
 
     setTempIdealName(nickname);
+    setTempIdealFullName(fullname);
     setTempIdealId(personId);
     setTempIdealThreadId(threadId);
     setTempIdealImageUrl(imageUrl);
@@ -155,7 +160,7 @@ export default function Page() {
       if (accessToken !== null && accessToken !== undefined && accessToken !== '') {
         try {
           const res = await fetch(`${API_URL}/ideal-people`, {
-            cache: 'no-store',
+            // cache: "no-store",
             headers: {
               Authorization: `Bearer ` + accessToken,
             },
@@ -167,6 +172,7 @@ export default function Page() {
             console.log('>>>', result);
             // console.log('결과', result);
             if (result.code === 200) {
+              console.log(result.data);
               setListData(result.data);
             } else {
               alert(result.code);
@@ -225,18 +231,11 @@ export default function Page() {
       return;
     }
 
-    // console.log('!!!!!!!!!!!!', listData);
-
     const sourceIndex = source.index;
     console.log('SOURCE', sourceIndex + 1);
     const destinationIndex = destination.index;
     console.log('DESTI', destinationIndex + 1);
 
-    // const draggedItem = listData?.idealPeople[sourceIndex];
-    // const destinationItem = listData?.idealPeople[destinationIndex];
-
-    // console.log('드래그드', draggedItem?.idealPersonFullName);
-    // console.log('데스티네이션', destinationItem?.idealPersonFullName);
     console.log('기존 어레이!!');
     console.log(idealIdArray);
     if (listData && listData.idealPeople) {
@@ -251,63 +250,8 @@ export default function Page() {
       console.log('변경된 어레이!!');
       console.log(idealIdArray);
       changeIdealList();
-
-      // const testtest = () => {
-      //   const tempItem = [];
-
-      //   for (let i = 0; i < listData.idealPeople.length; i++) {
-      //     if (i !== sourceIndex && i !== destinationIndex) {
-      //       tempItem[i] = listData.idealPeople[i];
-      //     } else if (i === sourceIndex) {
-      //       tempItem[sourceIndex] = listData.idealPeople[destinationIndex];
-      //       // console.log('출발', sourceIndex);
-      //       // console.log('도착', destinationIndex);
-      //     } else if (i === destinationIndex) {
-      //       tempItem[destinationIndex] = listData.idealPeople[sourceIndex];
-      //       // console.log('출발2', destinationIndex);
-      //       // console.log('도착2', sourceIndex);
-      //     }
-      //   }
-
-      //   // 잘 바뀜
-      //   console.log('임시배열', tempItem);
-
-      //   // const updatedListData: ListData = {
-      //   //   idealPeople: tempItem,
-      //   // };
-
-      //   const updatedListData: ListData = {
-      //     idealPeople: tempItem,
-      //   };
-
-      //   setTempTestArray(tempItem);
-
-      //   // 잘 바뀜
-      //   console.log('업데이트배열', updatedListData);
-
-      //   console.log('기존배열', listData);
-      //   return updatedListData;
-      // };
-      // const tempIdArray = tempTestArray.map((person) => person.idealPersonId);
-      // setIdealIdArray(tempIdArray);
-      // // setListData(testtest);
-
-      // setIsArrayUpdated(isArrayUpdated + 1);
-      // changeIdealList();
     }
-
-    // setIsArrayUpdated(isArrayUpdated + 1);
-    // changeIdealList();
   };
-
-  // useEffect(() => {
-  //   if (tempTestArray !== null) {
-  //     const tempIdArray = tempTestArray.map((person) => person.idealPersonId);
-  //     setIdealIdArray(tempIdArray);
-  //   }
-
-  //   console.log('idealIdArray!!!!', idealIdArray);
-  // }, [isArrayUpdated, listData, tempTestArray]);
 
   useEffect(() => {
     const animation = requestAnimationFrame(() => setEnabled(true));
@@ -321,10 +265,6 @@ export default function Page() {
   if (!enabled) {
     return null;
   }
-
-  // if (listData && listData.idealPeople && listData.idealPeople.length === 0) {
-  //   return <CreateIdealPersonPage />;
-  // }
 
   return (
     <div className='overflow-auto mt-[65px] mb-[68px]'>
@@ -393,17 +333,12 @@ export default function Page() {
       )}
       {listData && listData.idealPeople && listData.idealPeople.length === 0 && <CreateIdealPersonPage />}
       {idealDetailModalOpen && (
-        <div className=''>
+        <div>
           <IdealDetailModal
-            tempNickname={tempNickname}
-            tempFullName={tempFullName}
             tempPersonId={tempPersonId}
-            tempThreadId={tempThreadId}
-            tempImageUrl={tempImageUrl}
             closeModal={handleModalTest}
             isNicknameModified={isNicknameModified}
             setIsNicknameModified={setIsNicknameModified}
-            setTempNickname={setTempNickname}
           />
         </div>
       )}

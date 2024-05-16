@@ -22,6 +22,8 @@ interface StoreState {
   hideIdealList: boolean;
   setHideIdealListTrue: () => void;
   setHideIdealListFalse: () => void;
+  isNicknameModified: number;
+  setIsNicknameModified: () => void;
 }
 
 const useModalStore = create<StoreState>((set, get) => ({
@@ -72,6 +74,12 @@ const useModalStore = create<StoreState>((set, get) => ({
   },
   setHideIdealListFalse: () => {
     set({ hideIdealList: false });
+  },
+  isNicknameModified: 0,
+  setIsNicknameModified: () => {
+    set((state) => ({
+      isNicknameModified: state.isNicknameModified + 1,
+    }));
   },
 }));
 

@@ -8,28 +8,31 @@ import { useRouter } from 'next/navigation';
 import userStore from '@/store/userStore';
 
 import useModalStore from '@/store/modalStore';
+import useIdealStore from '@/store/idealStore';
 
 interface Props {
   closeModal: any;
-  tempNickname: string;
-  tempFullName: string;
+  // tempNickname: string;
+  // tempFullName: string;
   tempPersonId: number | undefined;
   setIsNicknameModified: any;
   isNicknameModified: number;
-  setTempNickname: any;
+  // setTempNickname: any;
 }
 
 export default function IdealNicknameModify({
   closeModal,
-  tempNickname,
-  tempFullName,
+  // tempNickname,
+  // tempFullName,
   tempPersonId,
   setIsNicknameModified,
   isNicknameModified,
-  setTempNickname,
-}: Props) {
+}: // setTempNickname,
+Props) {
   const router = useRouter();
-  const [inputValue, setInputValue] = useState<string>(tempNickname);
+  const { selectedIdealName, selectedIdealFullName, selectedIdealId, setTempIdealName } = useIdealStore();
+  // const [inputValue, setInputValue] = useState<string>(tempNickname);
+  const [inputValue, setInputValue] = useState<string>(selectedIdealName);
   // const [originNickname, setOriginNickname] = useState<string>(tempNickname);
   const [realNickname, setRealNickname] = useState<string>('');
   const [tempModifiedName, setTempModifiedName] = useState<string>('');
@@ -50,7 +53,7 @@ export default function IdealNicknameModify({
   const modifyIdealNickname = async () => {
     if (koreanRegex.test(inputValue) && inputValue !== '' && inputValue !== null) {
       try {
-        const res = await fetch(`${API_URL}/ideal-people/${tempPersonId}/nicknames`, {
+        const res = await fetch(`${API_URL}/ideal-people/${selectedIdealId}/nicknames`, {
           method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',
@@ -67,8 +70,9 @@ export default function IdealNicknameModify({
             alert('이상형의 이름을 변경했습니다.');
             setIdealNicknameModalState();
             setIsNicknameModified(isNicknameModified + 1);
-            setTempNickname(inputValue);
+            setTempIdealName(inputValue);
           } else if (result.code === 400) {
+            console.log('REEEE', result);
             alert('현재 이상형 닉네임과 동일합니다');
           } else {
             console.log(result);
@@ -114,7 +118,8 @@ export default function IdealNicknameModify({
             value={inputValue}
             // value={originNickname}
             style={{ backgroundColor: '#C37CDB' }}
-            placeholder={tempFullName}
+            // placeholder={tempFullName}
+            placeholder={selectedIdealFullName}
             maxLength={5}
             onChange={(e) => handleInputChange(e)}
           />
