@@ -8,12 +8,11 @@ import useUserStore from '@/store/userStore';
 import useModalStore from '@/store/modalStore';
 import useIdealStore from '@/store/idealStore';
 
+import ReissueToken from '@/hooks/ReissueToken';
+
 import IdealDetailModal from '@/components/modal/IdealDetailModal';
 
 import { CreateIdealPersonPage } from '@/components/platform/CreateIdealPerson';
-
-import { DndProvider } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
 
 interface IdealPeople {
   idealPersonId: number;
@@ -64,18 +63,14 @@ export default function Page() {
 
   const { accessToken, isLogin } = useUserStore();
 
-  // const [tempNickname, setTempNickname] = useState<string>('');
   const [tempFullName, setTempFullName] = useState<string>('');
   const [tempPersonId, setTempPersonId] = useState<number>();
   const [tempThreadId, setTempThreadId] = useState<string>('');
   const [tempImageUrl, setTempImageUrl] = useState<string>('');
   const [idealIdArray, setIdealIdArray] = useState<number[]>([]);
   const [tempTestArray, setTempTestArray] = useState<IdealPeople[]>([]);
-  // const [isNicknameModified, setIsNicknameModified] = useState<number>(0);
 
   const [originNickname, setOriginNickname] = useState<string>('');
-
-  // const idealPersonRankings = [12, 11, 10, 9, 8, 7, 6, 5, 4];
 
   const handleModalTest = (
     nickname: string,
@@ -98,7 +93,6 @@ export default function Page() {
     }
 
     setIdealDropDownFalse();
-    // setTempNickname(nickname);
     setTempFullName(fullname);
     setTempPersonId(personId);
     setTempThreadId(threadId);
@@ -110,19 +104,17 @@ export default function Page() {
     setTempIdealImageUrl(imageUrl);
   };
 
-  const onDragStart = () => {
-    // console.log('DRAG START');
-  };
+  const onDragStart = () => {};
 
-  useEffect(() => {
-    if (isLogin === false) {
-      const timer = setTimeout(() => {
-        window.location.href = `/login`;
-      }, 3000);
+  // useEffect(() => {
+  //   if (isLogin === false && accessToken === '') {
+  //     const timer = setTimeout(() => {
+  //       window.location.href = `/login`;
+  //     }, 3000);
 
-      return () => clearTimeout(timer);
-    }
-  }, []);
+  //     return () => clearTimeout(timer);
+  //   }
+  // }, []);
 
   useEffect(() => {
     const getMyNickname = async () => {
@@ -177,13 +169,19 @@ export default function Page() {
           });
 
           if (res.ok) {
-            // console.log(res.status);
             const result = await res.json();
             console.log('>>>', result);
             // console.log('결과', result);
             if (result.code === 200) {
-              console.log(result.data);
+              // console.log(result.data);
               setListData(result.data);
+              // ReissueToken();
+              // setIsNewFetch(isNewFetch + 1);
+              console.log('isNewFetch', isNewFetch);
+            } else if (result.code === 401) {
+              // ReissueToken();
+              // setIsNewFetch(isNewFetch + 1);
+              console.log('isNewFetch', isNewFetch);
             } else {
               alert(result.code);
             }
@@ -206,134 +204,53 @@ export default function Page() {
     }
   }, [isNewFetch, accessToken, isNicknameModified]);
 
-  const changeIdealList = async () => {
-    try {
-      setIsArrayUpdated(isArrayUpdated + 1);
-      const res = await fetch(`${API_URL}/ideal-people/ranks`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ` + accessToken,
-        },
-      });
-
-      if (res.ok) {
-        console.log('이상형 순서 변경 성공');
-        setIsNewFetch(isNewFetch + 1);
-      } else {
-        console.log('이상형 순서 변경 실패');
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const onDragEnd = ({ source, destination }: DropResult) => {
-    if (!destination) {
-      return;
-    }
-
-    const sourceIndex = source.index;
-    console.log('SOURCE', sourceIndex + 1);
-    const destinationIndex = destination.index;
-    console.log('DESTI', destinationIndex + 1);
-
-    console.log('기존 어레이!!');
-    console.log(idealIdArray);
-    if (listData && listData.idealPeople) {
-      const tempPeople = listData.idealPeople[sourceIndex];
-      listData.idealPeople[sourceIndex] = listData.idealPeople[destinationIndex];
-      listData.idealPeople[destinationIndex] = tempPeople;
-
-      for (let i = 0; i < listData.idealPeople.length; i++) {
-        idealIdArray[i] = listData.idealPeople[i].idealPersonId;
-      }
-
-      console.log('변경된 어레이!!');
-      console.log(idealIdArray);
-      changeIdealList();
-    }
-  };
-
-  useEffect(() => {
-    const animation = requestAnimationFrame(() => setEnabled(true));
-
-    return () => {
-      cancelAnimationFrame(animation);
-      setEnabled(false);
-    };
-  }, []);
-
-  if (!enabled) {
-    return null;
-  }
-
   return (
     <div className='overflow-auto mt-[65px] mb-[68px]'>
-      {isLogin && !hideIdealList && listData && listData.idealPeople && (
-        <DragDropContext onDragStart={onDragStart} onDragEnd={onDragEnd}>
-          {listData && listData.idealPeople.length > 0 && originNickname && (
-            <div className='text-xl text-white flex mt-2 mb-4 px-4'>{originNickname}님의 아인</div>
-          )}
-          {listData &&
-            listData.idealPeople &&
-            Array.from({ length: Math.ceil(listData.idealPeople.length / 2) }, (colIndex, rowIndex) => (
-              <Droppable key={`${rowIndex}-${colIndex}`} droppableId={`${rowIndex}-${colIndex}`}>
-                {(provided) => (
-                  <div ref={provided.innerRef} {...provided.droppableProps}>
-                    <div key={rowIndex} className='grid grid-cols-2 gap-8 mb-8 mt-8'>
-                      {listData.idealPeople.slice(rowIndex * 2, rowIndex * 2 + 2).map((item, colIndex) => (
-                        <Draggable
-                          key={item?.idealPersonFullName}
-                          draggableId={`${rowIndex}-${colIndex}`}
-                          index={item?.idealPersonRank}
-                        >
-                          {(provided) => (
-                            <div
-                              ref={provided.innerRef}
-                              {...provided.draggableProps}
-                              {...provided.dragHandleProps}
-                              onClick={() =>
-                                handleModalTest(
-                                  item?.idealPersonNickname,
-                                  item?.idealPersonFullName,
-                                  item?.idealPersonImageUrl,
-                                  item?.idealPersonId,
-                                  item?.idealPersonThreadId,
-                                  item?.idealPersonImageUrl
-                                )
-                              }
-                              className='flex flex-col text-center rounded-2xl h-38 w-38 cursor-pointer'
-                              //   key={item.idealPersonRank}
-                              //   key={index}
-                            >
-                              <img
-                                className='rounded-t-2xl bg-white'
-                                src={item?.idealPersonImageUrl}
-                                alt='이미지'
-                                height={170}
-                                width={170}
-                              />
-                              <div
-                                className='pt-2.5 pb-1.5 text-xl text-white rounded-b-2xl shadow-[0px_3px_5px_0px_rgba(0,0,0,0.3)]'
-                                style={{ backgroundColor: '#BE44E9' }}
-                              >
-                                {item?.idealPersonNickname}
-                              </div>
-                            </div>
-                          )}
-                        </Draggable>
-                      ))}
-                      {/* <button onClick={changeIdealList}>순서변경TEST</button> */}
-                    </div>
-                    {provided.placeholder}
+      {isLogin &&
+        !hideIdealList &&
+        listData &&
+        listData.idealPeople &&
+        listData.idealPeople.length > 0 &&
+        originNickname && (
+          <div>
+            <div className='text-xl text-white flex mt-2 mb-4 px-4 rounded-2xl'>{originNickname}님의 아인</div>
+
+            <div className='grid grid-cols-2 gap-6'>
+              {listData?.idealPeople.map((item, index) => (
+                <div
+                  key={index}
+                  onClick={() =>
+                    handleModalTest(
+                      item?.idealPersonNickname,
+                      item?.idealPersonFullName,
+                      item?.idealPersonImageUrl,
+                      item?.idealPersonId,
+                      item?.idealPersonThreadId,
+                      item?.idealPersonImageUrl
+                    )
+                  }
+                >
+                  <img
+                    className='rounded-t-2xl bg-white'
+                    src={item?.idealPersonImageUrl}
+                    alt='이미지'
+                    height={170}
+                    width={170}
+                  />
+                  <div
+                    className='pt-2.5 pb-1.5 text-xl text-white text-center rounded-b-2xl shadow-[0px_3px_5px_0px_rgba(0,0,0,0.3)]'
+                    style={{ backgroundColor: '#BE44E9' }}
+                  >
+                    {item?.idealPersonNickname}
                   </div>
-                )}
-              </Droppable>
-            ))}
-        </DragDropContext>
-      )}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
       {isLogin && listData && listData.idealPeople && listData.idealPeople.length === 0 && <CreateIdealPersonPage />}
+
       {isLogin && idealDetailModalOpen && (
         <div>
           <IdealDetailModal
@@ -344,12 +261,11 @@ export default function Page() {
           />
         </div>
       )}
+
       {!isLogin && (
         <div className='relative mt-[65px] mb-[68px] w-full h-full flex flex-col justify-center items-center'>
-          <div className='text-center text-xl text-white mt-32 leading-relaxed'>
-            채팅 기능은 로그인 후 이용할 수 있습니다.
-          </div>
-          <div className='text-center text-xl text-white mt-2 leading-relaxed'>로그인 페이지로 이동합니다.</div>
+          <div className='text-center text-xl text-white mt-32 leading-relaxed'>로딩 중입니다.</div>
+          {/* <div className='text-center text-xl text-white mt-2 leading-relaxed'>로그인 페이지로 이동합니다.</div> */}
         </div>
       )}
     </div>

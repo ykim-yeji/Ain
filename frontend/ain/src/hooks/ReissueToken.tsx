@@ -20,7 +20,6 @@ export default function Page() {
           method: 'POST',
           credentials: 'include',
         });
-
         if (res.ok) {
           const result = await res.json();
           console.log('결과', result);
@@ -28,18 +27,10 @@ export default function Page() {
           if (tempAccessToken !== undefined && tempAccessToken !== null) {
             setAccessToken(tempAccessToken);
           }
-          console.log('@@$!@$!@$@#!', accessToken);
-          // const tempRefreshToken = res.headers.get('Set-Cookie');
-
-          // console.log(newAccessToken);
-          // console.log(newRefreshToken);
-
-          // return newAccessToken;
         } else {
           alert('실패');
           console.log(res.status);
           console.log('대실패');
-          //   return;
         }
       } catch (error) {
         alert('실패2');
@@ -51,5 +42,5 @@ export default function Page() {
     reissueTokens();
   }, []);
 
-  return <div>토큰 리이슈</div>;
+  return null;
 }
