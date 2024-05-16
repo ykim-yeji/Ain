@@ -14,11 +14,30 @@ export default function Page() {
   const param = useSearchParams();
   const router = useRouter();
 
-  const API_URL = process.env.NEXT_PUBLIC_API_URL;
-
   const { accessToken, setAccessToken } = useUserStore();
 
   const { isSave, genderInput, mbti, characterName} = useCreateStore();
+
+  const [idealNum, setIdealNum] = useState<number|null>(null);
+
+  const confirmIdealCnt = async () => {
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/ideal-people/count`, {
+        headers: {
+          Authorization: `Bearer ` + accessToken,
+        },
+      });
+      if (res.ok) {
+        const result = await res.json();
+        console.log(result.data.idealPersonCount)
+        setIdealNum(result.data.idealPersonCount);
+      } else {
+        console.log(res.status);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const save = async () => {
 
@@ -74,7 +93,7 @@ export default function Page() {
         // isStoredIdealExist();
         router.push('/nickname');0
       } else {
-        router.push('/');
+        router.push('/chat');
         // 기존 회원이면 메인 페이지로
         // 기존 회원인데 생성한 이상형이 있으면? chat || main ?
         // isStoredIdealExist();
@@ -93,7 +112,7 @@ export default function Page() {
         //  새로운 회원이면 /nickname 페이지로
         router.push('/nickname');
       } else {
-        router.push('/');
+        router.push('/chat');
         if (accessToken !== '' && accessToken !== undefined) {
         }
       }
@@ -106,9 +125,21 @@ export default function Page() {
     if (accessToken && isSave) {
       // console.log('token updated:', accessToken);
       // accessToken이 업데이트된 후 실행하고 싶은 로직
-      save();
+      confirmIdealCnt()
+     
     }
   }, [accessToken]); // accessToken 상태를 의존성 배열에 추가
+
+  useEffect(() => {
+    if (idealNum && idealNum < 10) {
+      save();
+    } else if (idealNum && idealNum >= 10) {
+      useCreateStore.setState((state) => ({ isSave: false }));
+      alert('이상형은 최대 10개까지 생성가능합니다')
+    }
+
+  }, [idealNum])
+  
 
 
   return (
