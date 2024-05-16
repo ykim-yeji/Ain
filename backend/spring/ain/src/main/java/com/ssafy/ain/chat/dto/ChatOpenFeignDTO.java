@@ -1,9 +1,13 @@
 package com.ssafy.ain.chat.dto;
 
+import com.ssafy.ain.chat.dto.ChatDTO.*;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.List;
 
 public class ChatOpenFeignDTO {
 
@@ -28,5 +32,14 @@ public class ChatOpenFeignDTO {
         private String idealPersonChatMessageId;
         private String idealPersonChatMessage;
         private String idealPersonChatTime;
+    }
+
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @Builder
+    public static class GetIdealPersonChatsOFResponse {
+        private List<GetIdealPersonChatResponse> chats;
+        private boolean isLastChats;
     }
 }

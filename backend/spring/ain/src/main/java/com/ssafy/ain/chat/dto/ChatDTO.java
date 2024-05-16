@@ -29,22 +29,26 @@ public class ChatDTO {
 
     @Getter
     @Setter
-    public static class GetRecentDialogsRequest {
+    public static class GetIdealPersonChatsRequest {
+        @NotBlank(message = "이상형 thread id를 입력하지 않았습니다!")
         private String idealPersonThreadId;
         private String lastChatMessageId;
-    }
-
-    @AllArgsConstructor
-    @Builder
-    public static class GetRecentDialogsResponse {
-        List<GetRecentDialogResponse> dialogs;
     }
 
     @Getter
     @Setter
     @AllArgsConstructor
     @Builder
-    public static class GetRecentDialogResponse {
+    public static class GetIdealPersonChatsResponse {
+        private List<GetIdealPersonChatResponse> chats;
+        private boolean isLastChats;
+    }
+
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @Builder
+    public static class GetIdealPersonChatResponse {
         private String chatMessageId;
         private String chatMessage;
         private String chatSender;

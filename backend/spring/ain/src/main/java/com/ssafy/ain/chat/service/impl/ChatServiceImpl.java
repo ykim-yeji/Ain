@@ -3,7 +3,6 @@ package com.ssafy.ain.chat.service.impl;
 import com.ssafy.ain.chat.dto.ChatBotOpenFeignDTO.*;
 import com.ssafy.ain.chat.dto.ChatDTO.*;
 import com.ssafy.ain.chat.dto.ChatOpenFeignDTO.*;
-import com.ssafy.ain.chat.openfeign.ChatBotOpenFeign;
 import com.ssafy.ain.chat.openfeign.ChatOpenFeign;
 import com.ssafy.ain.chat.service.ChatBotService;
 import com.ssafy.ain.chat.service.ChatService;
@@ -70,11 +69,23 @@ public class ChatServiceImpl implements ChatService {
                 .build();
     }
 
+    /**
+     * 이상형과의 채팅 메시지 목록 조회
+     * @param getIdealPersonChatsRequest 채팅 목록 조회할 이상형 정보
+     * @return
+     */
     @Override
-    public GetRecentDialogsResponse getRecentDialogs(GetRecentDialogsRequest getRecentDialogsRequest) {
-        OpenFeignResponse<?> chatDTO = chatOpenFeign.getRecentDialogs(getRecentDialogsRequest);
-        List<GetRecentDialogResponse> response = new ArrayList<>();
-        return null;
+    public GetIdealPersonChatsResponse getIdealPersonChats(GetIdealPersonChatsRequest getIdealPersonChatsRequest) {
+        OpenFeignResponse<GetIdealPersonChatsOFResponse> chatsDTO = chatOpenFeign.getIdealPersonChats(getIdealPersonChatsRequest);
+        log.info("code: " + chatsDTO.getCode());
+        log.info("status: " + chatsDTO.getStatus());
+        log.info("message: " + chatsDTO.getMessage());
+        log.info("data: " + chatsDTO.getData());
+
+        return GetIdealPersonChatsResponse.builder()
+                .chats(chatsDTO.getData().getChats())
+                .isLastChats(chatsDTO.getData().isLastChats())
+                .build();
     }
 
     /**

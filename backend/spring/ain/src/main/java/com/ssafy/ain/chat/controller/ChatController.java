@@ -35,11 +35,16 @@ public class ChatController {
         return ApiResponse.success(CREATE_IDEAL_PERSON_CHAT, addIdealPersonChatResponse);
     }
 
-    @PostMapping("/dialogs/{idealPersonId}")
-    public ApiResponse<?> getRecentDialogs(@AuthenticationPrincipal UserPrincipal userPrincipal,
-                                            @PathVariable Long idealPersonId,
-                                            @RequestBody GetRecentDialogsRequest getRecentDialogsRequest) {
-        return ApiResponse.success(GET_RECENT_DIALOGS, chatService.getRecentDialogs(getRecentDialogsRequest));
+    /**
+     * 이상형과의 채팅 메시지 목록 조회
+     * @param getIdealPersonChatsRequest 채팅 목록 조회할 이상형 정보
+     * @return
+     */
+    @PostMapping("/dialogs")
+    public ApiResponse<?> getIdealPersonChats(@RequestBody @Valid GetIdealPersonChatsRequest getIdealPersonChatsRequest) {
+        GetIdealPersonChatsResponse getIdealPersonChatsResponse = chatService.getIdealPersonChats(getIdealPersonChatsRequest);
+
+        return ApiResponse.success(GET_IDEAL_PERSON_CHATS, getIdealPersonChatsResponse);
     }
 
     /**
