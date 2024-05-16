@@ -18,22 +18,15 @@ export default function Page() {
 
   const { accessToken, setAccessToken } = useUserStore();
 
-  const { genderInput, mbti, imageUrl, characterName, imageFile } = useCreateStore();
-
-  const reCreate = () => {
-    useCreateStore.setState((state) => ({
-      mergeInput: '',
-      genderInput: '',
-      mbti: '',
-      imageUrl: '',
-      characterName: '',
-    }));
-    router.push('/create');
-  };
+  const { isSave, genderInput, mbti, characterName} = useCreateStore();
 
   const save = async () => {
+
+    const imageFile = useCreateStore.getState().getImageFile();
+
     const formData = new FormData();
 
+    // null 체크 후 추가
     if (characterName) {
       formData.append('idealPersonFullName', characterName);
     }
@@ -44,9 +37,7 @@ export default function Page() {
       formData.append('idealPersonGender', genderInput);
     }
     if (imageFile) {
-      const blob = new Blob([imageFile], { type: 'image/png' });
-      formData.append('idealPersonImage', blob, 'image.png'); // 파일 이름 추가
-      // formData.append("idealPersonImage", imageFile, "image.png"); // 파일 이름 추가
+      formData.append('idealPersonImage', imageFile, 'image.png'); // 파일 이름 추가
     }
 
     if (accessToken !== null) {
@@ -59,73 +50,50 @@ export default function Page() {
           body: formData,
         });
 
-        if (response.ok) {
-          const data = await response.json();
-          reCreate();
-        } else {
-          console.log('에러발생으로 이상형 저장 못함');
+        const data = await response.json();
+
+        if (data.code == 201) {
+          useCreateStore.setState((state) => ({ isSave: false }));
+          router.push('/chat');
         }
 
-        // router.push('/chat');
+        router.push('/chat');
       } catch (error) {
         console.error('API request failed: ', error);
       }
     }
   };
 
-  const isStoredIdealExist = () => {
-    if (
-      characterName !== null &&
-      characterName !== undefined &&
-      genderInput !== null &&
-      genderInput !== undefined &&
-      mbti !== null &&
-      mbti !== undefined &&
-      imageFile !== null &&
-      imageFile !== undefined &&
-      imageUrl !== null &&
-      imageUrl !== undefined
-    ) {
-      console.log(1, characterName);
-      console.log(2, genderInput);
-      console.log(3, mbti);
-      console.log(4, imageFile);
 
-      save();
+  const getAccessToken = async () => {
+    if (param?.get('authorization') && param?.get('new')) {
+      const token = param.get('authorization') as string
+      setAccessToken(token);
+      if ((param.get('new') as string) === 'true') {
+        //  새로운 회원이면 /nickname 페이지로
+        // isStoredIdealExist();
+        router.push('/nickname');0
+      } else {
+        router.push('/');
+        // 기존 회원이면 메인 페이지로
+        // 기존 회원인데 생성한 이상형이 있으면? chat || main ?
+        // isStoredIdealExist();
+      }
+      console.log('!!', accessToken);
     }
   };
 
   useEffect(() => {
-    const getAccessToken = async () => {
-      if (param?.get('authorization') && param?.get('new')) {
-        setAccessToken(param.get('authorization') as string);
-        if ((param.get('new') as string) === 'true') {
-          //  새로운 회원이면 /nickname 페이지로
-          // isStoredIdealExist();
-          router.push('/nickname');
-        } else {
-          router.push('/');
-          // 기존 회원이면 메인 페이지로
-          // 기존 회원인데 생성한 이상형이 있으면? chat || main ?
-          // isStoredIdealExist();
-        }
-        console.log('!!', accessToken);
-      }
-    };
 
     getAccessToken();
-
-    // if (accessToken !== '' && accessToken !== undefined) {
-    //   isStoredIdealExist();
-    // }
 
     const redirectTimer = setTimeout(() => {
       if ((param.get('new') as string) === 'true') {
         console.log('AAA');
         //  새로운 회원이면 /nickname 페이지로
-        // router.push('/nickname');
+        router.push('/nickname');
       } else {
-        // router.push('/');
+        router.push('/');
         if (accessToken !== '' && accessToken !== undefined) {
         }
       }
@@ -135,10 +103,13 @@ export default function Page() {
   }, [param]);
 
   useEffect(() => {
-    if (accessToken !== '' && accessToken !== undefined) {
-      isStoredIdealExist();
+    if (accessToken && isSave) {
+      // console.log('token updated:', accessToken);
+      // accessToken이 업데이트된 후 실행하고 싶은 로직
+      save();
     }
-  }, [accessToken]);
+  }, [accessToken]); // accessToken 상태를 의존성 배열에 추가
+
 
   return (
     <div className='relative mt-[65px] mb-[68px] w-full h-full flex flex-col justify-center items-center'>

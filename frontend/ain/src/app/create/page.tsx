@@ -104,7 +104,7 @@ export default function CreatePage() {
                     rows={10}
                     value={faceInput}
                     onChange={(event) => setFaceInput(event.target.value)}
-                    placeholder='이목구비 입력 예시'
+                    placeholder='ex) 크고 또렷한 눈매와 짙은 눈썹, 높은 코, 올라간 입꼬리'
                   />
                 )}
                 {currentNum === 3 && (
@@ -113,7 +113,7 @@ export default function CreatePage() {
                     rows={10}
                     value={shapeInput}
                     onChange={(event) => setShapeInput(event.target.value)}
-                    placeholder='얼굴형, 헤어스타일 입력 예시'
+                    placeholder='ex) 갸름한 브이라인 얼굴형, 앞머리 있는 헤어스타일'
                   />
                 )}
                 {currentNum === 4 && (
@@ -122,7 +122,7 @@ export default function CreatePage() {
                     rows={10}
                     value={ectInput}
                     onChange={(event) => setEctInput(event.target.value)}
-                    placeholder='기타 생김새 입력 예시'
+                    placeholder='ex) 눈 밑에 작은 점, 귀여운 보조개'
                   />
                 )}
               </div>

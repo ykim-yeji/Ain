@@ -33,10 +33,8 @@ export default function LoadingPage() {
         .then((blob) => {
           // 받은 파일(blob)을 처리하는 로직을 작성합니다.
           const newUrl: string = URL.createObjectURL(blob); // blob 객체를 가리키는 URL을 생성
-          useCreateStore.setState((state) => ({ imageUrl: newUrl, imageFile: blob }));
-          // const image = document.createElement('img'); //새로운 <img> HTML 요소를 생성
-          // image.src = url; //생성된 이미지 요소(image)의 소스(src) 속성에, 2단계에서 생성된 blob URL을 할당
-          // document.body.appendChild(image);//이미지 요소를 문서의 body에 추가
+          useCreateStore.getState().setImageFile(blob); // Blob을 base64로 변환하여 저장
+          useCreateStore.setState((state) => ({ imageUrl: newUrl }));
         });
     } catch (error) {
       console.error('API request failed: ', error);

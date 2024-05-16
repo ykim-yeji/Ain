@@ -115,23 +115,23 @@ export default function ChatRoomPage() {
       // console.log(lastChatMessageId)
 
       try {
-          const response = await fetch(`${process.env.NEXT_PUBLIC_FAST_API_URL}/chats/dialogs`, {
+          const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/chats/dialogs`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            // 'Authorization': `Bearer ` + accessToken,
+            'Authorization': `Bearer ` + accessToken
           },
           body: JSON.stringify({ idealPersonThreadId: selectedIdealThreadId,
           lastChatMessageId: lastChatMessageId}),
           });
 
           const data = await response.json();
-          console.log(data)
+          console.log('data',data)
 
           if (data.code == 200) {
 
           const prevMessages = data.data.chats
-          const lastChats = data.data.isLastChats
+          const lastChats = data.data.lastChats
           // console.log('prevMessages', prevMessages)
           if (lastChats === true) {
             setIsLastChats(true)
@@ -158,9 +158,7 @@ export default function ChatRoomPage() {
             const firstMessageId = prevMessages[0].chatMessageId;
             setLastChatMessageId(firstMessageId)
             // console.log('lastChatMessageId', lastChatMessageId)
-          } else {
-            alert('이전 채팅이 존재하지 않습니다.')
-          }
+          } 
         }
         
           

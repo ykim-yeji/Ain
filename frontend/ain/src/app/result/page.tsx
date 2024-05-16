@@ -9,7 +9,8 @@ export default function ResultPage() {
   const { accessToken } = useUserStore();
 
   const router = useRouter();
-  const { genderInput, mbti, imageUrl, characterName, imageFile } = useCreateStore();
+
+  const { genderInput, mbti, imageUrl, characterName} = useCreateStore();
 
   const reCreate = () => {
     useCreateStore.setState((state) => ({
@@ -23,6 +24,12 @@ export default function ResultPage() {
   };
 
   const save = async () => {
+    useCreateStore.setState((state) => ({ isSave: true }));
+    
+    const imageFile = useCreateStore.getState().getImageFile();
+
+    if (accessToken !== "") {
+
     const formData = new FormData();
 
     // null 체크 후 추가
@@ -35,11 +42,13 @@ export default function ResultPage() {
     if (genderInput) {
       formData.append('idealPersonGender', genderInput);
     }
+
     if (imageFile) {
       formData.append('idealPersonImage', imageFile, 'image.png'); // 파일 이름 추가
     }
 
-    if (accessToken !== null) {
+    
+      // console.log('token', accessToken)
       try {
         const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/ideal-people`, {
           method: 'POST',
@@ -50,12 +59,17 @@ export default function ResultPage() {
         });
 
         const data = await response.json();
-        console.log(data);
 
-        router.push('/chat');
+        if (data.code == 201) {
+          useCreateStore.setState((state) => ({ isSave: false }));
+          router.push('/chat');
+        }
+        
       } catch (error) {
         console.error('API request failed: ', error);
       }
+    } else {
+      router.push('/login')
     }
   };
 
