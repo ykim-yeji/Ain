@@ -1,6 +1,7 @@
 package com.ssafy.ain.idealperson.service.impl;
 
 import com.ssafy.ain.chat.service.ChatBotService;
+import com.ssafy.ain.global.dto.UserInfoDTO;
 import com.ssafy.ain.global.exception.InvalidException;
 import com.ssafy.ain.global.exception.NoExistException;
 import com.ssafy.ain.global.util.S3Service;
@@ -140,6 +141,21 @@ public class IdealPersonServiceImpl implements IdealPersonService {
         return GetIdealPersonCountResponse.builder()
                 .idealPersonCount(idealPersonRepository.findIdealPeopleByMemberIdOrderByRanking(memberId)
                         .size())
+                .build();
+    }
+
+    @Override
+    public GetIdealPersonResponse getIdealPerson(UserInfoDTO userInfoDTO, Long idealPersonId) {
+        IdealPerson idealPerson = idealPersonRepository.findIdealPersonByIdAndMemberId(idealPersonId, userInfoDTO.getMemberId())
+                .orElseThrow(() -> new NoExistException(NOT_EXISTS_IDEAL_PERSON));
+
+        return GetIdealPersonResponse.builder()
+                .idealPersonId(idealPerson.getId())
+                .idealPersonFullName(idealPerson.getFullName())
+                .idealPersonNickname(idealPerson.getNickname())
+                .idealPersonImageUrl(idealPerson.getIdealPersonImageUrl())
+                .idealPersonRank(idealPerson.getRanking())
+                .idealPersonThreadId(idealPerson.getThreadId())
                 .build();
     }
 }

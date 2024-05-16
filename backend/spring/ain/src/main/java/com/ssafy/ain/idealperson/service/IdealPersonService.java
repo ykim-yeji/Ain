@@ -1,5 +1,6 @@
 package com.ssafy.ain.idealperson.service;
 
+import com.ssafy.ain.global.dto.UserInfoDTO;
 import com.ssafy.ain.idealperson.dto.IdealPersonDTO.*;
 
 public interface IdealPersonService {
@@ -16,4 +17,6 @@ public interface IdealPersonService {
     void modifyIdealPersonNickname(Long memberId, Long idealPersonId, String idealPersonNickname);
 
     GetIdealPersonCountResponse getIdealPersonCount(Long memberId);
+
+    GetIdealPersonResponse getIdealPerson(UserInfoDTO userInfoDTO, Long idealPersonId);
 }

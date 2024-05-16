@@ -68,4 +68,12 @@ public class IdealPersonController {
                 idealPersonService.getIdealPersonCount(userPrincipal.getUserInfoDTO()
                         .getMemberId()));
     }
+
+    @GetMapping("/{idealPersonId}")
+    public ApiResponse<?> getIdealPerson(@AuthenticationPrincipal UserPrincipal userPrincipal,
+                                         @PathVariable Long idealPersonId) {
+        return ApiResponse.success(SuccessCode.GET_IDEAL_PERSON,
+                idealPersonService.getIdealPerson(userPrincipal.getUserInfoDTO(),
+                        idealPersonId));
+    }
 }

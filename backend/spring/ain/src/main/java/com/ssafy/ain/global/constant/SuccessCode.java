@@ -32,6 +32,7 @@ public enum SuccessCode {
     ADD_IDEAL_PERSON(CREATED, "이상형 정보를 성공적으로 저장하였습니다!"),
     REMOVE_IDEAL_PERSON(OK, "이상형 정보를 성공적으로 삭제하였습니다!"),
     MODIFY_IDEAL_PERSON_NICKNAME(OK, "이상형 닉네임 정보를 성공적으로 변경하였습니다!"),
+    GET_IDEAL_PERSON(OK, "이상형 상세 조회에 성공하였습니다!"),
     GET_IDEAL_PERSON_COUNT(OK, "생성한 이상형 개수 정보 조회에 성공하였습니다!");
     private final HttpStatus status;
     private final String message;
