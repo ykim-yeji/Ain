@@ -119,14 +119,20 @@ export default function Navigation() {
             <div className='flex flex-col cursor-pointer'>
               <FontAwesomeIcon
                 style={{
-                  color: pathName === '/' || pathName === '/create' || pathName === 'loading' ? '#C776E3' : 'white',
+                  color:
+                    pathName === '/' || pathName === '/create' || pathName === 'loading' || pathName === 'result'
+                      ? '#C776E3'
+                      : 'white',
                 }}
                 icon={faHouse}
                 size='xl'
               />
               <div
                 style={{
-                  color: pathName === '/' || pathName === '/create' || pathName === 'loading' ? '#C776E3' : 'white',
+                  color:
+                    pathName === '/' || pathName === '/create' || pathName === 'loading' || pathName === 'result'
+                      ? '#C776E3'
+                      : 'white',
                 }}
                 className='text-sm'
               >
