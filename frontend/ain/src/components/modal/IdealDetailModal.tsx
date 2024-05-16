@@ -16,27 +16,27 @@ import IdealNicknameModify from './IdealNicknameModify';
 
 interface Props {
   closeModal: any;
-  tempNickname: string;
-  tempFullName: string;
+  // tempNickname: string;
+  // tempFullName: string;
   tempPersonId: number | undefined;
-  tempThreadId: string;
-  tempImageUrl: string;
+  // tempThreadId: string;
+  // tempImageUrl: string;
   setIsNicknameModified: any;
   isNicknameModified: number;
-  setTempNickname: any;
+  // setTempNickname: any;
 }
 
 export default function IdealDetailModal({
   closeModal,
-  tempNickname,
-  tempFullName,
+  // tempNickname,
+  // tempFullName,
   tempPersonId,
-  tempThreadId,
-  tempImageUrl,
+  // tempThreadId,
+  // tempImageUrl,
   setIsNicknameModified,
   isNicknameModified,
-  setTempNickname,
-}: Props) {
+}: // setTempNickname,
+Props) {
   const router = useRouter();
   const { accessToken } = useUserStore();
   const koreanRegex = /^[가-힣]*$/;
@@ -57,6 +57,7 @@ export default function IdealDetailModal({
 
   const {
     selectedIdealName,
+    selectedIdealFullName,
     selectedIdealId,
     selectedIdealThreadId,
     selectedIdealImageUrl,
@@ -187,7 +188,7 @@ export default function IdealDetailModal({
             src={selectedIdealImageUrl}
             style={{ width: '60%', height: '60%', objectFit: 'cover' }}
           />
-          <div className='text-white text-[40px] mt-4'>{tempNickname}</div>
+          <div className='text-white text-[40px] mt-4'>{selectedIdealName}</div>
           <button
             type='button'
             onClick={goToChatroom}
@@ -210,12 +211,12 @@ export default function IdealDetailModal({
               <div className='z-40 absolute h-full w-full '>
                 <IdealNicknameModify
                   closeModal={setIdealNicknameModalState}
-                  tempNickname={tempNickname}
-                  tempFullName={tempFullName}
+                  // tempNickname={tempNickname}
+                  // tempFullName={tempFullName}
                   tempPersonId={tempPersonId}
                   setIsNicknameModified={setIsNicknameModified}
                   isNicknameModified={isNicknameModified}
-                  setTempNickname={setTempNickname}
+                  // setTempNickname={setTempNickname}
                 />
               </div>
             </div>
