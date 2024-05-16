@@ -60,7 +60,7 @@ export const DesktopPage = () => {
 
   // 이상형 목록 조회
   const fetchIdealPersons = async () => {
-    if (accessToken) {
+    if (accessToken !== null && accessToken !== undefined && accessToken !== '') {
       try {
         const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/ideal-people`, {
           headers: {
