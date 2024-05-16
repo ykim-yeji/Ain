@@ -61,6 +61,7 @@ export const MobilePage = () => {
     setCurrentPage((prevPage) => (prevPage - 1 + totalPages) % totalPages);
   };
 
+  // 이상형 목록 조회
   const fetchIdealPersons = async () => {
     if (accessToken !== null && accessToken !== undefined && accessToken !== '') {
       try {
@@ -76,6 +77,9 @@ export const MobilePage = () => {
         const data = await response.json();
         if (data.code === 200 && data.status === 'OK') {
           setIdealPersons(data.data.idealPeople);
+          if (data.data.idealPeople.length > 0) {
+            setSelectedIdealPersonImage(data.data.idealPeople[0].idealPersonImageUrl);
+          }
         }
       } catch (error) {
         console.error('이상형 정보 가져오기 실패:', error);
