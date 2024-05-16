@@ -65,6 +65,7 @@ public class CustomLogoutFilter extends GenericFilterBean {
 			refreshToken = authService.getRefreshTokenFromCookie(request);
 			authService.isTokenExpired(refreshToken, REFRESH_TOKEN);
 			authService.equalTokenCategory(refreshToken, REFRESH_TOKEN);
+			authService.existRefreshToken(refreshToken);
 		} catch (NoExistException e) {
 
 			request.setAttribute(EXCEPTION, e.getCode());
@@ -73,13 +74,6 @@ public class CustomLogoutFilter extends GenericFilterBean {
 		} catch (InvalidException e) {
 
 			request.setAttribute(EXCEPTION, e.getCode());
-			filterChain.doFilter(request, response);
-			return;
-		}
-
-		if (!refreshTokenRepository.existsById(refreshToken)) {
-
-			request.setAttribute(EXCEPTION, NOT_LOGIN_MEMBER);
 			filterChain.doFilter(request, response);
 			return;
 		}

@@ -47,7 +47,6 @@ public class JWTFilter extends OncePerRequestFilter {
         }
 
         Long memberId = jwtUtil.getMemberId(accessToken);
-
         UserPrincipal userPrincipal = UserPrincipal.builder()
                 .userInfoDTO(
                         UserInfoDTO.builder()
@@ -55,9 +54,7 @@ public class JWTFilter extends OncePerRequestFilter {
                                 .build()
                 )
                 .build();
-
         Authentication authToken = new UsernamePasswordAuthenticationToken(userPrincipal, null, userPrincipal.getAuthorities());
-
         SecurityContextHolder.getContext().setAuthentication(authToken);
 
         filterChain.doFilter(request, response);

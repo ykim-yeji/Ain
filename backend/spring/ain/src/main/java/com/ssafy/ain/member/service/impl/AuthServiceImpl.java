@@ -38,14 +38,9 @@ public class AuthServiceImpl implements AuthService {
 		String refreshToken = getRefreshTokenFromCookie(request);
 		isTokenExpired(refreshToken, REFRESH_TOKEN);
 		equalTokenCategory(refreshToken, REFRESH_TOKEN);
-
-		if (!refreshTokenRepository.existsById(refreshToken)) {
-
-			throw new InvalidException(NOT_LOGIN_MEMBER);
-		}
+		existRefreshToken(refreshToken);
 
 		Long memberId = jwtUtil.getMemberId(refreshToken);
-
 		String reissuedAccessToken = jwtUtil.createJwt(ACCESS_TOKEN, memberId, accessExpiredMs);
 		String reissuedRefreshToken = jwtUtil.createJwt(REFRESH_TOKEN, memberId, refreshExpiredMs);
 
@@ -139,6 +134,18 @@ public class AuthServiceImpl implements AuthService {
 			}
 
 			throw new InvalidException(errorCode);
+		}
+	}
+
+	/**
+	 * 리프레시 토큰이 DB에 저장되어있는 지 확인
+	 * @param refreshToken 리프레시 토큰
+	 */
+	@Override
+	public void existRefreshToken(String refreshToken) {
+		if (!refreshTokenRepository.existsById(refreshToken)) {
+
+			throw new InvalidException(NOT_LOGIN_MEMBER);
 		}
 	}
 }
