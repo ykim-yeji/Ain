@@ -52,8 +52,11 @@
 
 <h4>📱Frontend</h4>
 <img src="https://img.shields.io/badge/NEXT.JS-000000?style=for-the-badge&logo=NEXT.JS&logoColor=white"/>
+<img src="https://img.shields.io/badge/REACT-61DAFB?style=for-the-badge&logo=REACT&logoColor=white"/>
 <img src="https://img.shields.io/badge/TYPE SCRIPT-3178C6?style=for-the-badge&logo=TYPESCRIPT&logoColor=white"/>
+<img src="https://img.shields.io/badge/SCSS-CC6699?style=for-the-badge&logo=SCSS&logoColor=white"/>
 <img src="https://img.shields.io/badge/TAIL WIND CSS-06B6D4?style=for-the-badge&logo=TAILWINDCSS&logoColor=white"/>
+<img src="https://img.shields.io/badge/styled components-DB7093?style=for-the-badge&logo=styled components&logoColor=white"/>
 
 <h4>💾 Backend</h4>
 <img src="https://img.shields.io/badge/java-007396?style=for-the-badge&logo=java&logoColor=white">
@@ -117,6 +120,7 @@
 ## 화면 설계서
 
 ## ERD
+<img src="https://github.com/ykim-yeji/Moiroom/assets/68416691/399f437c-498b-4b1f-8a84-009416c4b02f">
 
 </p>
 
