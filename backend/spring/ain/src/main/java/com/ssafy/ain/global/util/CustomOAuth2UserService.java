@@ -46,7 +46,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             isNewmember = true;
         }
         if (member.getStatus() == MemberStatus.DELETE) {
-            member.updateStatus(MemberStatus.SIGNUP);
+            member.updateStatus(MemberStatus.LOGIN);
             isNewmember = true;
         }
 
