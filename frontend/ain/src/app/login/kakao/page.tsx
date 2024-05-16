@@ -59,9 +59,12 @@ export default function Page() {
           body: formData,
         });
 
-        const data = await response.json();
-        console.log('!!!!!!', data);
-        console.log('token', accessToken);
+        if (response.ok) {
+          const data = await response.json();
+          reCreate();
+        } else {
+          console.log('에러발생으로 이상형 저장 못함');
+        }
 
         // router.push('/chat');
       } catch (error) {
