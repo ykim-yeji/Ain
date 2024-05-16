@@ -40,7 +40,7 @@ export const CreateIdealPersonPage = () => {
     <div className="create-ideal-person-page px-[50px] flex flex-col justify-center items-center w-full h-full" style={{ textAlign: 'center',  overflow: 'hidden' }}>
        <h1 className="text-white text-2xl mb-5" style={{ fontWeight: 'bold' }}>생성된 아인이 없어요...</h1>
       <div className="flex justify-center items-center mb-7">
-          <img src="./gif/no_data.gif" className="w-[90%] rounded-full" />
+          <img src="./gif/no_data.gif" className="w-[80%] rounded-full" />
       </div>
       <GradientText className="text-gray-300 text-xl mb-7" style={{ fontWeight: "bold" }}>
         아인을 만든 후 <br />소중한 순간을 기록하세요!

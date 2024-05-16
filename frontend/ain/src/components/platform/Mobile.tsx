@@ -29,6 +29,12 @@ export const MobilePage = () => {
     }
   }, [image]);
 
+  useEffect(() => {
+    if (accessToken) {
+      fetchIdealPersonsCount();
+    }
+  }, [accessToken]);
+
   const handleSavePicture = () => {
     if (image) {
       savePicture(image);
@@ -77,24 +83,34 @@ export const MobilePage = () => {
     }
   };
 
-  const fetchIdealPersonsCount = async () => {
-    if (accessToken) {
-      try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/ideal-people/count`, {
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${accessToken}`,
-          },
-        });
-        const data = await response.json();
-        if (data.code === 200 && data.status === 'OK') {
-          setIdealPersonCount(data.data.idealPeopleCount);
-        }
-      } catch (error) {
-        console.error('이상형 개수 정보 가져오기 실패:', error);
-      }
+  // 이상형 개수 조회
+const fetchIdealPersonsCount = async () => {
+  if (!accessToken) {
+    console.log('Access token is not available.');
+    return;
+  }
+
+  try {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/ideal-people/count`, {
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${accessToken}`,
+      },
+    });
+    const data = await response.json();
+    console.log('Full response data:', data); // 응답 데이터 전체를 로그로 출력
+
+    // 데이터 구조 확인 후, 필드 접근 경로 업데이트
+    if (data.code === 200 && data.status === 'OK' && data.data && typeof data.data.idealPersonCount !== 'undefined') {
+      console.log('Setting idealPersonCount:', data.data.idealPersonCount);
+      setIdealPersonCount(data.data.idealPersonCount);
+    } else {
+      console.error('Data is missing the idealPeopleCount field or response error:', data);
     }
-  };
+  } catch (error) {
+    console.error('Failed to fetch ideal person count:', error);
+  }
+};
 
   // 현재 페이지에 해당하는 이상형 목록 계산
   const currentPageIdealPersons = idealPersons
