@@ -118,8 +118,6 @@ Props) {
       heightAuto: false,
     }).then(async (result) => {
       if (result.isConfirmed) {
-        console.log(`${API_URL}/ideal-person/${tempPersonId}`);
-        console.log(accessToken);
         try {
           const response = await fetch(
             `${API_URL}/ideal-people/${tempPersonId}`,
@@ -132,8 +130,6 @@ Props) {
           );
           if (response.ok) {
             const result = await response.json();
-            console.log(result);
-            // router.push(`/chat`);
             if (result.code === 200) {
               setIdealDetailModalFalse();
               Swal.fire({
@@ -144,7 +140,7 @@ Props) {
               setIsNicknameModified(isNicknameModified + 1);
               setHideIdealListFalse();
             } else {
-              console.log(result.code, "번 에러발생");
+              // console.log(result.code);
             }
           } else {
             // alert('이상형 삭제 실패');
