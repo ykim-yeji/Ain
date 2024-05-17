@@ -185,32 +185,20 @@ export default function Page() {
 
           if (res.ok) {
             const result = await res.json();
-            console.log(">>>", result);
-            // console.log('결과', result);
+
             if (result.code === 200) {
-              // console.log(result.data);
               setListData(result.data);
-              // ReissueToken();
-              // setIsNewFetch(isNewFetch + 1);
-              console.log("isNewFetch", isNewFetch);
             } else if (result.code === 401) {
-              // ReissueToken();
-              // setIsNewFetch(isNewFetch + 1);
-              console.log("isNewFetch", isNewFetch);
             } else {
               alert(result.code);
             }
           } else {
-            console.log("fetch실패");
             console.log(res.status);
-            alert("실패다");
           }
         } catch (error) {
-          alert("에러실패");
-          console.log(">>>>", error);
+          console.log(error);
         }
       } else {
-        alert("뭔가..");
       }
     };
 

@@ -41,7 +41,6 @@ export default function Navigation() {
     setIdealDetailModalFalse();
     setHideIdealListFalse();
     setHeaderDropDownFalse();
-    console.log(idealDetailModalOpen);
   };
 
   const needToLoginChat = () => {

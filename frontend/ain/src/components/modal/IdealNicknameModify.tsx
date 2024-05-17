@@ -91,23 +91,19 @@ Props) {
             setIsNicknameModified(isNicknameModified + 1);
             setTempIdealName(inputValue);
           } else if (result.code === 400) {
-            console.log("REEEE", result);
             Swal.fire({
               icon: "warning",
               text: "현재 아인의 별명과 동일합니다",
               heightAuto: false,
             });
           } else {
-            console.log(result);
-            console.log(result.code, "번 에러발생");
+            console.log(res);
           }
         } else {
           console.log(res);
-          console.log("이상형 이름 변경 실패");
         }
       } catch (error) {
         console.log(error);
-        console.log("에러발생으로 실패");
       }
     } else {
       Swal.fire({

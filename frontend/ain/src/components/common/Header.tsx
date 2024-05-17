@@ -72,10 +72,7 @@ export default function Header() {
       });
 
       if (res.ok) {
-        // alert('성공');
         const result = await res.json();
-        // console.log('치킨', result);
-        // console.log('바보', result.message);
         Swal.fire({
           title: "로그아웃 되었습니다.",
           icon: "success",
@@ -83,33 +80,20 @@ export default function Header() {
         });
         router.push("/");
 
+        // 서버 로그아웃 요청이 완료되지 않더라도 프론트에서의 로그아웃 기능은 동작
         if (result.code === 200) {
-          // console.log('로그아웃 성공');
-          // router.push('/');
         } else if (result.code === 401) {
-          // console.log('바보', result);
-          return;
+          // return;
         } else if (result.code === 403) {
-          // alert('ERROR_FORBIDDEN');
-          return;
+          // return;
         } else if (result.code === 404) {
-          // alert('ERROR_NOT_FOUND');
-          return;
+          // return;
         } else {
-          // console.log(result.code);
           // return;
         }
       } else {
-        // alert('실패');
-        // console.log('로그아웃 실패');
-        // console.log(res);
-        // console.log(res.status);
       }
-    } catch (error) {
-      // alert('실패2');
-      // console.log('에러로 로그아웃 실패');
-      // console.log(error);
-    }
+    } catch (error) {}
 
     deleteAccessToken();
   };
