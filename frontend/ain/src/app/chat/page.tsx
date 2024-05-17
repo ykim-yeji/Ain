@@ -1,20 +1,25 @@
-'use client';
+"use client";
 
-import { DragDropContext, Draggable, Droppable, DropResult } from 'react-beautiful-dnd';
+import {
+  DragDropContext,
+  Draggable,
+  Droppable,
+  DropResult,
+} from "react-beautiful-dnd";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 
-import useUserStore from '@/store/userStore';
-import useModalStore from '@/store/modalStore';
-import useIdealStore from '@/store/idealStore';
+import useUserStore from "@/store/userStore";
+import useModalStore from "@/store/modalStore";
+import useIdealStore from "@/store/idealStore";
 
-import ReissueToken from '@/hooks/ReissueToken';
+import ReissueToken from "@/hooks/ReissueToken";
 
-import IdealDetailModal from '@/components/modal/IdealDetailModal';
+import IdealDetailModal from "@/components/modal/IdealDetailModal";
 
-import { CreateIdealPersonPage } from '@/components/platform/CreateIdealPerson';
+import { CreateIdealPersonPage } from "@/components/platform/CreateIdealPerson";
 
-import Swal from 'sweetalert2'
+import Swal from "sweetalert2";
 
 interface IdealPeople {
   idealPersonId: number;
@@ -65,14 +70,14 @@ export default function Page() {
 
   const { accessToken, isLogin } = useUserStore();
 
-  const [tempFullName, setTempFullName] = useState<string>('');
+  const [tempFullName, setTempFullName] = useState<string>("");
   const [tempPersonId, setTempPersonId] = useState<number>();
-  const [tempThreadId, setTempThreadId] = useState<string>('');
-  const [tempImageUrl, setTempImageUrl] = useState<string>('');
+  const [tempThreadId, setTempThreadId] = useState<string>("");
+  const [tempImageUrl, setTempImageUrl] = useState<string>("");
   const [idealIdArray, setIdealIdArray] = useState<number[]>([]);
   const [tempTestArray, setTempTestArray] = useState<IdealPeople[]>([]);
 
-  const [originNickname, setOriginNickname] = useState<string>('');
+  const [originNickname, setOriginNickname] = useState<string>("");
 
   const handleModalTest = (
     nickname: string,
@@ -132,36 +137,44 @@ export default function Page() {
           if (result.code === 200) {
             setOriginNickname(result.data.memberNickname);
           } else if (result.code === 401) {
-            alert('ERROR UNAUTHORIZED');
+            alert("ERROR UNAUTHORIZED");
             return;
           } else if (result.code === 403) {
-            alert('ERROR FORBIDDEN');
+            alert("ERROR FORBIDDEN");
             return;
           } else if (result.code === 404) {
-            alert('ERROR NOT FOUND');
+            alert("ERROR NOT FOUND");
             return;
           } else {
-            alert('401, 403, 404 이외 에러 발생');
+            alert("401, 403, 404 이외 에러 발생");
             return;
           }
         } else {
-          console.log('에러발생');
+          console.log("에러발생");
           return;
         }
       } catch (error) {
-        alert('에러발생으로 닉네임 정보 불러오기 실패');
+        alert("에러발생으로 닉네임 정보 불러오기 실패");
         console.log(error);
       }
     };
 
-    if (accessToken !== '' && accessToken !== null && accessToken !== undefined) {
+    if (
+      accessToken !== "" &&
+      accessToken !== null &&
+      accessToken !== undefined
+    ) {
       getMyNickname();
     }
   }, [isNewFetch, accessToken, isNicknameModified]);
 
   useEffect(() => {
     const getData = async () => {
-      if (accessToken !== null && accessToken !== undefined && accessToken !== '') {
+      if (
+        accessToken !== null &&
+        accessToken !== undefined &&
+        accessToken !== ""
+      ) {
         try {
           const res = await fetch(`${API_URL}/ideal-people`, {
             // cache: "no-store",
@@ -172,42 +185,55 @@ export default function Page() {
 
           if (res.ok) {
             const result = await res.json();
-            console.log('>>>', result);
+            console.log(">>>", result);
             // console.log('결과', result);
             if (result.code === 200) {
               // console.log(result.data);
               setListData(result.data);
               // ReissueToken();
               // setIsNewFetch(isNewFetch + 1);
-              console.log('isNewFetch', isNewFetch);
+              console.log("isNewFetch", isNewFetch);
             } else if (result.code === 401) {
               // ReissueToken();
               // setIsNewFetch(isNewFetch + 1);
-              console.log('isNewFetch', isNewFetch);
+              console.log("isNewFetch", isNewFetch);
             } else {
               alert(result.code);
             }
           } else {
-            console.log('fetch실패');
+            console.log("fetch실패");
             console.log(res.status);
-            alert('실패다');
+            alert("실패다");
           }
         } catch (error) {
-          alert('에러실패');
-          console.log('>>>>', error);
+          alert("에러실패");
+          console.log(">>>>", error);
         }
       } else {
-        alert('뭔가..');
+        alert("뭔가..");
       }
     };
 
-    if (accessToken !== '' && accessToken !== null && accessToken !== undefined) {
+    if (
+      accessToken !== "" &&
+      accessToken !== null &&
+      accessToken !== undefined
+    ) {
       getData();
     }
   }, [isNewFetch, accessToken, isNicknameModified]);
 
+  if (
+    isLogin &&
+    listData &&
+    listData.idealPeople &&
+    listData.idealPeople.length === 0
+  ) {
+    return <CreateIdealPersonPage />;
+  }
+
   return (
-    <div className='overflow-auto mt-[65px] mb-[68px]'>
+    <div className="overflow-auto mt-[65px] mb-[68px]">
       {isLogin &&
         !hideIdealList &&
         listData &&
@@ -215,9 +241,11 @@ export default function Page() {
         listData.idealPeople.length > 0 &&
         originNickname && (
           <div>
-            <div className='text-xl text-white flex mt-2 mb-4 px-4 rounded-2xl'>{originNickname}님의 아인</div>
+            <div className="text-xl text-white flex mt-2 mb-4 px-4 rounded-2xl">
+              {originNickname}님의 아인
+            </div>
 
-            <div className='grid grid-cols-2 gap-6'>
+            <div className="grid grid-cols-2 gap-6">
               {listData?.idealPeople.map((item, index) => (
                 <div
                   key={index}
@@ -233,15 +261,15 @@ export default function Page() {
                   }
                 >
                   <img
-                    className='rounded-t-2xl bg-white'
+                    className="rounded-t-2xl bg-white"
                     src={item?.idealPersonImageUrl}
-                    alt='이미지'
+                    alt="이미지"
                     height={170}
                     width={170}
                   />
                   <div
-                    className='pt-2.5 pb-1.5 text-xl text-white text-center rounded-b-2xl shadow-[0px_3px_5px_0px_rgba(0,0,0,0.3)]'
-                    style={{ backgroundColor: '#BE44E9' }}
+                    className="pt-2.5 pb-1.5 text-xl text-white text-center rounded-b-2xl shadow-[0px_3px_5px_0px_rgba(0,0,0,0.3)]"
+                    style={{ backgroundColor: "#BE44E9" }}
                   >
                     {item?.idealPersonNickname}
                   </div>
@@ -251,7 +279,7 @@ export default function Page() {
           </div>
         )}
 
-      {isLogin && listData && listData.idealPeople && listData.idealPeople.length === 0 && <CreateIdealPersonPage />}
+      {/* {isLogin && listData && listData.idealPeople && listData.idealPeople.length === 0 && <CreateIdealPersonPage />} */}
 
       {isLogin && idealDetailModalOpen && (
         <div>
@@ -265,8 +293,10 @@ export default function Page() {
       )}
 
       {!isLogin && (
-        <div className='relative mt-[65px] mb-[68px] w-full h-full flex flex-col justify-center items-center'>
-          <div className='text-center text-xl text-white mt-32 leading-relaxed'>로딩 중입니다.</div>
+        <div className="relative mt-[65px] mb-[68px] w-full h-full flex flex-col justify-center items-center">
+          <div className="text-center text-xl text-white mt-32 leading-relaxed">
+            로딩 중입니다.
+          </div>
           {/* <div className='text-center text-xl text-white mt-2 leading-relaxed'>로그인 페이지로 이동합니다.</div> */}
         </div>
       )}
