@@ -268,7 +268,7 @@ export default function Page() {
                     width={170}
                   />
                   <div
-                    className="pt-2.5 pb-1.5 text-xl text-white text-center rounded-b-2xl shadow-[0px_3px_5px_0px_rgba(0,0,0,0.3)]"
+                    className="pt-2.5 pb-1.5 mb-6 text-xl text-white text-center rounded-b-2xl shadow-[0px_3px_5px_0px_rgba(0,0,0,0.3)]"
                     style={{ backgroundColor: "#BE44E9" }}
                   >
                     {item?.idealPersonNickname}
