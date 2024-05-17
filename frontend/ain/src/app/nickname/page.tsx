@@ -58,7 +58,8 @@ export default function Page() {
               icon: "success",
               title: "닉네임 등록을 성공했습니다!",
               showConfirmButton: false,
-              timer: 1500
+              timer: 1500,
+              heightAuto: false,
             });
             router.push("/");
           } else if (result.code === 400) {
@@ -84,6 +85,7 @@ export default function Page() {
           Swal.fire({
             icon: "error",
             text: "닉네임 등록에 실패했습니다.",
+            heightAuto: false,
           });
           // console.log(res.status);
           return;
@@ -92,6 +94,7 @@ export default function Page() {
         Swal.fire({
           icon: "error",
           text: "닉네임 등록에 실패했습니다.",
+          heightAuto: false,
         });
         // console.log(error);
         // throw new Error();
@@ -101,7 +104,8 @@ export default function Page() {
         icon: "error",
         text: "닉네임은 한글 1~5자로 설정해주세요.",
         showConfirmButton: false,
-        timer: 1500
+        timer: 1500,
+        heightAuto: false,
       });
     }
   };
