@@ -48,6 +48,6 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         );
 
         response.addCookie(authService.createCookie(REFRESH_TOKEN, refreshToken, refreshExpiredMs));
-        response.sendRedirect("https://myain.co.kr/login/kakao?authorization=" + accessToken + "&new=" + userPrincipal.getOAuthUserDTO().isNewMember());
+        response.sendRedirect("http://localhost:3000/login/kakao?authorization=" + accessToken + "&new=" + userPrincipal.getOAuthUserDTO().isNewMember());
     }
 }
