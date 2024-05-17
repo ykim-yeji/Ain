@@ -14,7 +14,6 @@ export default function Page() {
   const { accessToken, setAccessToken, refreshToken } = useUserStore();
 
   // userStore에서 가져오기 (일단 localStorage에서 가져오기도 가능)
-  console.log("ACCESS", accessToken);
 
   const router = useRouter();
 
@@ -35,10 +34,7 @@ export default function Page() {
       inputValue !== null &&
       accessToken !== null
     ) {
-      // fetch post
-
       try {
-        console.log(`bearer ` + accessToken);
         const res = await fetch(`${API_URL}/members`, {
           method: "PATCH",
           headers: {
@@ -87,7 +83,6 @@ export default function Page() {
             text: "닉네임 등록에 실패했습니다.",
             heightAuto: false,
           });
-          // console.log(res.status);
           return;
         }
       } catch (error) {
@@ -96,8 +91,6 @@ export default function Page() {
           text: "닉네임 등록에 실패했습니다.",
           heightAuto: false,
         });
-        // console.log(error);
-        // throw new Error();
       }
     } else {
       Swal.fire({

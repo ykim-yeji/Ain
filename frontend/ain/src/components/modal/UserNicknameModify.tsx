@@ -49,16 +49,16 @@ export default function UserNicknameModifyModal({ closeModal }: Props) {
             if (result.code === 200) {
               setOriginNickname(result.data.memberNickname);
             } else if (result.code === 401) {
-              // alert('ERROR UNAUTHORIZED');
+              console.log(result.code);
               return;
             } else if (result.code === 403) {
-              // alert('ERROR FORBIDDEN');
+              console.log(result.code);
               return;
             } else if (result.code === 404) {
-              // alert('ERROR NOT FOUND');
+              console.log(result.code);
               return;
             } else {
-              // alert('401, 403, 404 이외 에러 발생');
+              console.log(result.code);
               return;
             }
           } else {
@@ -66,12 +66,9 @@ export default function UserNicknameModifyModal({ closeModal }: Props) {
             return;
           }
         } catch (error) {
-          // alert('에러발생으로 닉네임 정보 불러오기 실패');
           console.log(error);
         }
       };
-
-      // 로그인이 되어있어야 자동 실행되게끔...?
       getMyNickname();
     }
   }, []);
