@@ -30,6 +30,7 @@ export default function Navigation() {
     setNicknameModalState,
     idealDetailModalOpen,
     setIdealDetailModalFalse,
+    setIdealDropDownFalse,
     setHideIdealListFalse,
     setHideIdealListTrue,
     setHeaderDropDownFalse,
@@ -89,6 +90,7 @@ export default function Navigation() {
                 setHeaderDropDownFalse();
                 setIdealDetailModalFalse();
                 setHideIdealListFalse();
+                setIdealDropDownFalse();
               }}
             >
               <div
@@ -137,6 +139,7 @@ export default function Navigation() {
               setHeaderDropDownFalse();
               setIdealDetailModalFalse();
               setHideIdealListFalse();
+              setIdealDropDownFalse();
             }}
           >
             <div className="flex flex-col cursor-pointer">
@@ -179,6 +182,7 @@ export default function Navigation() {
                 setHeaderDropDownFalse();
                 setIdealDetailModalFalse();
                 setHideIdealListFalse();
+                setIdealDropDownFalse();
               }}
             >
               <div className="flex flex-col cursor-pointer">
