@@ -13,7 +13,7 @@ import useUserStore from "@/store/userStore";
 import useModalStore from "@/store/modalStore";
 import useIdealStore from "@/store/idealStore";
 
-import ReissueToken from "@/hooks/ReissueToken";
+// import ReissueToken from "@/hooks/ReissueToken";
 
 import IdealDetailModal from "@/components/modal/IdealDetailModal";
 
@@ -82,7 +82,7 @@ export default function Page() {
   const handleModalTest = (
     nickname: string,
     fullname: string,
-    url: string,
+    // url: string,
     personId: number,
     threadId: string,
     imageUrl: string
@@ -99,12 +99,14 @@ export default function Page() {
       setHideIdealListTrue();
     }
 
-    setIdealDropDownFalse();
-    setTempFullName(fullname);
-    setTempPersonId(personId);
-    setTempThreadId(threadId);
+    // setIdealDropDownFalse();
+    // setTempFullName(fullname);
+    // setTempPersonId(personId);
+    // setTempThreadId(threadId);
 
+    // 순환참조가 여기서 생기네....
     setTempIdealName(nickname);
+
     setTempIdealFullName(fullname);
     setTempIdealId(personId);
     setTempIdealThreadId(threadId);
@@ -122,6 +124,11 @@ export default function Page() {
   //     return () => clearTimeout(timer);
   //   }
   // }, []);
+
+  const closeModal = () => {
+    setIdealDetailModalFalse();
+    setHideIdealListFalse();
+  };
 
   useEffect(() => {
     const getMyNickname = async () => {
@@ -241,7 +248,7 @@ export default function Page() {
                     handleModalTest(
                       item?.idealPersonNickname,
                       item?.idealPersonFullName,
-                      item?.idealPersonImageUrl,
+                      // item?.idealPersonImageUrl,
                       item?.idealPersonId,
                       item?.idealPersonThreadId,
                       item?.idealPersonImageUrl
@@ -273,9 +280,10 @@ export default function Page() {
         <div>
           <IdealDetailModal
             tempPersonId={tempPersonId}
-            closeModal={handleModalTest}
-            isNicknameModified={isNicknameModified}
-            setIsNicknameModified={setIsNicknameModified}
+            closeModal={closeModal}
+            // closeModal={handleModalTest}
+            // isNicknameModified={isNicknameModified}
+            // setIsNicknameModified={setIsNicknameModified}
           />
         </div>
       )}

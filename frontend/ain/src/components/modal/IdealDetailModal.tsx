@@ -21,8 +21,8 @@ interface Props {
   tempPersonId: number | undefined;
   // tempThreadId: string;
   // tempImageUrl: string;
-  setIsNicknameModified: any;
-  isNicknameModified: number;
+  // setIsNicknameModified: any;
+  // isNicknameModified: number;
   // setTempNickname: any;
 }
 
@@ -31,11 +31,11 @@ export default function IdealDetailModal({
   // tempNickname,
   // tempFullName,
   tempPersonId,
-  // tempThreadId,
-  // tempImageUrl,
-  setIsNicknameModified,
-  isNicknameModified,
-}: // setTempNickname,
+}: // tempThreadId,
+// tempImageUrl,
+// setIsNicknameModified,
+// isNicknameModified,
+// setTempNickname,
 Props) {
   const router = useRouter();
   const { accessToken } = useUserStore();
@@ -53,6 +53,8 @@ Props) {
     setIdealDropDownFalse,
     idealNicknameModalState,
     setIdealNicknameModalState,
+    isNicknameModified,
+    setIsNicknameModified,
   } = useModalStore();
 
   const {
@@ -120,7 +122,8 @@ Props) {
       if (result.isConfirmed) {
         try {
           const response = await fetch(
-            `${API_URL}/ideal-people/${tempPersonId}`,
+            // `${API_URL}/ideal-people/${tempPersonId}`,
+            `${API_URL}/ideal-people/${selectedIdealId}`,
             {
               method: "DELETE",
               headers: {
@@ -137,7 +140,7 @@ Props) {
                 icon: "success",
                 heightAuto: false,
               });
-              setIsNicknameModified(isNicknameModified + 1);
+              setIsNicknameModified();
               setHideIdealListFalse();
             } else {
               // console.log(result.code);
