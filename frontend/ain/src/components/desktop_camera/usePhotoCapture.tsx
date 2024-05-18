@@ -12,7 +12,14 @@ export function usePhotoCapture(videoRef: React.RefObject<HTMLVideoElement>, sel
       const context = canvas.getContext('2d');
 
       if (context) {
-        context.drawImage(videoRef.current, 0, 0);
+       // 좌우 반전 효과를 적용
+       context.translate(canvas.width, 0);
+       context.scale(-1, 1);
+       context.drawImage(videoRef.current, 0, 0, canvas.width, canvas.height);
+
+       // 원래 좌표계로 복구
+       context.setTransform(1, 0, 0, 1, 0, 0);
+       
         const myImage = new Image();
         myImage.crossOrigin = "anonymous";
         myImage.src = selectedIdealPersonImage;

@@ -183,7 +183,7 @@ const fetchIdealPersonsCount = async () => {
         {image ? (
           <img src={image} className="w-full" alt="Captured" /> // Captured image
         ) : (
-          <video ref={videoRef} autoPlay playsInline muted className="w-full h-auto"/> // Video stream
+          <video ref={videoRef} autoPlay playsInline muted className="w-full h-auto" style={{ transform: 'scaleX(-1)' }}/> // Video stream
         )}
         {isCameraOn && selectedIdealPersonImage && (
           <div style={{ position: "absolute", right: "0", bottom: "0" }}>
