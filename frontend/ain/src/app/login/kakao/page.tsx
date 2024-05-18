@@ -83,6 +83,7 @@ export default function Page() {
             title: "아인을 저장했습니다!",
             showConfirmButton: false,
             timer: 1500,
+            heightAuto: false,
           });
           useCreateStore.setState((state) => ({ isSave: false }));
           router.push("/chat");
@@ -147,6 +148,7 @@ export default function Page() {
       Swal.fire({
         text: "아인은 최대 10명까지 생성 가능합니다!",
         icon: "warning",
+        heightAuto: false,
       });
     }
   }, [idealNum]);
