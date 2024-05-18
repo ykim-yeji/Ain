@@ -128,6 +128,7 @@ export default function Page() {
   const closeModal = () => {
     setIdealDetailModalFalse();
     setHideIdealListFalse();
+    setIdealDropDownFalse();
   };
 
   useEffect(() => {
