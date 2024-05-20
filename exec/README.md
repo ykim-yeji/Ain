@@ -113,6 +113,10 @@
 <img src="https://github.com/ykim-yeji/Moiroom/assets/68416691/0bf9000b-ac1d-4538-bf4a-a70e140feb8d" width=30% height=30%/>
 <p>이상형 상세보기 페이지에서 이상형을 삭제할 수 있습니다.</p>
 
+### 5-4. 로그아웃
+<img src="https://github.com/ykim-yeji/Moiroom/assets/68416691/b3ef7718-8bb6-448d-87e3-5568b98e64df" width=30% height=30%/>
+<p>헤더에서 로그아웃을 진행할 수 있습니다.</p>
+
 </p>
 
 <p>
