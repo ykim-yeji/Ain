@@ -1,4 +1,4 @@
-# <p align="center"><img align="center" src="https://github.com/ykim-yeji/Moiroom/assets/68416691/a938863e-22a8-456b-a5fa-3d96357cde91" width=20% height=20%><h1 align="center">아인</h1></p>
+# <div align="center"><img align="center" src="https://github.com/ykim-yeji/Moiroom/assets/68416691/a938863e-22a8-456b-a5fa-3d96357cde91" width=20% height=20%><hr><h3 align="center">아인</h3></div>
 
 <p align="center">
 당신만의 완벽한 이상형을 만나고 싶나요?<br>
