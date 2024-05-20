@@ -1,4 +1,4 @@
-# <p align="center"><img align="center" src="https://github.com/ykim-yeji/Moiroom/assets/68416691/a938863e-22a8-456b-a5fa-3d96357cde91" width=50% height=50%></p>
+# <img align="center" src="https://github.com/ykim-yeji/Moiroom/assets/68416691/a938863e-22a8-456b-a5fa-3d96357cde91" width=80% height=80%>
 <h1 align="center">아인</h1>
 
 <p align="center">
@@ -75,7 +75,7 @@
 # 화면 구성 소개
 
 ## 1. 회원가입 및 로그인
-<img src="https://github.com/ykim-yeji/Moiroom/assets/68416691/61a58fa4-33cc-489f-aecd-28140de73d83"/>
+<img src="https://github.com/ykim-yeji/Moiroom/assets/68416691/61a58fa4-33cc-489f-aecd-28140de73d83" width=90% height=90%/>
 <p>저희 아인 서비스는 카카오 소셜 로그인으로 로그인이 가능합니다. 이상형 만들기 기능은 로그인을 하지 않아도 이용할 수 있습니다. 그외 나머지 기능은 로그인을 진행한 후에 사용할 수 있습니다.</p>
 
 ## 2. 이상형 만들기
@@ -87,7 +87,7 @@
 <p>이상형을 생성할 때 이상형에게 무작위로 MBTI가 부여됩니다. 부여된 MBTI를 기반으로 성격을 형성한 이상형과 채팅을 통해 소통할 수 있습니다.</p>
 
 ## 4. 사진 찍기
-<img src="https://github.com/ykim-yeji/Moiroom/assets/68416691/59416039-acf4-4af6-bfff-8573065e2558"/>
+<img src="https://github.com/ykim-yeji/Moiroom/assets/68416691/59416039-acf4-4af6-bfff-8573065e2558" width=90% height=90%/>
 <p>이상형과 함께 사진을 찍고 저장할 수 있습니다.</p>
 
 ## 5. 설정
@@ -118,7 +118,7 @@
 <p>
 
 # 시스템 아키텍처
-<img src="https://github.com/ykim-yeji/Moiroom/assets/68416691/0429258a-b58b-4cb1-9030-84675ecb5d68"/>
+<img src="https://github.com/ykim-yeji/Moiroom/assets/68416691/0429258a-b58b-4cb1-9030-84675ecb5d68" width=60% height=60%/>
 
 </p>
 
@@ -127,16 +127,16 @@
 # 기획 및 설계 산출물
 
 ## 요구사항 명세서
-<img src="https://github.com/ykim-yeji/Moiroom/assets/68416691/3ce1ee57-6415-4df8-8f5c-19c8fe815f9c">
-<img src="https://github.com/ykim-yeji/Moiroom/assets/68416691/53887513-9f09-4732-9e9e-ddb240f81313">
+<img src="https://github.com/ykim-yeji/Moiroom/assets/68416691/3ce1ee57-6415-4df8-8f5c-19c8fe815f9c" width=60% height=60%>
+<img src="https://github.com/ykim-yeji/Moiroom/assets/68416691/53887513-9f09-4732-9e9e-ddb240f81313" width=60% height=60%>
 
 ## 기능명세서
 ### 프론트엔드
-<img src="https://github.com/ykim-yeji/Moiroom/assets/68416691/d4a7998f-5735-4331-b937-a5a7d293d276"/>
-<img src="https://github.com/ykim-yeji/Moiroom/assets/68416691/3386c77e-fd6d-4e46-9252-983fda87f9e0"/>
-<img src="https://github.com/ykim-yeji/Moiroom/assets/68416691/48335c1f-c516-4703-b8e9-f373c8d82471"/>
-<img src="https://github.com/ykim-yeji/Moiroom/assets/68416691/7ce6013e-5b53-4a99-950a-9a659db5aa48"/>
-<img src="https://github.com/ykim-yeji/Moiroom/assets/68416691/ce9bfe3a-9745-467e-8de1-b6e8a82e7d24"/>
+<img src="https://github.com/ykim-yeji/Moiroom/assets/68416691/d4a7998f-5735-4331-b937-a5a7d293d276" width=60% height=60%/>
+<img src="https://github.com/ykim-yeji/Moiroom/assets/68416691/3386c77e-fd6d-4e46-9252-983fda87f9e0" width=60% height=60%/>
+<img src="https://github.com/ykim-yeji/Moiroom/assets/68416691/48335c1f-c516-4703-b8e9-f373c8d82471" width=60% height=60%/>
+<img src="https://github.com/ykim-yeji/Moiroom/assets/68416691/7ce6013e-5b53-4a99-950a-9a659db5aa48" width=60% height=60%/>
+<img src="https://github.com/ykim-yeji/Moiroom/assets/68416691/ce9bfe3a-9745-467e-8de1-b6e8a82e7d24" width=60% height=60%/>
 
 ### 백엔드
 <img src="https://github.com/ykim-yeji/Moiroom/assets/68416691/b7197dcd-3023-4c85-a50b-af015f742fa7"/>
@@ -144,7 +144,7 @@
 <img src="https://github.com/ykim-yeji/Moiroom/assets/68416691/c15e0e50-cb9f-447a-b9e0-da01443c9ef5"/>
 
 ## 화면 설계서
-<img src="https://github.com/ykim-yeji/Moiroom/assets/68416691/9151541a-021d-4012-9cd1-53147946556d">
+<img src="https://github.com/ykim-yeji/Moiroom/assets/68416691/9151541a-021d-4012-9cd1-53147946556d" width=60% height=60%>
 
 ## ERD
 <img src="https://github.com/ykim-yeji/Moiroom/assets/68416691/399f437c-498b-4b1f-8a84-009416c4b02f">
@@ -154,6 +154,6 @@
 <p>
 
 # 팀원 소개
-<img src="https://github.com/ykim-yeji/Moiroom/assets/68416691/2db2ab25-4601-462d-bbef-f10160b8bd55">
+<img src="https://github.com/ykim-yeji/Moiroom/assets/68416691/2db2ab25-4601-462d-bbef-f10160b8bd55" width=70% height=70%>
 
 </p>
