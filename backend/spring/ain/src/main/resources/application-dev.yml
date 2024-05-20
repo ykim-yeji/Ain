@@ -1,0 +1,31 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://${EC2_ACCESS_IP}:3306/ain?serverTimezone=Asia/Seoul&useUnicode=true&characterEncoding=utf8&useLegacyDatetimeCode=false
+    username: ${MYSQL_USERNAME}
+    password: ${MYSQL_PW}
+  jpa:
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQLDialect
+    hibernate:
+      ddl-auto: none
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    properties:
+      globally_quoted_identifiers: true
+      hibernate:
+        format_sql: true
+        show_sql: true
+  jwt:
+    secret: ${JWT_SECRET_KEY}
+    live:
+      access: 3600000 # 1시간
+      refresh: 1209600000 # 2주
+  data:
+    redis:
+      host: ${EC2_ACCESS_IP}
+      port: 6379
+
+logging:
+  level:
+    com.ssafy.ain: info

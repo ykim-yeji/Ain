@@ -1,0 +1,18 @@
+cloud:
+  aws:
+    s3:
+      bucket: ain-bucket
+    credentials:
+      accessKey: ${BUCKET_ACCESSKEY}
+      secretKey: ${BUCKET_SECRETKEY}
+    region:
+      static: ap-northeast-2
+      auto: false
+    stack:
+      auto: false
+spring:
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 3MB
+      max-request-size: 3MB
