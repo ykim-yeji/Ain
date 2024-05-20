@@ -1,0 +1,4 @@
+openai:
+  chatgpt:
+    ideal-person:
+      assistant-id: ${IDEAL_PERSON_ASSISTANT_ID}
