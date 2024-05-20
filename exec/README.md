@@ -160,6 +160,6 @@
 <p>
 
 # 팀원 소개
-<img src="https://github.com/ykim-yeji/Moiroom/assets/68416691/2db2ab25-4601-462d-bbef-f10160b8bd55" width=70% height=70%>
+<img src="https://github.com/ykim-yeji/Moiroom/assets/68416691/2db2ab25-4601-462d-bbef-f10160b8bd55" width=50% height=50%>
 
 </p>
