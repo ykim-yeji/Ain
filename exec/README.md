@@ -150,10 +150,10 @@
 <img src="https://github.com/ykim-yeji/Moiroom/assets/68416691/c15e0e50-cb9f-447a-b9e0-da01443c9ef5"/>
 
 ## 화면 설계서
-<img src="https://github.com/ykim-yeji/Moiroom/assets/68416691/9151541a-021d-4012-9cd1-53147946556d" width=60% height=60%>
+<img src="https://github.com/ykim-yeji/Moiroom/assets/68416691/9151541a-021d-4012-9cd1-53147946556d" width=40% height=40%>
 
 ## ERD
-<img src="https://github.com/ykim-yeji/Moiroom/assets/68416691/399f437c-498b-4b1f-8a84-009416c4b02f" width=90% height=90%>
+<img src="https://github.com/ykim-yeji/Moiroom/assets/68416691/399f437c-498b-4b1f-8a84-009416c4b02f" width=70% height=70%>
 
 </p>
 
