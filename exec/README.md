@@ -1,9 +1,10 @@
-# <div align="center"><img align="center" src="https://github.com/ykim-yeji/Moiroom/assets/68416691/a938863e-22a8-456b-a5fa-3d96357cde91" width=20% height=20%><hr><h3 align="center">아인</h3></div>
+# <div align="center"><img align="center" src="https://github.com/ykim-yeji/Moiroom/assets/68416691/a938863e-22a8-456b-a5fa-3d96357cde91" width=40% height=40%><hr><h3 align="center">아인</h3></div>
 
+<div>
 <p align="center">
 당신만의 완벽한 이상형을 만나고 싶나요?<br>
 '아인(AIN)'에서 당신이 상상하는 이상형을 만날 수 있습니다. 외롭고 지칠 때 저희 '아인'에서 당신의 이상형을 만나고 대화를 나눠보세요! 💞
-</p><br>
+</p></div><br>
 
 <p>
 
