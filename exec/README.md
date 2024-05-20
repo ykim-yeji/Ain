@@ -1,4 +1,4 @@
-# <img align="center" src="https://github.com/ykim-yeji/Moiroom/assets/68416691/a938863e-22a8-456b-a5fa-3d96357cde91" width=80% height=80%>
+# <img align="center" src="https://github.com/ykim-yeji/Moiroom/assets/68416691/a938863e-22a8-456b-a5fa-3d96357cde91" width=30% height=30%>
 <h1 align="center">아인</h1>
 
 <p align="center">
@@ -51,12 +51,15 @@
 <img src="https://img.shields.io/badge/JENKINS-D24939?style=for-the-badge&logo=jenkins&logoColor=white"/>
 
 <h4>📱Frontend</h4>
+<img src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white"/>
+<img src="https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white"/>
 <img src="https://img.shields.io/badge/NEXT.JS-000000?style=for-the-badge&logo=NEXT.JS&logoColor=white"/>
 <img src="https://img.shields.io/badge/REACT-61DAFB?style=for-the-badge&logo=REACT&logoColor=white"/>
 <img src="https://img.shields.io/badge/TYPE SCRIPT-3178C6?style=for-the-badge&logo=TYPESCRIPT&logoColor=white"/>
 <img src="https://img.shields.io/badge/SCSS-CC6699?style=for-the-badge&logo=SCSS&logoColor=white"/>
 <img src="https://img.shields.io/badge/TAIL WIND CSS-06B6D4?style=for-the-badge&logo=TAILWINDCSS&logoColor=white"/>
 <img src="https://img.shields.io/badge/styled components-DB7093?style=for-the-badge&logo=styled components&logoColor=white"/>
+<img src="https://img.shields.io/badge/Zustand-670000?style=for-the-badge&logo=Zustand&logoColor=white"/>
 
 <h4>💾 Backend</h4>
 <img src="https://img.shields.io/badge/java-007396?style=for-the-badge&logo=java&logoColor=white">
@@ -68,6 +71,9 @@
 <img src="https://img.shields.io/badge/REDIS-DC382D?style=for-the-badge&logo=redis&logoColor=white"/>
 <img src="https://img.shields.io/badge/PYTHON-3776AB?style=for-the-badge&logo=python&logoColor=white"/>
 <img src="https://img.shields.io/badge/FAST API-009688?style=for-the-badge&logo=FASTAPI&logoColor=white"/>
+<img src="https://img.shields.io/badge/DallE 3-412991?style=for-the-badge&logo=openai&logoColor=white"/>
+<img src="https://img.shields.io/badge/ChatGPT 4o-412991?style=for-the-badge&logo=openai&logoColor=white"/>
+<img src="https://img.shields.io/badge/ChatGPT Assistants API-412991?style=for-the-badge&logo=openai&logoColor=white"/>
 </p><br>
 
 <p>
@@ -75,7 +81,7 @@
 # 화면 구성 소개
 
 ## 1. 회원가입 및 로그인
-<img src="https://github.com/ykim-yeji/Moiroom/assets/68416691/61a58fa4-33cc-489f-aecd-28140de73d83" width=90% height=90%/>
+<img src="https://github.com/ykim-yeji/Moiroom/assets/68416691/61a58fa4-33cc-489f-aecd-28140de73d83" width=30% height=30%/>
 <p>저희 아인 서비스는 카카오 소셜 로그인으로 로그인이 가능합니다. 이상형 만들기 기능은 로그인을 하지 않아도 이용할 수 있습니다. 그외 나머지 기능은 로그인을 진행한 후에 사용할 수 있습니다.</p>
 
 ## 2. 이상형 만들기
@@ -87,7 +93,7 @@
 <p>이상형을 생성할 때 이상형에게 무작위로 MBTI가 부여됩니다. 부여된 MBTI를 기반으로 성격을 형성한 이상형과 채팅을 통해 소통할 수 있습니다.</p>
 
 ## 4. 사진 찍기
-<img src="https://github.com/ykim-yeji/Moiroom/assets/68416691/59416039-acf4-4af6-bfff-8573065e2558" width=90% height=90%/>
+<img src="https://github.com/ykim-yeji/Moiroom/assets/68416691/59416039-acf4-4af6-bfff-8573065e2558" width=30% height=30%/>
 <p>이상형과 함께 사진을 찍고 저장할 수 있습니다.</p>
 
 ## 5. 설정
@@ -147,7 +153,7 @@
 <img src="https://github.com/ykim-yeji/Moiroom/assets/68416691/9151541a-021d-4012-9cd1-53147946556d" width=60% height=60%>
 
 ## ERD
-<img src="https://github.com/ykim-yeji/Moiroom/assets/68416691/399f437c-498b-4b1f-8a84-009416c4b02f">
+<img src="https://github.com/ykim-yeji/Moiroom/assets/68416691/399f437c-498b-4b1f-8a84-009416c4b02f" width=90% height=90%>
 
 </p>
 
