@@ -33,6 +33,11 @@ public class AuthServiceImpl implements AuthService {
 	@Value("${spring.jwt.live.refresh}")
 	private Long refreshExpiredMs;
 
+	/**
+	 * 토큰 재발급
+	 * @param request 요청
+	 * @param response 응답
+	 */
 	@Override
 	public void getReissuedToken(HttpServletRequest request, HttpServletResponse response) {
 		String refreshToken = getRefreshTokenFromCookie(request);
@@ -56,6 +61,13 @@ public class AuthServiceImpl implements AuthService {
 		response.addCookie(createCookie(REFRESH_TOKEN, reissuedRefreshToken, refreshExpiredMs));
 	}
 
+	/**
+	 * 쿠키 생성
+	 * @param name 쿠키 key
+	 * @param value 쿠키 value
+	 * @param expiredMs 쿠키 유효기간
+	 * @return
+	 */
 	@Override
 	public Cookie createCookie(String name, String value, Long expiredMs) {
 		Cookie cookie = new Cookie(name, value);
