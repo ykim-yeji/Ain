@@ -62,6 +62,8 @@
 <h4>💾 Backend</h4>
 <img src="https://img.shields.io/badge/java-007396?style=for-the-badge&logo=java&logoColor=white">
 <img src="https://img.shields.io/badge/SPRING BOOT-6DB33F?style=for-the-badge&logo=springboot&logoColor=white"/>
+<img src="https://img.shields.io/badge/SPRING Data JPA-6DB33F?style=for-the-badge&logo=springdatajpa&logoColor=white"/>
+<img src="https://img.shields.io/badge/SPRING CLOUD OPENFEIGN-6DB33F?style=for-the-badge&logo=springcloudopenfeign&logoColor=white"/>
 <img src="https://img.shields.io/badge/SPRING SECURITY-6DB33F?style=for-the-badge&logo=springsecurity&logoColor=white"/>
 <img src="https://img.shields.io/badge/OAUTH2-40AEF0?style=for-the-badge&logo=oauth2&logoColor=white"/>
 <img src="https://img.shields.io/badge/JSON WEB TOKENS-000000?style=for-the-badge&logo=JSON WEB TOKENS&logoColor=white"/>
@@ -70,7 +72,6 @@
 <img src="https://img.shields.io/badge/PYTHON-3776AB?style=for-the-badge&logo=python&logoColor=white"/>
 <img src="https://img.shields.io/badge/FAST API-009688?style=for-the-badge&logo=FASTAPI&logoColor=white"/>
 <img src="https://img.shields.io/badge/DallE 3-412991?style=for-the-badge&logo=openai&logoColor=white"/>
-<img src="https://img.shields.io/badge/ChatGPT 4o-412991?style=for-the-badge&logo=openai&logoColor=white"/>
 <img src="https://img.shields.io/badge/ChatGPT Assistants API-412991?style=for-the-badge&logo=openai&logoColor=white"/>
 </p><br>
 
