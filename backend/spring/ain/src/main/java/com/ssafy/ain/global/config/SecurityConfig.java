@@ -38,7 +38,7 @@ public class SecurityConfig {
         http
                 .cors(cors -> cors.configurationSource(request -> {
                     CorsConfiguration configuration = new CorsConfiguration();
-                    configuration.setAllowedOrigins(List.of("http://localhost:3000", "https://myain.co.kr"));
+                    configuration.setAllowedOrigins(List.of("https://myain.co.kr"));
                     configuration.setAllowedMethods(Collections.singletonList("*"));
                     configuration.setAllowCredentials(true);
                     configuration.setAllowedHeaders(Collections.singletonList("*"));
@@ -65,7 +65,7 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests(
                         (request) -> request
-                                .requestMatchers("/", "/auth/reissue", "/test/**").permitAll()
+                                .requestMatchers("/", "/auth/reissue").permitAll()
                                 .requestMatchers("/ideal-people/names").permitAll()
                                 .anyRequest().authenticated()
                 )
