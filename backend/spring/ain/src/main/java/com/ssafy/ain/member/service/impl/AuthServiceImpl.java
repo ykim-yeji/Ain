@@ -7,6 +7,9 @@ import com.ssafy.ain.global.constant.ErrorCode;
 import jakarta.servlet.http.Cookie;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Service;
 
 import com.ssafy.ain.global.entity.RefreshToken;
@@ -19,6 +22,9 @@ import com.ssafy.ain.member.service.AuthService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -159,5 +165,37 @@ public class AuthServiceImpl implements AuthService {
 
 			throw new InvalidException(NOT_LOGIN_MEMBER);
 		}
+	}
+
+	/**
+	 * 정해진 형식에 맞는 Error Response 반환
+	 * @param errorCode 에러 코드
+	 * @return
+	 */
+	@Override
+	public Map<String, Object> getErrorResponse(ErrorCode errorCode) {
+		Map<String, Object> errorResponse = new HashMap<>();
+		errorResponse.put("code", errorCode.getStatus().value());
+		errorResponse.put("status", errorCode.getStatus());
+		errorResponse.put("message", errorCode.getMessage());
+
+		return errorResponse;
+	}
+
+	@Override
+	public Map<String, Object> getErrorResponse(RuntimeException runtimeException) {
+		Map<String, Object> errorResponse = new HashMap<>();
+		HttpStatus httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+		if (runtimeException instanceof AuthenticationException) {
+			httpStatus = HttpStatus.UNAUTHORIZED;
+		}
+		if (runtimeException instanceof AccessDeniedException) {
+			httpStatus = HttpStatus.FORBIDDEN;
+		}
+		errorResponse.put("code", httpStatus.value());
+		errorResponse.put("status", httpStatus);
+		errorResponse.put("message", runtimeException.getMessage());
+
+		return errorResponse;
 	}
 }
