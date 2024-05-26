@@ -7,6 +7,9 @@ import com.ssafy.ain.global.constant.ErrorCode;
 import jakarta.servlet.http.Cookie;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Service;
 
 import com.ssafy.ain.global.entity.RefreshToken;
@@ -19,6 +22,9 @@ import com.ssafy.ain.member.service.AuthService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -33,6 +39,11 @@ public class AuthServiceImpl implements AuthService {
 	@Value("${spring.jwt.live.refresh}")
 	private Long refreshExpiredMs;
 
+	/**
+	 * 토큰 재발급
+	 * @param request 요청
+	 * @param response 응답
+	 */
 	@Override
 	public void getReissuedToken(HttpServletRequest request, HttpServletResponse response) {
 		String refreshToken = getRefreshTokenFromCookie(request);
@@ -56,6 +67,13 @@ public class AuthServiceImpl implements AuthService {
 		response.addCookie(createCookie(REFRESH_TOKEN, reissuedRefreshToken, refreshExpiredMs));
 	}
 
+	/**
+	 * 쿠키 생성
+	 * @param name 쿠키 key
+	 * @param value 쿠키 value
+	 * @param expiredMs 쿠키 유효기간
+	 * @return
+	 */
 	@Override
 	public Cookie createCookie(String name, String value, Long expiredMs) {
 		Cookie cookie = new Cookie(name, value);
@@ -147,5 +165,37 @@ public class AuthServiceImpl implements AuthService {
 
 			throw new InvalidException(NOT_LOGIN_MEMBER);
 		}
+	}
+
+	/**
+	 * 정해진 형식에 맞는 Error Response 반환
+	 * @param errorCode 에러 코드
+	 * @return
+	 */
+	@Override
+	public Map<String, Object> getErrorResponse(ErrorCode errorCode) {
+		Map<String, Object> errorResponse = new HashMap<>();
+		errorResponse.put("code", errorCode.getStatus().value());
+		errorResponse.put("status", errorCode.getStatus());
+		errorResponse.put("message", errorCode.getMessage());
+
+		return errorResponse;
+	}
+
+	@Override
+	public Map<String, Object> getErrorResponse(RuntimeException runtimeException) {
+		Map<String, Object> errorResponse = new HashMap<>();
+		HttpStatus httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+		if (runtimeException instanceof AuthenticationException) {
+			httpStatus = HttpStatus.UNAUTHORIZED;
+		}
+		if (runtimeException instanceof AccessDeniedException) {
+			httpStatus = HttpStatus.FORBIDDEN;
+		}
+		errorResponse.put("code", httpStatus.value());
+		errorResponse.put("status", httpStatus);
+		errorResponse.put("message", runtimeException.getMessage());
+
+		return errorResponse;
 	}
 }

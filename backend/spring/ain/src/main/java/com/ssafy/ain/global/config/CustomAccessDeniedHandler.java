@@ -2,6 +2,7 @@ package com.ssafy.ain.global.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.ain.global.constant.ErrorCode;
+import com.ssafy.ain.member.service.AuthService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -20,6 +21,7 @@ import java.util.Map;
 public class CustomAccessDeniedHandler implements AccessDeniedHandler {
 
     private final ObjectMapper objectMapper;
+    private final AuthService authService;
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response,
@@ -27,30 +29,12 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
         Object exception = request.getAttribute("exception");
         Map<String, Object> errorResponse = null;
         if (exception instanceof ErrorCode) {
-            errorResponse = getErrorResponse((ErrorCode) exception);
+            errorResponse = authService.getErrorResponse((ErrorCode) exception);
         } else {
-            errorResponse = getErrorResponse(accessDeniedException);
+            errorResponse = authService.getErrorResponse(accessDeniedException);
         }
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
         response.getWriter().write(objectMapper.writeValueAsString(errorResponse));
-    }
-
-    private Map<String, Object> getErrorResponse(ErrorCode errorCode) {
-        Map<String, Object> errorResponse = new HashMap<>();
-        errorResponse.put("code", errorCode.getStatus().value());
-        errorResponse.put("status", errorCode.getStatus());
-        errorResponse.put("message", errorCode.getMessage());
-
-        return errorResponse;
-    }
-
-    private Map<String, Object> getErrorResponse(AccessDeniedException accessDeniedException) {
-        Map<String, Object> errorResponse = new HashMap<>();
-        errorResponse.put("code", HttpStatus.FORBIDDEN.value());
-        errorResponse.put("status", HttpStatus.FORBIDDEN);
-        errorResponse.put("message", accessDeniedException.getMessage());
-
-        return errorResponse;
     }
 }
