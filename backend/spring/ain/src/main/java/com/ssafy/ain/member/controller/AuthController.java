@@ -20,6 +20,12 @@ public class AuthController {
 
 	private final AuthService authService;
 
+	/**
+	 * 토큰 재발급
+	 * @param request 요청
+	 * @param response 응답
+	 * @return
+	 */
 	@PostMapping("/reissue")
 	public ApiResponse<?> getReissuedToken(HttpServletRequest request, HttpServletResponse response) {
 		authService.getReissuedToken(request, response);
