@@ -2,8 +2,6 @@ package com.ssafy.ain.member.service;
 
 import java.io.IOException;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

@@ -3,7 +3,6 @@ package com.ssafy.ain.member.service.impl;
 import static com.ssafy.ain.global.constant.ErrorCode.*;
 import static com.ssafy.ain.global.constant.JwtConstant.*;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.ain.global.constant.ErrorCode;
 import jakarta.servlet.http.Cookie;
