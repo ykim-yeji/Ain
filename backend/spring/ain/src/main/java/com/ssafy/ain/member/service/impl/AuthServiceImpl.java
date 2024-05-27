@@ -3,6 +3,7 @@ package com.ssafy.ain.member.service.impl;
 import static com.ssafy.ain.global.constant.ErrorCode.*;
 import static com.ssafy.ain.global.constant.JwtConstant.*;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.ain.global.constant.ErrorCode;
 import jakarta.servlet.http.Cookie;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +24,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -168,12 +170,34 @@ public class AuthServiceImpl implements AuthService {
 	}
 
 	/**
-	 * 정해진 형식에 맞는 Error Response 반환
+	 * Filter 단에서 발생하는 Error를 응답에 담아 반환
+	 * @param request 요청
+	 * @param response 응답
+	 * @param runtimeException 발생한 예외
+	 * @throws IOException
+	 */
+	@Override
+	public void addErrorInResponse(HttpServletRequest request, HttpServletResponse response,
+		RuntimeException runtimeException) throws IOException {
+		Object exception = request.getAttribute("exception");
+		Map<String, Object> errorResponse = null;
+		if (exception instanceof ErrorCode) {
+			errorResponse = getErrorResponse((ErrorCode) exception);
+		} else {
+			errorResponse = getErrorResponse(runtimeException);
+		}
+		response.setContentType("application/json");
+		response.setCharacterEncoding("UTF-8");
+		ObjectMapper objectMapper = new ObjectMapper();
+		response.getWriter().write(objectMapper.writeValueAsString(errorResponse));
+	}
+
+	/**
+	 * ErrorCode에 맞는 정해진 형식의 Error Response 생성
 	 * @param errorCode 에러 코드
 	 * @return
 	 */
-	@Override
-	public Map<String, Object> getErrorResponse(ErrorCode errorCode) {
+	private Map<String, Object> getErrorResponse(ErrorCode errorCode) {
 		Map<String, Object> errorResponse = new HashMap<>();
 		errorResponse.put("code", errorCode.getStatus().value());
 		errorResponse.put("status", errorCode.getStatus());
@@ -182,8 +206,12 @@ public class AuthServiceImpl implements AuthService {
 		return errorResponse;
 	}
 
-	@Override
-	public Map<String, Object> getErrorResponse(RuntimeException runtimeException) {
+	/**
+	 * 발생한 예외에 맞는 정해진 형식의 Error Response 생성
+	 * @param runtimeException 발생한 예외
+	 * @return
+	 */
+	private Map<String, Object> getErrorResponse(RuntimeException runtimeException) {
 		Map<String, Object> errorResponse = new HashMap<>();
 		HttpStatus httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
 		if (runtimeException instanceof AuthenticationException) {
