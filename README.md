@@ -27,6 +27,7 @@
 # 개발 환경
 
 <h4>⛭ Management Tool</h4>
+<p>
 <img src="https://img.shields.io/badge/JIRA-0052CC?style=for-the-badge&logo=JIRA&logoColor=white">
 <img src="https://img.shields.io/badge/gitlab-FC6D26?style=for-the-badge&logo=gitlab&logoColor=white">
 <img src="https://img.shields.io/badge/mattermost-0058CC?style=for-the-badge&logo=mattermost&logoColor=white">
@@ -34,21 +35,27 @@
 <img src="https://img.shields.io/badge/figma-F24E1E?style=for-the-badge&logo=figma&logoColor=white">
 <img src="https://img.shields.io/badge/postman-FF6C37?style=for-the-badge&logo=postman&logoColor=white">
 <img src="https://img.shields.io/badge/GIT-F05032?style=for-the-badge&logo=git&logoColor=white">
+</p>
 
 <h4>🖥️ IDE</h4>
+<p>
 <img src="https://img.shields.io/badge/INTELLIJ-000000?style=for-the-badge&logo=intellijidea&logoColor=white"/>
 <img src="https://img.shields.io/badge/VISUAL STUDIO CODE-007ACC?style=for-the-badge&logo=VISUAL STUDIO CODE&logoColor=white"/>
 <img src="https://img.shields.io/badge/PYCHARM-000000?style=for-the-badge&logo=pycharm&logoColor=white"/>
+</p>
 
 <h4>🚦 Infra</h4>
+<p>
 <img src="https://img.shields.io/badge/AMAZON EC2-232F3E?style=for-the-badge&logo=amazonec2&logoColor=white"/>
 <img src="https://img.shields.io/badge/AMAZON S3-569A31?style=for-the-badge&logo=amazons3&logoColor=white"/>
 <img src="https://img.shields.io/badge/NGINX-009639?style=for-the-badge&logo=nginx&logoColor=white"/>
 <img src="https://img.shields.io/badge/DOCKER-2496ED?style=for-the-badge&logo=docker&logoColor=white"/>
 <img src="https://img.shields.io/badge/UBUNTU-E95420?style=for-the-badge&logo=ubuntu&logoColor=white"/>
 <img src="https://img.shields.io/badge/JENKINS-D24939?style=for-the-badge&logo=jenkins&logoColor=white"/>
+</p>
 
 <h4>📱Frontend</h4>
+<p>
 <img src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white"/>
 <img src="https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white"/>
 <img src="https://img.shields.io/badge/NEXT.JS-000000?style=for-the-badge&logo=NEXT.JS&logoColor=white"/>
@@ -58,8 +65,10 @@
 <img src="https://img.shields.io/badge/TAIL WIND CSS-06B6D4?style=for-the-badge&logo=TAILWINDCSS&logoColor=white"/>
 <img src="https://img.shields.io/badge/styled components-DB7093?style=for-the-badge&logo=styled components&logoColor=white"/>
 <img src="https://img.shields.io/badge/Zustand-670000?style=for-the-badge&logo=Zustand&logoColor=white"/>
+</p>
 
 <h4>💾 Backend</h4>
+<p>
 <img src="https://img.shields.io/badge/java-007396?style=for-the-badge&logo=java&logoColor=white">
 <img src="https://img.shields.io/badge/SPRING BOOT-6DB33F?style=for-the-badge&logo=springboot&logoColor=white"/>
 <img src="https://img.shields.io/badge/SPRING SECURITY-6DB33F?style=for-the-badge&logo=springsecurity&logoColor=white"/>
@@ -72,6 +81,8 @@
 <img src="https://img.shields.io/badge/DallE 3-412991?style=for-the-badge&logo=openai&logoColor=white"/>
 <img src="https://img.shields.io/badge/ChatGPT 4o-412991?style=for-the-badge&logo=openai&logoColor=white"/>
 <img src="https://img.shields.io/badge/ChatGPT Assistants API-412991?style=for-the-badge&logo=openai&logoColor=white"/>
+</p>
+
 </p><br>
 
 <p>
@@ -120,7 +131,7 @@
 <p>
 
 # 시스템 아키텍처
-<img src="https://github.com/ykim-yeji/ain/assets/68416691/42536461-6162-4ae5-b49d-e2ead3ff5878" width=60% height=60%/>
+<img src="https://github.com/ykim-yeji/ain/assets/68416691/42536461-6162-4ae5-b49d-e2ead3ff5878"/>
 
 </p>
 
@@ -129,16 +140,16 @@
 # 기획 및 설계 산출물
 
 ## 요구사항 명세서
-<img src="https://github.com/ykim-yeji/ain/assets/68416691/44b1b12a-eb5f-4b96-9c42-b3d6bc8f5c60" width=60% height=60%>
-<img src="https://github.com/ykim-yeji/ain/assets/68416691/ca1251f5-ddaa-4fb3-9095-736d70b027f6" width=60% height=60%>
+<img src="https://github.com/ykim-yeji/ain/assets/68416691/44b1b12a-eb5f-4b96-9c42-b3d6bc8f5c60">
+<img src="https://github.com/ykim-yeji/ain/assets/68416691/ca1251f5-ddaa-4fb3-9095-736d70b027f6">
 
 ## 기능명세서
 ### 프론트엔드
-<img src="https://github.com/ykim-yeji/ain/assets/68416691/e1c6165f-5a73-4541-91aa-f34863fd8f64" width=60% height=60%/>
-<img src="https://github.com/ykim-yeji/ain/assets/68416691/14b175b2-4e87-42f6-bab7-5c1ec9c5deea" width=60% height=60%/>
-<img src="https://github.com/ykim-yeji/ain/assets/68416691/807bc701-0d5d-40db-b0d7-aa00ee8b8a92" width=60% height=60%/>
-<img src="https://github.com/ykim-yeji/ain/assets/68416691/46f3857a-0de9-43bf-bb84-9a280712a208" width=60% height=60%/>
-<img src="https://github.com/ykim-yeji/ain/assets/68416691/38e449ef-11a9-4814-bcb7-656251ca447a" width=60% height=60%/>
+<img src="https://github.com/ykim-yeji/ain/assets/68416691/e1c6165f-5a73-4541-91aa-f34863fd8f64"/>
+<img src="https://github.com/ykim-yeji/ain/assets/68416691/14b175b2-4e87-42f6-bab7-5c1ec9c5deea"/>
+<img src="https://github.com/ykim-yeji/ain/assets/68416691/807bc701-0d5d-40db-b0d7-aa00ee8b8a92"/>
+<img src="https://github.com/ykim-yeji/ain/assets/68416691/46f3857a-0de9-43bf-bb84-9a280712a208"/>
+<img src="https://github.com/ykim-yeji/ain/assets/68416691/38e449ef-11a9-4814-bcb7-656251ca447a"/>
 
 ### 백엔드
 <img src="https://github.com/ykim-yeji/ain/assets/68416691/dfb3907f-412a-4f7e-8a9b-c41e6ba7373a"/>
@@ -146,16 +157,16 @@
 <img src="https://github.com/ykim-yeji/ain/assets/68416691/1473cf10-3505-4bfd-9903-ad6a9a5c5b23"/>
 
 ## 화면 설계서
-<img src="https://github.com/ykim-yeji/ain/assets/68416691/559c61eb-33d2-4792-b675-c8754116cda5" width=40% height=40%>
+<img src="https://github.com/ykim-yeji/ain/assets/68416691/559c61eb-33d2-4792-b675-c8754116cda5">
 
 ## ERD
-<img src="https://github.com/ykim-yeji/ain/assets/68416691/4daef96d-5ac9-40d0-be71-aa8e5acdab8b" width=70% height=70%>
+<img src="https://github.com/ykim-yeji/ain/assets/68416691/4daef96d-5ac9-40d0-be71-aa8e5acdab8b">
 
 </p>
 
 <p>
 
 # 팀원 소개
-<img src="https://github.com/ykim-yeji/ain/assets/68416691/4afe0b15-09c1-4ab0-96cd-78b53bdfbeb2" width=50% height=50%>
+<img src="https://github.com/ykim-yeji/ain/assets/68416691/4afe0b15-09c1-4ab0-96cd-78b53bdfbeb2">
 
 </p>
